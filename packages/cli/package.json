@@ -25,6 +25,7 @@
     "@autoguide/ai": "workspace:*",
     "@autoguide/config": "workspace:*",
     "@autoguide/core": "workspace:*",
+    "@autoguide/export": "workspace:*",
     "@autoguide/playwright": "workspace:*",
     "@autoguide/scanner": "workspace:*",
     "@autoguide/storage": "workspace:*",

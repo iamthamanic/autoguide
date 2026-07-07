@@ -41,6 +41,12 @@ export class ReviewQueue {
     return [...this.items.values()];
   }
 
+  loadFromItems(items: ReviewItem[]): void {
+    for (const item of items) {
+      this.items.set(item.factId, item);
+    }
+  }
+
   applyDecision(fact: Fact, status: ReviewStatus, editedValue?: unknown): Fact {
     const updated: Fact = {
       ...fact,

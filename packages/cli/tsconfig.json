@@ -13,6 +13,7 @@
     { "path": "../storage" },
     { "path": "../scanner" },
     { "path": "../playwright" },
-    { "path": "../ai" }
+    { "path": "../ai" },
+    { "path": "../export" }
   ]
 }

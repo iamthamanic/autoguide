@@ -40,7 +40,45 @@ describe('@autoguide/react', () => {
     expect(screen.getByLabelText('Hilfe öffnen')).toBeTruthy();
   });
 
-  it('shows uncertain facts only in development mode', () => {
+  it('resolves route context in help panel title', () => {
+    render(
+      <AutoGuideProvider
+        appId="demo"
+        route="/vacation"
+        pages={[
+          {
+            id: 'p1',
+            route: '/vacation',
+            title: 'Urlaub',
+            roleIds: [],
+            elementIds: [],
+            featureIds: [],
+            flowIds: [],
+            factIds: [],
+            status: 'draft',
+          },
+        ]}
+        flows={[
+          {
+            id: 'fl1',
+            title: 'Urlaub beantragen',
+            steps: [{ order: 1, title: 'Antrag öffnen', factIds: [] }],
+            roleIds: [],
+            pageIds: ['p1'],
+            factIds: [],
+            status: 'draft',
+          },
+        ]}
+      >
+        <AutoGuideWidget />
+      </AutoGuideProvider>,
+    );
+    fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
+    expect(screen.getByRole('heading', { name: /Hilfe: Urlaub/ })).toBeTruthy();
+    expect(screen.getByText('Urlaub beantragen')).toBeTruthy();
+  });
+
+  it('shows uncertain facts only in published mode', () => {
     render(
       <AutoGuideProvider appId="demo" mode="published" facts={sampleFacts}>
         <AutoGuideWidget />

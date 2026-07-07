@@ -151,6 +151,36 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     await storage.writeJson(storage.paths.confidenceJson, {
       scores: Object.fromEntries(facts.map((f) => [f.id, f.confidence])),
     });
+
+    const now = new Date().toISOString();
+    for (const page of pageRecords) {
+      storage.index.upsertPageIndex({
+        id: page.id,
+        route: page.route,
+        title: page.title,
+        status: page.status,
+        updatedAt: now,
+      });
+    }
+    for (const flow of flowRecords) {
+      storage.index.upsertFlowIndex({
+        id: flow.id,
+        title: flow.title,
+        body: flow.steps.map((step) => step.title).join(' '),
+        status: flow.status,
+        updatedAt: now,
+      });
+    }
+    for (const fact of facts) {
+      storage.index.upsertFactIndex({
+        id: fact.id,
+        entityId: fact.entityId,
+        key: fact.key,
+        confidence: fact.confidence,
+        reviewStatus: fact.reviewStatus,
+        updatedAt: fact.updatedAt,
+      });
+    }
   } finally {
     storage.dispose();
   }
