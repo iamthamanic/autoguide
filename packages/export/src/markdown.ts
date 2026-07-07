@@ -2,18 +2,15 @@
  * @autoguide/export — Markdown documentation export.
  */
 
-import type { Fact, VisibilityMode } from '@autoguide/core';
 import { filterFactsForMode } from '@autoguide/core';
 import type { FlowRecord, PageRecord } from '@autoguide/core';
+import type { ExportRenderOptions } from './types.js';
 
-export interface MarkdownExportOptions {
-  mode: VisibilityMode;
-  exportedAt?: string;
-}
+export type MarkdownExportOptions = ExportRenderOptions;
 
 export function exportPageMarkdown(
   page: PageRecord,
-  facts: Fact[],
+  facts: import('@autoguide/core').Fact[],
   options: MarkdownExportOptions,
 ): string {
   const visible = filterFactsForMode(facts, options.mode);
@@ -60,7 +57,7 @@ export function exportFlowMarkdown(
 export function exportKnowledgeMarkdown(
   pages: PageRecord[],
   flows: FlowRecord[],
-  facts: Fact[],
+  facts: import('@autoguide/core').Fact[],
   options: MarkdownExportOptions,
 ): string {
   const chunks = [

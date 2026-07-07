@@ -176,6 +176,10 @@ importers:
       '@autoguide/core':
         specifier: workspace:*
         version: link:../core
+    optionalDependencies:
+      playwright:
+        specifier: ^1.51.0
+        version: 1.61.1
 
   packages/playwright:
     dependencies:

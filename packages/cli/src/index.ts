@@ -90,10 +90,13 @@ program
 program
   .command('export')
   .description('Export documentation artifacts')
-  .option('--format <format>', 'Export format', 'md')
+  .option('--format <format>', 'Export format (md, html, pdf)', 'md')
   .option('--out <dir>', 'Output directory', 'docs/autoguide-export')
   .action(async (options: { format: string; out: string }) => {
-    const code = await runExport(process.cwd(), { format: options.format as 'md', outDir: options.out });
+    const code = await runExport(process.cwd(), {
+      format: options.format as 'md' | 'html' | 'pdf',
+      outDir: options.out,
+    });
     if (code !== 0) process.exitCode = code;
   });
 
