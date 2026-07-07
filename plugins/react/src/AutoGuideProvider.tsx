@@ -3,7 +3,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord, VisibilityMode, Tour } from '@autoguide/core';
 import { AutoGuideContext } from './context.js';
 
 export interface AutoGuideProviderProps {
@@ -14,6 +14,7 @@ export interface AutoGuideProviderProps {
   facts?: Fact[];
   pages?: PageRecord[];
   flows?: FlowRecord[];
+  tours?: Tour[];
   children: ReactNode;
 }
 
@@ -25,11 +26,12 @@ export function AutoGuideProvider({
   facts = [],
   pages = [],
   flows = [],
+  tours = [],
   children,
 }: AutoGuideProviderProps) {
   return (
     <AutoGuideContext.Provider
-      value={{ appId, userRole, mode, route, facts, pages, flows }}
+      value={{ appId, userRole, mode, route, facts, pages, flows, tours }}
     >
       {children}
     </AutoGuideContext.Provider>

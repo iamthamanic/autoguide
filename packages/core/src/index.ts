@@ -23,3 +23,6 @@ export * from './help/context-resolver.js';
 export * from './help/search.js';
 export * from './recommendations/types.js';
 export * from './recommendations/engine.js';
+export * from './tours/types.js';
+export * from './tours/generate.js';
+export * from './tours/validate.js';
