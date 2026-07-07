@@ -45,6 +45,28 @@ describe('dogfood browo-hr', () => {
       expect(exitCode).toBe(0);
       const exported = await readFile(join(dir, 'docs/export/knowledge.md'), 'utf8');
       expect(exported).toContain('# AutoGuide Dokumentation');
+
+      const htmlExit = await runExport(dir, { format: 'html', outDir: 'docs/export-html' });
+      expect(htmlExit).toBe(0);
+      const html = await readFile(join(dir, 'docs/export-html/knowledge.html'), 'utf8');
+      expect(html).toContain('<html lang="de">');
+      expect(html).toContain('AutoGuide Dokumentation');
+      expect(html).toMatch(/Wiki|Stammdaten|Mitarbeiter/i);
+
+      let chromiumAvailable = true;
+      try {
+        const { chromium } = await import('playwright');
+        const browser = await chromium.launch();
+        await browser.close();
+      } catch {
+        chromiumAvailable = false;
+      }
+      if (chromiumAvailable) {
+        const pdfExit = await runExport(dir, { format: 'pdf', outDir: 'docs/export-pdf' });
+        expect(pdfExit).toBe(0);
+        const pdf = await readFile(join(dir, 'docs/export-pdf/knowledge.pdf'));
+        expect(pdf.subarray(0, 4).toString()).toBe('%PDF');
+      }
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
