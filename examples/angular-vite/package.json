@@ -1,0 +1,29 @@
+{
+  "name": "@autoguide/example-angular-vite",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "echo 'example app — e2e via verify-ui later'"
+  },
+  "dependencies": {
+    "@angular/common": "^19.2.14",
+    "@angular/compiler": "^19.2.14",
+    "@angular/core": "^19.2.14",
+    "@angular/forms": "^19.2.14",
+    "@angular/platform-browser": "^19.2.14",
+    "@autoguide/angular": "workspace:*",
+    "rxjs": "^7.8.2",
+    "zone.js": "^0.15.1"
+  },
+  "devDependencies": {
+    "@analogjs/vite-plugin-angular": "^1.16.1",
+    "@angular/build": "^19.2.14",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
