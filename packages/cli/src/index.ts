@@ -7,6 +7,9 @@ import { Command } from 'commander';
 import { runInit } from './commands/init.js';
 import { runDoctor } from './commands/doctor.js';
 import { runScan } from './commands/scan.js';
+import { runReview } from './commands/review.js';
+import { runExport } from './commands/export.js';
+import { runPublish } from './commands/publish.js';
 
 const program = new Command();
 
@@ -63,6 +66,43 @@ program
       return;
     }
     console.log(`Scan abgeschlossen (${result.outputDir}).`);
+  });
+
+program
+  .command('review')
+  .description('Review queue: list, accept, or reject uncertain facts')
+  .option('--list', 'List pending review items')
+  .option('--accept <factId>', 'Approve a fact')
+  .option('--reject <factId>', 'Reject a fact')
+  .option('--value <text>', 'Edited value when accepting')
+  .option('--json', 'JSON output for CI')
+  .action(async (options: {
+    list?: boolean;
+    accept?: string;
+    reject?: string;
+    value?: string;
+    json?: boolean;
+  }) => {
+    const code = await runReview(process.cwd(), options);
+    if (code !== 0) process.exitCode = code;
+  });
+
+program
+  .command('export')
+  .description('Export documentation artifacts')
+  .option('--format <format>', 'Export format', 'md')
+  .option('--out <dir>', 'Output directory', 'docs/autoguide-export')
+  .action(async (options: { format: string; out: string }) => {
+    const code = await runExport(process.cwd(), { format: options.format as 'md', outDir: options.out });
+    if (code !== 0) process.exitCode = code;
+  });
+
+program
+  .command('publish')
+  .description('Validate and switch project to published mode')
+  .action(async () => {
+    const code = await runPublish(process.cwd());
+    if (code !== 0) process.exitCode = code;
   });
 
 program.parseAsync(process.argv).catch((error: unknown) => {

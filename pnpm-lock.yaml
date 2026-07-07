@@ -66,6 +66,9 @@ importers:
       '@autoguide/core':
         specifier: workspace:*
         version: link:../core
+      '@autoguide/export':
+        specifier: workspace:*
+        version: link:../export
       '@autoguide/playwright':
         specifier: workspace:*
         version: link:../playwright
@@ -86,6 +89,12 @@ importers:
         version: link:../core
 
   packages/core: {}
+
+  packages/export:
+    dependencies:
+      '@autoguide/core':
+        specifier: workspace:*
+        version: link:../core
 
   packages/playwright:
     dependencies:
