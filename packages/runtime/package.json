@@ -1,0 +1,27 @@
+{
+  "name": "@autoguide/runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser runtime DOM scanner for AutoGuide",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --config vitest.config.ts"
+  },
+  "dependencies": {
+    "@autoguide/core": "workspace:*"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}
