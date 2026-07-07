@@ -1,0 +1,538 @@
+{
+  "epicSlug": "autoguide-platform",
+  "designPath": ".qa/design/autoguide-platform.md",
+  "defaultLabels": [
+    "P1"
+  ],
+  "issues": [
+    {
+      "title": "Initialize pnpm monorepo and shared TypeScript config",
+      "featureSlug": "monorepo-foundation",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [],
+      "body": "## Intent\nBootstrap the AutoGuide monorepo with pnpm workspaces, root TypeScript strict config, Vitest placeholder, and CI-ready scripts.\n\n## User Journey\n1. Developer clones repo\n2. Runs `pnpm install` and `pnpm typecheck`\n3. Monorepo structure is ready for packages\n\n## Problem\nEmpty repo has no build foundation for @autoguide packages.\n\n## Solution\nAdd pnpm-workspace.yaml, tsconfig.base.json, root package.json scripts (build, typecheck, test, checks), packages/plugins/examples dirs.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n| Cloud | skip |\n| Tauri | skip |\n\n## Edge Cases\n- Empty workspace packages should not break typecheck\n- Node 20+ engine constraint documented\n\n## Acceptance\n- [ ] `pnpm install` succeeds\n- [ ] `pnpm typecheck` runs (passes or no-op with no packages)\n- [ ] Workspace globs include packages/*, plugins/*, examples/*\n- [ ] tsconfig.base.json has strict: true\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Define core types and fact model in @autoguide/core",
+      "featureSlug": "core-types-fact-model",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Initialize pnpm monorepo and shared TypeScript config"
+      ],
+      "body": "## Intent\nCreate framework-agnostic core types: Fact, Feature, Page, Flow, Provenance, Confidence, ReviewStatus.\n\n## User Journey\n1. Developer imports types from @autoguide/core\n2. Types validate fact shape with provenance metadata\n\n## Problem\nNo shared vocabulary for knowledge artifacts across scanners and UI.\n\n## Solution\npackages/core with exported types, zod or JSON-schema-aligned interfaces, no React/DOM imports.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Fact IDs stable across rescans\n- ai_proposal vs manual_override distinguished\n\n## Acceptance\n- [ ] packages/core builds standalone\n- [ ] No React/DOM/Node-specific imports in core\n- [ ] Fact type includes provenance, confidence, review_status\n- [ ] Unit tests for type guards/validators\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement config schema and loader",
+      "featureSlug": "config-schema-loader",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Initialize pnpm monorepo and shared TypeScript config"
+      ],
+      "body": "## Intent\nDefine autoguide.config.ts schema with defineAutoGuideConfig, defaults, and validation.\n\n## User Journey\n1. Dev runs autoguide init\n2. Config file generated with appId, framework, baseUrl, mode, ai settings\n\n## Problem\nCLI and SDK need typed configuration with sensible defaults.\n\n## Solution\npackages/config with schema, loader, validation errors; support mode development|published, ai provider ollama|openai-compatible with endpoint+apiKey.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Secrets from env not written to config file\n- Invalid config returns clear German error messages\n\n## Acceptance\n- [ ] defineAutoGuideConfig helper exported\n- [ ] Validates required fields\n- [ ] AI cloud fields optional (apiKey, endpoint)\n- [ ] mode defaults to development\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement JSON storage writer and SQLite index skeleton",
+      "featureSlug": "storage-json-sqlite",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Define core types and fact model in @autoguide/core",
+        "Implement config schema and loader"
+      ],
+      "body": "## Intent\nPersist knowledge to .autoguide/ as JSON (SoT) with SQLite index for search.\n\n## User Journey\n1. Scan completes\n2. features.json, pages.json, flows.json written atomically\n3. SQLite index updated for queries\n\n## Problem\nKnowledge needs durable local storage without cloud dependency.\n\n## Solution\npackages/storage: atomic JSON writes, SQLite schema skeleton per SPEC_FULL, storage abstraction interface.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Partial write failure rolls back\n- Missing .autoguide dir created on init\n\n## Acceptance\n- [ ] JSON files validate against schemas\n- [ ] Atomic write helper tested\n- [ ] SQLite tables created idempotently\n- [ ] No secrets in stored artifacts\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Define JSON schemas for knowledge artifacts",
+      "featureSlug": "json-schemas",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Define core types and fact model in @autoguide/core"
+      ],
+      "body": "## Intent\nPublish JSON schemas for features, pages, flows, confidence, provenance artifacts.\n\n## User Journey\n1. CLI generates output\n2. Output validates against committed schemas\n\n## Problem\nWithout schemas, scanner outputs drift and break consumers.\n\n## Solution\npackages/core/schemas/*.json + validation helper used by CLI and tests.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Schema version field for future migrations\n\n## Acceptance\n- [ ] Schemas cover MVP artifacts from SPEC_FULL\n- [ ] Validation function returns structured errors\n- [ ] CI can validate sample fixtures\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement CLI init and doctor commands",
+      "featureSlug": "cli-init-doctor",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Implement config schema and loader",
+        "Implement JSON storage writer and SQLite index skeleton"
+      ],
+      "body": "## Intent\nCLI commands: autoguide init (detect framework, write config) and autoguide doctor (health checks).\n\n## User Journey\n1. Dev runs npx autoguide init in React Vite project\n2. autoguide.config.ts and .autoguide/ created\n3. doctor reports missing deps\n\n## Problem\nNo entry point for developers to bootstrap AutoGuide.\n\n## Solution\npackages/cli with commander/yargs, init + doctor, non-zero exit on failure.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- init is idempotent\n- doctor detects missing Playwright/Ollama optionally\n\n## Acceptance\n- [ ] init creates config + output dir\n- [ ] doctor exits 0 when healthy, non-zero on issues\n- [ ] Framework detection for Vite React\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Create React adapter provider and widget placeholder",
+      "featureSlug": "react-adapter-skeleton",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Define core types and fact model in @autoguide/core",
+        "Implement JSON storage writer and SQLite index skeleton"
+      ],
+      "body": "## Intent\nShip @autoguide/react with AutoGuideProvider, AutoGuideWidget placeholder, context, hooks.\n\n## User Journey\n1. Dev wraps app in AutoGuideProvider\n2. Help widget FAB renders without throwing when docs missing\n\n## Problem\nHost apps need embeddable SDK entry point.\n\n## Solution\nplugins/react: Provider, Widget shell, load docs from bundle/URL, dev mode badge.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- No throw if .autoguide missing\n- Works Vite React without Next.js\n\n## Acceptance\n- [ ] AutoGuideProvider exports documented API\n- [ ] Widget renders FAB + empty state in German\n- [ ] React Testing Library smoke test\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Create example React Vite reference app",
+      "featureSlug": "example-react-vite",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Create React adapter provider and widget placeholder"
+      ],
+      "body": "## Intent\nMinimal Vite React example app with routes, buttons, AutoGuide integrated for local dev.\n\n## User Journey\n1. Dev runs pnpm dev from root\n2. Example app loads with widget visible\n\n## Problem\nNo isolated host for adapter development and verify-ui.\n\n## Solution\nexamples/react-vite with 2-3 routes, sample actions, AutoGuideProvider wired.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Port 5173 documented in README\n\n## Acceptance\n- [ ] pnpm dev starts example on :5173\n- [ ] Widget visible in example\n- [ ] At least 2 routes navigable\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement runtime DOM traversal and accessibility extraction",
+      "featureSlug": "runtime-dom-a11y",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Create React adapter provider and widget placeholder"
+      ],
+      "body": "## Intent\nPassive runtime scan: DOM traversal, interactive element detection, a11y tree collection.\n\n## User Journey\n1. App runs with SDK\n2. Runtime scanner captures visible elements and labels\n\n## Problem\nNeed runtime evidence for facts without AI.\n\n## Solution\nRuntime scanner module in plugins/react or packages/runtime; bridge to core fact format.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Shadow DOM partial support\n- Dynamic UI mutations debounced\n\n## Acceptance\n- [ ] Detects buttons, links, inputs with accessible names\n- [ ] Outputs runtime snapshot JSON\n- [ ] Mutation observer does not leak memory\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement runtime snapshot serializer and selector generator",
+      "featureSlug": "runtime-snapshot-selectors",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Implement runtime DOM traversal and accessibility extraction"
+      ],
+      "body": "## Intent\nSerialize runtime state to stable selectors and element graph for inspector and Playwright.\n\n## User Journey\n1. Scan runs\n2. Each element gets stable selector + graph edges to page/route\n\n## Problem\nInspector and verification need stable element identity.\n\n## Solution\nSelector generator (data-autoguide-* preferred, fallback CSS), graph serializer.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Prefer data-autoguide-id when present\n- Fragile selectors flagged low confidence\n\n## Acceptance\n- [ ] Snapshot persisted to .autoguide/\n- [ ] Selectors reproducible across rescans\n- [ ] Unit tests for selector stability\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Inspector overlay and element fact panel",
+      "featureSlug": "inspector-overlay",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Implement runtime snapshot serializer and selector generator"
+      ],
+      "body": "## Intent\nInspector mode: hover/select elements, show facts, confidence, provenance in dev mode.\n\n## User Journey\n1. Dev toggles Inspector\n2. Clicks button\n3. Sees fact panel with evidence sources\n\n## Problem\nDevelopers need in-app review of detected knowledge.\n\n## Solution\nInspectorOverlay component, toggle hotkey, fact panel per UI_STYLEGUIDE.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Inspector does not trigger destructive clicks\n- ESC exits inspector\n\n## Acceptance\n- [ ] Toggle inspector on/off\n- [ ] Element selection shows facts\n- [ ] Confidence badge dev-only\n- [ ] German UI strings\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement source scanner TSX parser and route detection",
+      "featureSlug": "source-scanner-routes",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Define core types and fact model in @autoguide/core",
+        "Implement JSON storage writer and SQLite index skeleton"
+      ],
+      "body": "## Intent\nStatic analysis: walk TSX files, detect routes (react-router etc.), extract page candidates.\n\n## User Journey\n1. CLI scan includes source pass\n2. pages.json populated from route definitions\n\n## Problem\nRuntime alone misses routes not visited.\n\n## Solution\npackages/cli source scanner with TS parser, route scanner plugin for React Router.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Lazy routes detected from import graph\n- Monorepo frontend path configurable\n\n## Acceptance\n- [ ] Detects routes in example app and browo-hr structure\n- [ ] Outputs page candidates with file provenance\n- [ ] No execution of user code\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement component handler extraction and data-doc parsing",
+      "featureSlug": "source-scanner-handlers",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement source scanner TSX parser and route detection"
+      ],
+      "body": "## Intent\nExtract component names, onClick handlers, data-doc and data-autoguide-* attributes.\n\n## User Journey\n1. Source scan enriches element facts with handler names and explicit metadata\n\n## Problem\nHigher confidence requires source-level evidence.\n\n## Solution\nAST visitor for handlers, attribute extraction, merge rules per evidence hierarchy.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Ambiguous handler names flagged for review\n- data-doc-* boosts confidence\n\n## Acceptance\n- [ ] Extracts handlers from example app\n- [ ] Explicit metadata facts score >= 0.95\n- [ ] Ambiguous handlers create review items\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Merge source and runtime facts into knowledge graph",
+      "featureSlug": "knowledge-graph-merge",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement runtime snapshot serializer and selector generator",
+        "Implement component handler extraction and data-doc parsing"
+      ],
+      "body": "## Intent\nKnowledge graph: merge static and runtime facts, resolve entities and relationships.\n\n## User Journey\n1. Scan completes\n2. Unified graph links pages, elements, features, flows\n\n## Problem\nIsolated scanner outputs need merging with conflict detection.\n\n## Solution\npackages/core graph operations: addFact, link, detectConflicts per SPEC_FULL.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Conflicting descriptions create conflict records\n- Same element from two sources merged\n\n## Acceptance\n- [ ] Graph stores entities and relationships\n- [ ] Merge prefers higher evidence tier\n- [ ] Conflicts surfaced to review queue\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement confidence scoring engine",
+      "featureSlug": "confidence-engine",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Merge source and runtime facts into knowledge graph"
+      ],
+      "body": "## Intent\nScore facts 0-1 based on evidence hierarchy from SPEC_FULL.\n\n## User Journey\n1. Facts scored after merge\n2. Low confidence items flagged for review\n\n## Problem\nUsers must see uncertainty, not hidden guesses.\n\n## Solution\npackages/core confidence module with weights, thresholds, destructive action rules.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Below 0.50 hidden from published mode\n- Destructive actions require higher threshold\n\n## Acceptance\n- [ ] Scoring matches evidence hierarchy order\n- [ ] confidence.json written\n- [ ] Unit tests for score examples from spec\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement review queue and manual override persistence",
+      "featureSlug": "review-manual-override",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Implement confidence scoring engine"
+      ],
+      "body": "## Intent\nReview workflow: queue uncertain facts, accept/edit/reject, persist manual overrides.\n\n## User Journey\n1. Dev opens review UI/CLI\n2. Edits description\n3. Override persisted and cannot be overwritten by AI\n\n## Problem\nDeveloper-reviewed truth must outrank inference.\n\n## Solution\nReview items, manual_override storage, verification rerun hook.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- AI cannot overwrite manual_override\n- Edited facts re-verified against evidence\n\n## Acceptance\n- [ ] Review queue populated for confidence < threshold\n- [ ] Manual edit persists across rescans\n- [ ] ai_proposal never overwrites approved facts\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement development and published visibility modes",
+      "featureSlug": "visibility-modes",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Implement review queue and manual override persistence",
+        "Create React adapter provider and widget placeholder"
+      ],
+      "body": "## Intent\nConfig mode development|published gates what SDK surfaces show.\n\n## User Journey\n1. Dev uses development mode during review\n2. After publish, end users see only approved facts >= 0.85\n\n## Problem\nOnly dev may see wrong content; end users need safe gate.\n\n## Solution\nFilter layer in SDK + config mode; published requires review_status approved.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Mode mismatch logged in dev\n- Widget shows German empty state when nothing approved\n\n## Acceptance\n- [ ] development shows all facts with badges\n- [ ] published hides unapproved and low confidence\n- [ ] Config mode switch documented\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Playwright trace import from existing tests",
+      "featureSlug": "playwright-import",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement JSON storage writer and SQLite index skeleton",
+        "Implement CLI init and doctor commands"
+      ],
+      "body": "## Intent\nImport existing Playwright test traces (browo-hr e2e) as behavior evidence.\n\n## User Journey\n1. Dev runs scan --playwright-import ./e2e\n2. Flow steps extracted from traces\n\n## Problem\nReinventing crawl ignores existing test investment.\n\n## Solution\nPlaywright trace/report parser plugin; map steps to flow candidates.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Auth sessions from tests reused where safe\n- Import fails gracefully if no tests\n\n## Acceptance\n- [ ] Imports browo-hr e2e trace format\n- [ ] Creates flow candidates with Playwright provenance\n- [ ] Does not replace Playwright as test runner\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement AutoGuide crawl fallback for uncovered routes",
+      "featureSlug": "playwright-crawl-fallback",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement Playwright trace import from existing tests"
+      ],
+      "body": "## Intent\nOwn Playwright crawl for routes without test coverage.\n\n## User Journey\n1. Scan identifies uncovered routes\n2. Crawl visits and captures traces/screenshots\n\n## Problem\nNot all routes have e2e tests.\n\n## Solution\nCrawl profile in CLI, safeMode default, screenshot optional.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- safeMode skips destructive buttons\n- Screenshots disabled via config\n\n## Acceptance\n- [ ] Crawl runs against example app\n- [ ] Uncovered routes detected vs import\n- [ ] PII redaction hooks stubbed\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement flow candidate generation from traces",
+      "featureSlug": "flow-generation",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement Playwright trace import from existing tests",
+        "Implement AutoGuide crawl fallback for uncovered routes"
+      ],
+      "body": "## Intent\nGenerate step-by-step flow candidates from Playwright evidence.\n\n## User Journey\n1. Scan produces flows.json with ordered steps\n2. Dev reviews flow accuracy\n\n## Problem\nWow moment requires flows not button inventories.\n\n## Solution\nFlow builder from trace events, link steps to elements and pages.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Branching flows split into separate candidates\n- Incomplete flows marked uncertain\n\n## Acceptance\n- [ ] flows.json has ordered steps\n- [ ] Each step links to element/page evidence\n- [ ] Example app yields at least 1 flow\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement AI provider interface and Ollama adapter",
+      "featureSlug": "ai-ollama-provider",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Define core types and fact model in @autoguide/core"
+      ],
+      "body": "## Intent\nAIProvider interface + Ollama-compatible local implementation (default).\n\n## User Journey\n1. Dev runs scan with Ollama local\n2. AI proposes descriptions marked ai_proposal\n\n## Problem\nSemantic enrichment needed for readable docs beyond labels.\n\n## Solution\npackages/core or packages/ai: AIProvider, Ollama adapter, prompt templates with evidence-only rule.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Ollama unavailable: scan continues without AI\n- Structured JSON output validated\n\n## Acceptance\n- [ ] AIProvider interface per spec\n- [ ] Ollama adapter works with localhost:11434\n- [ ] Output marked ai_proposal with confidence cap\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement OpenAI-compatible cloud provider with API key and URL",
+      "featureSlug": "ai-cloud-provider",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement AI provider interface and Ollama adapter"
+      ],
+      "body": "## Intent\nCloud AI via user-supplied API key + endpoint URL; explicit PII warning.\n\n## User Journey\n1. Dev sets ai.provider openai-compatible + key + URL in config/env\n2. Confirms warning before first cloud call\n\n## Problem\nSome users want cloud quality; must be opt-in.\n\n## Solution\nOpenAI-compatible adapter, env AUTOGuide_AI_API_KEY + AUTOGuide_AI_ENDPOINT, consent prompt.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Hybrid | opt-in cloud |\n\n## Edge Cases\n- No cloud call without key\n- HR apps show German warning dialog\n\n## Acceptance\n- [ ] Cloud provider uses configurable endpoint URL\n- [ ] Missing key fails with clear error\n- [ ] Consent required before first cloud enrichment\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement AI output validation and ai_proposal marking",
+      "featureSlug": "ai-output-validation",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement OpenAI-compatible cloud provider with API key and URL",
+        "Implement review queue and manual override persistence"
+      ],
+      "body": "## Intent\nValidate AI JSON output against schema; never overwrite verified facts.\n\n## User Journey\n1. AI proposes fact\n2. Validated and queued for review\n3. Dev approves before publish\n\n## Problem\nUnvalidated AI output erodes trust.\n\n## Solution\nSchema validation, uncertainty classification in prompt, merge rules.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Hallucinated routes rejected\n- Split composite facts when partially verified\n\n## Acceptance\n- [ ] Invalid AI JSON rejected\n- [ ] ai_proposal in review queue\n- [ ] Verification example from spec (approve button) passes\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement CLI scan command full pipeline",
+      "featureSlug": "cli-scan-pipeline",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Merge source and runtime facts into knowledge graph",
+        "Implement confidence scoring engine",
+        "Implement CLI init and doctor commands"
+      ],
+      "body": "## Intent\nWire autoguide scan: source + runtime + optional Playwright + optional AI → .autoguide/\n\n## User Journey\n1. Dev runs npx autoguide scan\n2. Full knowledge artifacts generated locally\n\n## Problem\nIndividual scanners exist but no unified scan command.\n\n## Solution\nscan orchestrator in CLI with flags for import/crawl/ai skip.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- --no-ai flag works\n- Scan exit non-zero on validation failure\n\n## Acceptance\n- [ ] scan produces features, pages, flows, confidence JSON\n- [ ] Works on example app without cloud\n- [ ] Non-zero exit on schema failure\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement CLI review command",
+      "featureSlug": "cli-review",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement review queue and manual override persistence",
+        "Implement CLI init and doctor commands"
+      ],
+      "body": "## Intent\nCLI review: list, accept, edit, reject review queue items.\n\n## User Journey\n1. Dev runs autoguide review\n2. Steps through uncertain facts interactively or via flags\n\n## Problem\nNot all review happens in browser UI.\n\n## Solution\nreview subcommand with TTY prompts or JSON patch mode.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Non-interactive CI mode for listing only\n\n## Acceptance\n- [ ] Lists pending review items\n- [ ] Edit persists manual override\n- [ ] Reject removes from publish candidates\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Markdown documentation export",
+      "featureSlug": "export-markdown",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement development and published visibility modes",
+        "Implement CLI scan command full pipeline"
+      ],
+      "body": "## Intent\nExport approved knowledge as Markdown with metadata footer.\n\n## User Journey\n1. Dev runs autoguide export --format md\n2. Gets onboarding-ready docs per page/flow\n\n## Problem\nWow moment needs shareable training material.\n\n## Solution\nExport generator: page docs, flow steps, role visibility, provenance footer for dev export.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Export respects published filter\n- German headings\n\n## Acceptance\n- [ ] Markdown export for pages and flows\n- [ ] Includes last verified timestamp\n- [ ] published-only content when mode published\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Help Center with context resolution",
+      "featureSlug": "help-center",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement development and published visibility modes",
+        "Create React adapter provider and widget placeholder"
+      ],
+      "body": "## Intent\nHelp widget shows page/feature docs for current route and role.\n\n## User Journey\n1. End user opens Help on /vacation page\n2. Sees relevant flow and actions\n\n## Problem\nGeneric help is useless; context matters.\n\n## Solution\nContext resolver from route + userRole prop, Help Center panel sections per spec.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Unknown route shows empty state\n- Role filtering stub for later RBAC issue\n\n## Acceptance\n- [ ] Widget resolves current route context\n- [ ] Shows page title, actions, flows\n- [ ] German UI copy\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement deterministic search index",
+      "featureSlug": "search-index",
+      "priority": "P1",
+      "labels": [
+        "P1"
+      ],
+      "dependsOn": [
+        "Implement Markdown documentation export",
+        "Implement Help Center with context resolution"
+      ],
+      "body": "## Intent\nLocal search over knowledge index; deterministic first, no AI required.\n\n## User Journey\n1. User types in Help search\n2. Matching pages/flows ranked by title and keywords\n\n## Problem\nUsers need to find docs quickly in large apps.\n\n## Solution\nSQLite FTS or in-memory index from storage layer; search API for widget.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Empty query shows recent/toc\n- Privacy: no external search API\n\n## Acceptance\n- [ ] Search returns pages and flows\n- [ ] Works offline\n- [ ] Sub-100ms on typical HR app corpus\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement CLI publish command",
+      "featureSlug": "cli-publish",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Implement development and published visibility modes",
+        "Implement Help Center with context resolution"
+      ],
+      "body": "## Intent\nautoguide publish switches project to published mode after validation gate.\n\n## User Journey\n1. Dev completes review\n2. Runs autoguide publish\n3. End users see approved content only\n\n## Problem\nManual config edit is error-prone for go-live.\n\n## Solution\npublish command validates thresholds, updates config/marker, documents rollback.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Publish fails if destructive facts unreviewed\n- publish logs summary\n\n## Acceptance\n- [ ] publish sets mode published\n- [ ] Fails when unapproved high-impact facts remain\n- [ ] German CLI messages\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement guided tour model and step generation",
+      "featureSlug": "guided-tours",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Implement flow candidate generation from traces",
+        "Implement Help Center with context resolution"
+      ],
+      "body": "## Intent\nTour model with steps anchored to elements; generate from verified flows.\n\n## User Journey\n1. User starts guided tour for Urlaub beantragen\n2. Spotlight steps through UI\n\n## Problem\nFlows in JSON are not yet interactive tours.\n\n## Solution\nTour/step schema, generator from flows, TourRunner component.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Skip tour if element missing\n- Tours only in published mode\n\n## Acceptance\n- [ ] Tour model validates against schema\n- [ ] At least 1 tour in example app\n- [ ] Steps highlight correct elements\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement recommendation engine",
+      "featureSlug": "recommendation-engine",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Implement confidence scoring engine",
+        "Implement review queue and manual override persistence"
+      ],
+      "body": "## Intent\nSuggest code improvements: missing labels, ambiguous handlers, missing data-doc.\n\n## User Journey\n1. After scan dev sees recommendations list\n2. Optional fixes improve confidence\n\n## Problem\nApps lack metadata that would make docs trustworthy.\n\n## Solution\nRecommendation rules from SPEC_FULL; output recommendations.json.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Recommendations never auto-apply\n- Linked to specific files/lines\n\n## Acceptance\n- [ ] Missing label detection\n- [ ] recommendations.json written\n- [ ] CLI doctor surfaces top recommendations\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Vue adapter",
+      "featureSlug": "adapter-vue",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Create React adapter provider and widget placeholder",
+        "Implement development and published visibility modes"
+      ],
+      "body": "## Intent\nVue 3 adapter with parity to React MVP API.\n\n## User Journey\n1. Vue dev installs @autoguide/vue\n2. Same Provider/Widget/Inspector behavior\n\n## Problem\nFull spec requires Vue support.\n\n## Solution\nplugins/vue mirroring React adapter surface.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Composition API plugin install\n- SSR deferred\n\n## Acceptance\n- [ ] Vue 3 example app works\n- [ ] API parity documented vs React\n- [ ] No core framework imports\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Angular adapter",
+      "featureSlug": "adapter-angular",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Create React adapter provider and widget placeholder",
+        "Implement development and published visibility modes"
+      ],
+      "body": "## Intent\nAngular adapter with parity to React MVP API.\n\n## User Journey\n1. Angular dev installs @autoguide/angular\n2. Module/standalone component integration\n\n## Problem\nFull spec requires Angular support.\n\n## Solution\nplugins/angular with NgModule or standalone bootstrap.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Zone.js change detection compatibility\n\n## Acceptance\n- [ ] Minimal Angular example runs widget\n- [ ] API parity checklist completed\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Svelte adapter",
+      "featureSlug": "adapter-svelte",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Create React adapter provider and widget placeholder",
+        "Implement development and published visibility modes"
+      ],
+      "body": "## Intent\nSvelte adapter with parity to React MVP API.\n\n## User Journey\n1. Svelte dev installs @autoguide/svelte\n2. Store-based context + widget\n\n## Problem\nFull spec requires Svelte support.\n\n## Solution\nplugins/svelte with Svelte 5 runes or stores per project standard.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- SvelteKit route detection separate issue\n\n## Acceptance\n- [ ] Svelte example app runs widget\n- [ ] API parity checklist completed\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Tauri adapter",
+      "featureSlug": "adapter-tauri",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Create React adapter provider and widget placeholder",
+        "Implement development and published visibility modes"
+      ],
+      "body": "## Intent\nTauri 2 adapter for scriptony-multihost dogfood.\n\n## User Journey\n1. Tauri app embeds AutoGuide via webview bridge\n2. Runtime scan works in desktop context\n\n## Problem\nscriptony is Tauri; browser-only SDK insufficient.\n\n## Solution\nplugins/tauri bridge for runtime scanner and widget in webview.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Tauri | yes |\n\n## Edge Cases\n- Webview DOM same as browser scanner\n- File paths for .autoguide in app data dir\n\n## Acceptance\n- [ ] Works in scriptony-multihost dev build\n- [ ] Documented install path\n- [ ] No DOM APIs in core\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement plugin API and registry",
+      "featureSlug": "plugin-registry",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Define core types and fact model in @autoguide/core"
+      ],
+      "body": "## Intent\nPlugin lifecycle and registry for scanners, adapters, AI providers.\n\n## User Journey\n1. Third party registers custom scanner plugin\n2. CLI scan loads plugins from config\n\n## Problem\nExtensibility required from day one per architecture decision.\n\n## Solution\nPlugin interface, registry in core, discovery from autoguide.config plugins array.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Invalid plugin fails doctor check\n- Version compatibility field\n\n## Acceptance\n- [ ] Plugin interface documented\n- [ ] Built-in plugins register via same API\n- [ ] Sample stub plugin in examples/\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement HTML and PDF export",
+      "featureSlug": "export-html-pdf",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Implement Markdown documentation export"
+      ],
+      "body": "## Intent\nHTML and PDF export for onboarding packets.\n\n## User Journey\n1. Dev runs autoguide export --format pdf\n2. Shares PDF with employees\n\n## Problem\nMarkdown alone insufficient for some HR onboarding.\n\n## Solution\nHTML template render + PDF generator (playwright pdf or similar).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Large docs paginated\n- Fonts embedded for German umlauts\n\n## Acceptance\n- [ ] HTML export matches Markdown content\n- [ ] PDF generates for example app\n- [ ] published filter respected\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement role-based documentation filtering",
+      "featureSlug": "role-based-docs",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Implement review queue and manual override persistence",
+        "Implement Help Center with context resolution"
+      ],
+      "body": "## Intent\nFilter docs by userRole prop and fact role metadata.\n\n## User Journey\n1. HR admin sees admin flows\n2. Employee sees employee-only flows\n\n## Problem\nbrowo-hr has multiple roles; docs must differ.\n\n## Solution\nRole tags on facts, filter in Help Center and export.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Missing role shows intersection or safe default\n\n## Acceptance\n- [ ] userRole prop filters content\n- [ ] Export can target single role\n- [ ] browo-hr role example documented\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement version-aware change history",
+      "featureSlug": "version-history",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Implement development and published visibility modes",
+        "Implement JSON storage writer and SQLite index skeleton"
+      ],
+      "body": "## Intent\nTrack doc staleness across git scans; mark changed artifacts stale.\n\n## User Journey\n1. Code changes after publish\n2. Scan marks affected docs stale\n\n## Problem\nDocs drift from code without visibility.\n\n## Solution\nGit diff + AST diff hooks; stale markers in knowledge files.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Backend-only change flagged uncertain\n- Version field per fact\n\n## Acceptance\n- [ ] Rescan detects changed routes/components\n- [ ] Stale facts flagged in review\n- [ ] History log in .autoguide/\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement CI documentation validation command",
+      "featureSlug": "ci-validate-docs",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Implement CLI scan command full pipeline",
+        "Define JSON schemas for knowledge artifacts"
+      ],
+      "body": "## Intent\nCI command fails build when docs invalid or stale beyond threshold.\n\n## User Journey\n1. GitHub Action runs autoguide validate\n2. PR fails if schemas break or stale high-impact docs\n\n## Problem\nTeams need enforcement in pipeline.\n\n## Solution\nvalidate subcommand, GitHub Action example in docs.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- validate --soft for warnings only\n\n## Acceptance\n- [ ] validate exits non-zero on schema failure\n- [ ] Example workflow in .github/workflows/\n- [ ] Documented for browo-hr integration\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Validate browo-hr integration with three complete flows",
+      "featureSlug": "dogfood-browo-hr",
+      "priority": "P0",
+      "labels": [
+        "P0"
+      ],
+      "dependsOn": [
+        "Implement Markdown documentation export",
+        "Implement CLI publish command",
+        "Implement CLI scan command full pipeline"
+      ],
+      "body": "## Intent\nEnd-to-end proof: browo-hr with 3 step-by-step flows documented and publishable.\n\n## User Journey\n1. Run scan on browo-hr with Playwright import\n2. Review 3 flows\n3. Export Markdown/PDF and publish\n\n## Problem\nWow moment unproven without real HR app validation.\n\n## Solution\nIntegration doc, scan config for browo-hr, acceptance flows: Urlaubsantrag, Mitarbeiter anlegen, Genehmigung (or dev confirms alternatives).\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Auth via existing e2e setup\n- HR data stays local\n\n## Acceptance\n- [ ] 3 flows with ordered steps in flows.json\n- [ ] Markdown export readable in German\n- [ ] published mode hides unreviewed facts\n- [ ] Playwright import from browo-hr/e2e used\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    },
+    {
+      "title": "Implement Flutter adapter",
+      "featureSlug": "adapter-flutter",
+      "priority": "P2",
+      "labels": [
+        "P2"
+      ],
+      "dependsOn": [
+        "Define core types and fact model in @autoguide/core"
+      ],
+      "body": "## Intent\nFlutter adapter per SPEC_FULL future goals.\n\n## User Journey\n1. Flutter app integrates autoguide package\n2. Widget overlay on Material/Cupertino app\n\n## Problem\nFull spec (c) includes Flutter.\n\n## Solution\nplugins/flutter Dart package bridging to core via platform channel or FFI stub.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Tauri | skip |\n| Flutter | yes |\n\n## Edge Cases\n- MVP API parity definition documented\n- May stub scanner for v1\n\n## Acceptance\n- [ ] Flutter example documents integration path\n- [ ] Widget renders in example app\n- [ ] Architecture doc for core bridge\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+    }
+  ]
+}

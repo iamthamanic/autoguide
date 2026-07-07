@@ -1,0 +1,87 @@
+# AutoGuide
+
+Documentation intelligence engine — make process-heavy software self-explaining.
+
+SDK, CLI, and runtime UI that generate verifiable documentation from code, DOM, and Playwright traces. See [docs/PRD.md](docs/PRD.md) for product scope and [docs/SPEC_FULL.md](docs/SPEC_FULL.md) for the full engineering specification.
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm 9+
+- (Optional) Ollama for local AI enrichment
+- (Optional) Playwright for scan import
+
+## Setup
+
+```bash
+# From repository root
+pnpm install
+cp .env.example .env   # if present — fill values locally, never commit secrets
+```
+
+## Development
+
+```bash
+pnpm dev    # starts example React Vite app when available
+pnpm build
+pnpm typecheck
+pnpm test
+```
+
+Open [http://localhost:5173](http://localhost:5173) (example app)
+
+## Checks (quality gate)
+
+```bash
+pnpm run verify    # deterministic: typecheck + test
+```
+
+Before commit/PR, run **`@ecc-check`** (review-ticket + AgentShield + optional verify-ui). No shimwrappercheck in this repo.
+
+## Tests
+
+```bash
+pnpm test              # unit tests (Vitest)
+pnpm run test:e2e      # Playwright — bootstrap via @verify-ui skill
+```
+
+## Project structure
+
+```
+autoguide/
+├── packages/           # @autoguide/core, config, storage, cli
+├── plugins/            # @autoguide/react (+ future adapters)
+├── examples/           # reference apps
+├── docs/
+│   ├── PRD.md
+│   ├── SPEC_FULL.md
+│   └── UI_STYLEGUIDE.md
+├── .qa/                # design, intake, acceptance, runner config
+└── AGENTS.md
+```
+
+## Environment variables
+
+Document variables in `.env.example`. Do not commit real secrets.
+
+| Variable | Purpose |
+|----------|---------|
+| `AUTOGuide_AI_API_KEY` | Optional cloud AI provider key (user-supplied) |
+| `AUTOGuide_AI_ENDPOINT` | Optional cloud AI endpoint URL |
+
+## Agent workflow
+
+For AI-assisted development:
+
+1. `@project-setup` — bootstrap (done)
+2. `@feature-intake` — epic design + issue slices
+3. `@ecc-runner` — autonomous issue pipeline
+4. `@implement` — code + acceptance artifact
+5. `@ecc-check` — quality gate before ship
+6. `@verify-ui` — browser verification
+
+See [AGENTS.md](AGENTS.md).
+
+## License
+
+MIT (TBD)

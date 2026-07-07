@@ -1,0 +1,38 @@
+# Runner profile — AutoGuide monorepo
+
+issueBackend: github
+
+github:
+  defaultLabels: []
+  milestone: null
+
+stackProfile: monorepo
+
+locale: de
+
+runtimeAxes:
+  - local
+  - cloud
+  - tauri
+
+checksSnippet: "pnpm run verify"
+
+helperSkills:
+  documentation-lookup:
+    - playwright
+    - ollama
+  security-review:
+    - ai-privacy
+    - api-keys
+
+epicPrdSearch:
+  - docs/PRD.md
+  - docs/SPEC_FULL.md
+
+dogfoodApps:
+  primary: browo-hr
+  secondary:
+    - sagadrive
+    - scriptony-multihost
+
+referenceAppPath: ../browo-hr/browo-hr/frontend

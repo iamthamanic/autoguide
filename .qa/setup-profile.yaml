@@ -1,0 +1,9 @@
+locale: de
+appRoot: .
+prdPath: docs/PRD.md
+styleguidePath: docs/UI_STYLEGUIDE.md
+skipShimwrappercheck: true
+enableFallow: false
+enableStubtree: false
+enableMcpSetup: false
+enablePonytail: true

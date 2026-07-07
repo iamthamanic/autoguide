@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.autoguide/
+*.local
+.env
+.env.*
+!.env.example
+.DS_Store
+coverage/
+.turbo/
+*.log
+.qa/evidence/
+.qa/test-results/
