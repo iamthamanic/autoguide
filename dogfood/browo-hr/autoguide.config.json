@@ -1,0 +1,14 @@
+{
+  "appId": "browo-hr",
+  "framework": "react",
+  "baseUrl": "http://localhost:3010",
+  "outputDir": ".autoguide",
+  "mode": "development",
+  "ai": {
+    "provider": "none"
+  },
+  "scan": {
+    "playwrightImportPath": "fixtures/playwright-report.json",
+    "safeMode": true
+  }
+}
