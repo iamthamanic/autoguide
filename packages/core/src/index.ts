@@ -21,3 +21,5 @@ export * from './visibility/filter.js';
 export * from './plugins/registry.js';
 export * from './help/context-resolver.js';
 export * from './help/search.js';
+export * from './recommendations/types.js';
+export * from './recommendations/engine.js';

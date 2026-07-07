@@ -15,6 +15,7 @@ export interface StoragePaths {
   factsJson: string;
   confidenceJson: string;
   reviewsJson: string;
+  recommendationsJson: string;
 }
 
 export function resolveStoragePaths(outputDir: string): StoragePaths {
@@ -27,6 +28,7 @@ export function resolveStoragePaths(outputDir: string): StoragePaths {
     factsJson: join(outputDir, 'facts.json'),
     confidenceJson: join(outputDir, 'confidence.json'),
     reviewsJson: join(outputDir, 'reviews.json'),
+    recommendationsJson: join(outputDir, 'recommendations.json'),
   };
 }
 
@@ -51,6 +53,7 @@ export class StorageWriter {
     await writeJsonAtomic(this.paths.factsJson, []);
     await writeJsonAtomic(this.paths.confidenceJson, { scores: {} });
     await writeJsonAtomic(this.paths.reviewsJson, []);
+    await writeJsonAtomic(this.paths.recommendationsJson, []);
   }
 
   async writeJson<T>(path: string, data: T): Promise<void> {

@@ -9,6 +9,7 @@ import {
   KnowledgeGraph,
   ReviewQueue,
   validateScanArtifacts,
+  generateRecommendations,
 } from '@autoguide/core';
 import type { Fact, FlowRecord } from '@autoguide/core';
 import { loadConfigFromObject } from '@autoguide/config';
@@ -126,6 +127,16 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   const queue = new ReviewQueue();
   queue.seedFromFacts(mergeResult.facts);
 
+  const recommendationHints = source.elements.map((element) => ({
+    filePath: element.filePath,
+    line: element.line,
+    componentName: element.componentName,
+    handlerName: element.handlerName,
+    hasDataDoc: Boolean(element.dataDocKey),
+    missingAriaLabel: element.missingAriaLabel,
+  }));
+  const recommendations = generateRecommendations(mergeResult.facts, recommendationHints);
+
   const pageRecords = toPageRecords(merged.pages);
   const featureRecords = buildFeatureRecords(mergeResult.facts);
   const facts: Fact[] = mergeResult.facts;
@@ -148,6 +159,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     await storage.writeJson(storage.paths.flowsJson, flowRecords);
     await storage.writeJson(storage.paths.factsJson, facts);
     await storage.writeJson(storage.paths.reviewsJson, queue.list());
+    await storage.writeJson(storage.paths.recommendationsJson, recommendations);
     await storage.writeJson(storage.paths.confidenceJson, {
       scores: Object.fromEntries(facts.map((f) => [f.id, f.confidence])),
     });
