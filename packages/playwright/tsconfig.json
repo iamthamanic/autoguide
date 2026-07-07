@@ -8,11 +8,5 @@
     "declarationMap": true
   },
   "include": ["src/**/*"],
-  "references": [
-    { "path": "../core" },
-    { "path": "../config" },
-    { "path": "../storage" },
-    { "path": "../scanner" },
-    { "path": "../playwright" }
-  ]
+  "references": [{ "path": "../core" }]
 }
