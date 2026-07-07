@@ -22,6 +22,18 @@ export class ReviewQueue {
   seedFromFacts(facts: Fact[]): ReviewItem[] {
     for (const fact of facts) {
       const threshold = minimumConfidenceForKey(fact.key);
+      if (fact.status === 'stale') {
+        const item: ReviewItem = {
+          factId: fact.id,
+          entityId: fact.entityId,
+          key: fact.key,
+          value: fact.value,
+          confidence: fact.confidence,
+          reason: 'Dokumentation veraltet — Quellcode geändert',
+        };
+        this.items.set(fact.id, item);
+        continue;
+      }
       if (fact.confidence < threshold || needsReview(fact.confidence)) {
         const item: ReviewItem = {
           factId: fact.id,

@@ -13,6 +13,8 @@ export const ARTIFACT_FILES = [
   'confidence.json',
   'reviews.json',
   'recommendations.json',
+  'history.json',
+  'scan-snapshot.json',
 ] as const;
 
 export type ArtifactFile = (typeof ARTIFACT_FILES)[number];
