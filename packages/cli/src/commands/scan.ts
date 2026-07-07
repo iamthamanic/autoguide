@@ -74,8 +74,13 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   let visitedRoutes: string[] = [];
   let playwrightTests: PlaywrightTestEvidence[] = [];
 
-  const reportPath =
+  const reportPathRaw =
     options.playwrightReport ?? config.scan.playwrightImportPath;
+  const reportPath = reportPathRaw
+    ? reportPathRaw.startsWith('/')
+      ? reportPathRaw
+      : join(cwd, reportPathRaw)
+    : undefined;
   if (reportPath && existsSync(reportPath)) {
     playwrightTests = await importPlaywrightReport(reportPath);
     visitedRoutes = playwrightTests

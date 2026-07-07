@@ -1,0 +1,73 @@
+{
+  "suites": [
+    {
+      "title": "Wiki - Article Viewing (User)",
+      "file": "e2e/tests/learning/wiki-view.spec.ts",
+      "specs": [
+        {
+          "title": "Wiki-Artikel im Lernzentrum ansehen",
+          "tests": [
+            {
+              "title": "User sieht veröffentlichte Artikel",
+              "results": [
+                {
+                  "steps": [
+                    { "title": "goto /learning", "category": "pw:api" },
+                    { "title": "click Wiki Tab", "category": "pw:api" },
+                    { "title": "Artikel öffnen", "category": "pw:api" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Wiki - Search and Filters (User)",
+      "file": "e2e/tests/learning/wiki-search.spec.ts",
+      "specs": [
+        {
+          "title": "Wiki durchsuchen",
+          "tests": [
+            {
+              "title": "Wiki-Suche funktioniert - passende Ergebnisse",
+              "results": [
+                {
+                  "steps": [
+                    { "title": "goto /learning", "category": "pw:api" },
+                    { "title": "fill Wiki durchsuchen", "category": "pw:api" },
+                    { "title": "Trefferliste prüfen", "category": "pw:api" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "TM Stammdaten & Sollstunden Änderung",
+      "file": "e2e/tests/time-management/tm-stammdaten.spec.ts",
+      "specs": [
+        {
+          "title": "Mitarbeiter Stammdaten prüfen",
+          "tests": [
+            {
+              "title": "Phase A: Sarah Klein Stammdaten zeigt Eintrittsdatum, Abteilung, Teams",
+              "results": [
+                {
+                  "steps": [
+                    { "title": "goto /time-management", "category": "pw:api" },
+                    { "title": "Mitarbeiterin auswählen", "category": "pw:api" },
+                    { "title": "Stammdaten validieren", "category": "pw:api" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
