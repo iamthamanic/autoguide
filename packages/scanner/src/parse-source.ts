@@ -14,6 +14,7 @@ const ROUTE_PATTERNS = [
 
 const DATA_DOC_PATTERN = /data-doc-([a-zA-Z0-9_-]+)=['"`]([^'"`]*)['"`]/g;
 const HANDLER_PATTERN = /on(Click|Submit|Change)\s*=\s*\{?\s*([a-zA-Z0-9_$.]+)/g;
+const BUTTON_PATTERN = /<button\b[^>]*>/gi;
 
 export function extractRoutesFromText(filePath: string, content: string): RouteCandidate[] {
   const routes: RouteCandidate[] = [];
@@ -48,6 +49,22 @@ export function extractElementsFromText(filePath: string, content: string): Sour
       handlerName: match[2],
       line: content.slice(0, match.index).split('\n').length,
     });
+  }
+
+  BUTTON_PATTERN.lastIndex = 0;
+  while ((match = BUTTON_PATTERN.exec(content)) !== null) {
+    const tag = match[0] ?? '';
+    const hasAria = /aria-label\s*=/.test(tag) || /aria-labelledby\s*=/.test(tag);
+    const innerMatch = content.slice(match.index).match(/<button\b[^>]*>([\s\S]*?)<\/button>/i);
+    const inner = innerMatch?.[1]?.trim() ?? '';
+    const hasMeaningfulText = /[a-zA-ZäöüÄÖÜß]{2,}/.test(inner);
+    if (!hasAria && !hasMeaningfulText) {
+      elements.push({
+        filePath,
+        missingAriaLabel: true,
+        line: content.slice(0, match.index).split('\n').length,
+      });
+    }
   }
 
   return elements;

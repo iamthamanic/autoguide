@@ -13,6 +13,7 @@ export interface SourceElementFact {
   handlerName?: string;
   dataDocKey?: string;
   dataDocValue?: string;
+  missingAriaLabel?: boolean;
   line?: number;
 }
 

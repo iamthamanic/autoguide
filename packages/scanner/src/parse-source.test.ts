@@ -14,4 +14,10 @@ describe('@autoguide/scanner', () => {
     expect(elements.some((e) => e.dataDocKey === 'action')).toBe(true);
     expect(elements.some((e) => e.handlerName === 'handleSave')).toBe(true);
   });
+
+  it('detects icon-only buttons without aria-label', () => {
+    const content = `<button onClick={handleClick}>✓</button>`;
+    const elements = extractElementsFromText('Page.tsx', content);
+    expect(elements.some((e) => e.missingAriaLabel)).toBe(true);
+  });
 });
