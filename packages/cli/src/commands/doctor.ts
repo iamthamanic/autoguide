@@ -4,13 +4,15 @@
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { readFile } from 'node:fs/promises';
+import { createBuiltinRegistry } from '../plugins.js';
 
 export interface DoctorResult {
   ok: boolean;
   messages: string[];
 }
 
-export function runDoctor(cwd: string): DoctorResult {
+export async function runDoctor(cwd: string): Promise<DoctorResult> {
   const messages: string[] = [];
   let ok = true;
 
@@ -24,6 +26,17 @@ export function runDoctor(cwd: string): DoctorResult {
   if (!existsSync(outputDir)) {
     ok = false;
     messages.push('.autoguide/ fehlt — führe `autoguide init` aus.');
+  }
+
+  if (existsSync(configPath)) {
+    try {
+      const config = JSON.parse(await readFile(configPath, 'utf8')) as { plugins?: string[] };
+      const registry = createBuiltinRegistry(config.plugins ?? []);
+      messages.push(`Plugins: ${registry.list().map((item) => item.id).join(', ')}`);
+    } catch (error) {
+      ok = false;
+      messages.push(error instanceof Error ? error.message : 'Plugin-Validierung fehlgeschlagen.');
+    }
   }
 
   if (ok) {

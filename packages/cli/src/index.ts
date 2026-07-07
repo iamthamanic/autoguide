@@ -26,8 +26,8 @@ program
 program
   .command('doctor')
   .description('Check AutoGuide project health')
-  .action(() => {
-    const result = runDoctor(process.cwd());
+  .action(async () => {
+    const result = await runDoctor(process.cwd());
     for (const message of result.messages) console.log(message);
     if (!result.ok) process.exitCode = 1;
   });

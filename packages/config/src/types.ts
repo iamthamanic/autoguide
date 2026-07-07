@@ -25,6 +25,7 @@ export interface AutoGuideConfig {
   mode: VisibilityMode;
   ai: AiConfig;
   scan: ScanConfig;
+  plugins?: string[];
 }
 
 export type AutoGuideConfigInput = Partial<AutoGuideConfig> & Pick<AutoGuideConfig, 'appId'>;

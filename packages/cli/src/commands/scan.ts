@@ -28,6 +28,7 @@ import {
 import { scanSourceProject, mergeScanResults } from '@autoguide/scanner';
 import { StorageWriter } from '@autoguide/storage';
 import { attachFlowDefaults, buildFeatureRecords, toPageRecords } from '../scan/artifacts.js';
+import { createBuiltinRegistry } from '../plugins.js';
 
 export interface ScanOptions {
   sourceDir?: string;
@@ -55,6 +56,8 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   const config = loadConfigFromObject(raw);
   const outputDir = join(cwd, config.outputDir ?? '.autoguide');
   const baseUrl = options.baseUrl ?? config.baseUrl ?? 'http://localhost:5173';
+
+  createBuiltinRegistry(config.plugins ?? []);
 
   if (options.cloudConsent) {
     await recordCloudConsent(outputDir);
