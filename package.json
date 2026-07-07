@@ -9,11 +9,12 @@
     "dev": "pnpm --filter @autoguide/example-react-vite dev",
     "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r run typecheck",
     "test": "vitest run && pnpm -r run test",
-    "verify": "pnpm typecheck && pnpm test",
+    "verify": "pnpm -r run build && pnpm typecheck && pnpm test",
     "checks": "pnpm run verify",
     "test:e2e": "echo 'Add Playwright — see verify-ui skill'"
   },
   "devDependencies": {
+    "@types/node": "^22.15.32",
     "typescript": "^5.7.3",
     "vitest": "^3.2.4"
   },
