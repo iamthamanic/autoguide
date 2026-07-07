@@ -50,6 +50,7 @@ export function isFact(value: unknown): value is Fact {
   ) {
     return false;
   }
+  if (value.sourceVersion !== undefined && typeof value.sourceVersion !== 'string') return false;
   if (!isFactStatus(value.status)) return false;
   if (!isReviewStatus(value.reviewStatus)) return false;
   if (typeof value.confidence !== 'number') return false;

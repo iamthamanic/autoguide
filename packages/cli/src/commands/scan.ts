@@ -10,7 +10,16 @@ import {
   ReviewQueue,
   validateScanArtifacts,
   generateRecommendations,
+  buildScanSnapshot,
+  detectChanges,
+  mergeRescanFacts,
+  createEmptyHistoryLog,
+  createHistoryEntry,
+  appendHistoryEntry,
+  type ScanSnapshot,
+  type HistoryLog,
 } from '@autoguide/core';
+import { getGitChangedFiles, getGitHead } from '../lib/git-changes.js';
 import type { Fact, FlowRecord } from '@autoguide/core';
 import { loadConfigFromObject } from '@autoguide/config';
 import type { AutoGuideConfigInput } from '@autoguide/config';
@@ -66,6 +75,32 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   const source = await scanSourceProject(join(cwd, sourceDir));
   const merged = mergeScanResults(source);
+
+  const gitHead = await getGitHead(cwd);
+  const gitChangedFiles = await getGitChangedFiles(cwd, [sourceDir]);
+  const currentSnapshot = buildScanSnapshot(
+    { routes: source.routes, elements: source.elements },
+    gitHead,
+  );
+
+  let previousSnapshot: ScanSnapshot | null = null;
+  let previousFacts: Fact[] = [];
+  let historyLog: HistoryLog = createEmptyHistoryLog();
+  const snapshotPath = join(outputDir, 'scan-snapshot.json');
+  const historyPath = join(outputDir, 'history.json');
+  const factsPath = join(outputDir, 'facts.json');
+
+  if (existsSync(snapshotPath)) {
+    previousSnapshot = JSON.parse(await readFile(snapshotPath, 'utf8')) as ScanSnapshot;
+  }
+  if (existsSync(factsPath)) {
+    previousFacts = JSON.parse(await readFile(factsPath, 'utf8')) as Fact[];
+  }
+  if (existsSync(historyPath)) {
+    historyLog = JSON.parse(await readFile(historyPath, 'utf8')) as HistoryLog;
+  }
+
+  const changeDetection = detectChanges(previousSnapshot, currentSnapshot, gitChangedFiles);
 
   let extraFacts = merged.facts;
   let flowRecords: FlowRecord[] = [];
@@ -129,8 +164,26 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     }
   }
 
+  const pageRecords = toPageRecords(merged.pages).map((page) =>
+    changeDetection.changedRoutes.includes(page.route)
+      ? { ...page, status: 'stale' as const }
+      : page,
+  );
+  const rescanMerge = mergeRescanFacts(
+    previousFacts,
+    mergeResult.facts,
+    changeDetection,
+    gitHead,
+  );
+  const facts: Fact[] = rescanMerge.facts;
+
+  historyLog = appendHistoryEntry(
+    historyLog,
+    createHistoryEntry(changeDetection, rescanMerge.staleFactIds, gitHead),
+  );
+
   const queue = new ReviewQueue();
-  queue.seedFromFacts(mergeResult.facts);
+  queue.seedFromFacts(facts);
 
   const recommendationHints = source.elements.map((element) => ({
     filePath: element.filePath,
@@ -140,11 +193,9 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     hasDataDoc: Boolean(element.dataDocKey),
     missingAriaLabel: element.missingAriaLabel,
   }));
-  const recommendations = generateRecommendations(mergeResult.facts, recommendationHints);
+  const recommendations = generateRecommendations(facts, recommendationHints);
 
-  const pageRecords = toPageRecords(merged.pages);
-  const featureRecords = buildFeatureRecords(mergeResult.facts);
-  const facts: Fact[] = mergeResult.facts;
+  const featureRecords = buildFeatureRecords(facts);
 
   const validationErrors = validateScanArtifacts({
     pages: pageRecords,
@@ -165,6 +216,8 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     await storage.writeJson(storage.paths.factsJson, facts);
     await storage.writeJson(storage.paths.reviewsJson, queue.list());
     await storage.writeJson(storage.paths.recommendationsJson, recommendations);
+    await storage.writeJson(storage.paths.historyJson, historyLog);
+    await storage.writeJson(storage.paths.scanSnapshotJson, currentSnapshot);
     await storage.writeJson(storage.paths.confidenceJson, {
       scores: Object.fromEntries(facts.map((f) => [f.id, f.confidence])),
     });

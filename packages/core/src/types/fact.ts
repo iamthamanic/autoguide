@@ -41,6 +41,7 @@ export interface Fact {
   key: string;
   value: unknown;
   roleIds?: string[];
+  sourceVersion?: string;
   status: FactStatus;
   reviewStatus: ReviewStatus;
   confidence: number;

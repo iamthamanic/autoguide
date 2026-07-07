@@ -27,3 +27,8 @@ export * from './recommendations/engine.js';
 export * from './tours/types.js';
 export * from './tours/generate.js';
 export * from './tours/validate.js';
+export * from './history/types.js';
+export * from './history/snapshot.js';
+export * from './history/detect-changes.js';
+export * from './history/apply-stale.js';
+export * from './history/history-log.js';
