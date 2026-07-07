@@ -26,8 +26,8 @@ program
 program
   .command('doctor')
   .description('Check AutoGuide project health')
-  .action(() => {
-    const result = runDoctor(process.cwd());
+  .action(async () => {
+    const result = await runDoctor(process.cwd());
     for (const message of result.messages) console.log(message);
     if (!result.ok) process.exitCode = 1;
   });
@@ -39,19 +39,30 @@ program
   .option('--playwright-import <path>', 'Playwright JSON report to import')
   .option('--base-url <url>', 'Base URL for crawl fallback')
   .option('--crawl', 'Crawl uncovered routes with Playwright')
+  .option('--no-ai', 'Skip AI enrichment')
+  .option('--cloud-consent', 'Record consent for cloud AI enrichment')
   .action(async (options: {
     source: string;
     playwrightImport?: string;
     baseUrl?: string;
     crawl?: boolean;
+    noAi?: boolean;
+    cloudConsent?: boolean;
   }) => {
-    await runScan(process.cwd(), {
+    const result = await runScan(process.cwd(), {
       sourceDir: options.source,
       playwrightReport: options.playwrightImport,
       baseUrl: options.baseUrl,
       crawl: options.crawl,
+      noAi: options.noAi,
+      cloudConsent: options.cloudConsent,
     });
-    console.log('Scan abgeschlossen.');
+    if (!result.ok) {
+      for (const error of result.errors) console.error(error);
+      process.exitCode = 1;
+      return;
+    }
+    console.log(`Scan abgeschlossen (${result.outputDir}).`);
   });
 
 program.parseAsync(process.argv).catch((error: unknown) => {

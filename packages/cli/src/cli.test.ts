@@ -12,7 +12,7 @@ describe('@autoguide/cli', () => {
     process.chdir(dir);
     try {
       await runInit(dir);
-      const doctor = runDoctor(dir);
+      const doctor = await runDoctor(dir);
       expect(doctor.ok).toBe(true);
       const config = JSON.parse(await readFile(join(dir, 'autoguide.config.json'), 'utf8'));
       expect(config.appId).toBe('my-app');
