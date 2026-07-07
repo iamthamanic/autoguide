@@ -92,10 +92,12 @@ program
   .description('Export documentation artifacts')
   .option('--format <format>', 'Export format (md, html, pdf)', 'md')
   .option('--out <dir>', 'Output directory', 'docs/autoguide-export')
-  .action(async (options: { format: string; out: string }) => {
+  .option('--role <role>', 'Filter export to a single user role')
+  .action(async (options: { format: string; out: string; role?: string }) => {
     const code = await runExport(process.cwd(), {
       format: options.format as 'md' | 'html' | 'pdf',
       outDir: options.out,
+      role: options.role,
     });
     if (code !== 0) process.exitCode = code;
   });

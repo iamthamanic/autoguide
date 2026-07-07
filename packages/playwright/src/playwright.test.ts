@@ -54,6 +54,44 @@ describe('@autoguide/playwright', () => {
     expect(isSafeAction('Open settings')).toBe(true);
   });
 
+  it('infers roleIds from suite titles', () => {
+    const report = JSON.stringify({
+      suites: [
+        {
+          title: 'Wiki - Search and Filters (User)',
+          specs: [
+            {
+              title: 'Wiki durchsuchen',
+              tests: [
+                {
+                  title: 'Wiki-Suche',
+                  results: [{ steps: [{ title: 'goto /learning' }] }],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          title: 'TM Stammdaten',
+          specs: [
+            {
+              title: 'Stammdaten prüfen',
+              tests: [
+                {
+                  title: 'Admin Stammdaten',
+                  results: [{ steps: [{ title: 'goto /time-management' }] }],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    const flows = buildFlowsFromTests(parsePlaywrightReportJson(report));
+    expect(flows[0]?.roleIds).toEqual(['Mitarbeiter']);
+    expect(flows[1]?.roleIds).toEqual(['HR-Admin']);
+  });
+
   it('merges import result with flows', () => {
     const tests = parsePlaywrightReportJson(SAMPLE_REPORT);
     const result = mergePlaywrightEvidence(tests, ['/', '/employees']);

@@ -6,5 +6,6 @@ import type { VisibilityMode } from '@autoguide/core';
 
 export interface ExportRenderOptions {
   mode: VisibilityMode;
+  userRole?: string;
   exportedAt?: string;
 }

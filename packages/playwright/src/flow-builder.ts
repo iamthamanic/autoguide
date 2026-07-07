@@ -10,6 +10,17 @@ function now(): string {
   return new Date().toISOString();
 }
 
+function inferRoleIds(test: PlaywrightTestEvidence): string[] {
+  const text = `${test.suiteTitle ?? ''} ${test.title} ${test.file ?? ''}`.toLowerCase();
+  if (text.includes('admin') || text.includes('stammdaten') || text.includes('hr-admin')) {
+    return ['HR-Admin'];
+  }
+  if (text.includes('(user)') || text.includes('mitarbeiter')) {
+    return ['Mitarbeiter'];
+  }
+  return [];
+}
+
 export function buildFlowsFromTests(tests: PlaywrightTestEvidence[]): FlowRecord[] {
   return tests.map((test, index) => ({
     id: `flow-${index + 1}`,
@@ -21,7 +32,7 @@ export function buildFlowsFromTests(tests: PlaywrightTestEvidence[]): FlowRecord
       description: step.error ? `Fehler: ${step.error}` : undefined,
       factIds: [],
     })),
-    roleIds: [],
+    roleIds: inferRoleIds(test),
     pageIds: [],
     factIds: [],
     status: 'draft' as const,
@@ -47,6 +58,7 @@ export function testsToFacts(tests: PlaywrightTestEvidence[]): Fact[] {
         entityId: test.title,
         key: 'step',
         value: step.title,
+        roleIds: inferRoleIds(test),
         status: step.error ? 'needs_review' : 'verified',
         reviewStatus: 'pending',
         confidence: scoreFromProvenance(provenance),

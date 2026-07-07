@@ -19,6 +19,7 @@ export type ExportFormat = 'md' | 'html' | 'pdf';
 export interface ExportOptions {
   format?: ExportFormat;
   outDir?: string;
+  role?: string;
 }
 
 export async function runExport(cwd: string, options: ExportOptions = {}): Promise<number> {
@@ -34,7 +35,7 @@ export async function runExport(cwd: string, options: ExportOptions = {}): Promi
   const resolved = loadConfigFromObject(config);
   const outputDir = await resolveOutputDir(cwd);
   const bundle = await loadArtifacts(outputDir);
-  const renderOptions = { mode: resolved.mode };
+  const renderOptions = { mode: resolved.mode, userRole: options.role };
   const targetDir = join(cwd, options.outDir ?? 'docs/autoguide-export');
   await mkdir(targetDir, { recursive: true });
 

@@ -5,6 +5,7 @@
 import type { Fact, VisibilityMode } from '../types/fact.js';
 import type { FlowRecord, PageRecord } from '../types/records.js';
 import { filterFactsForMode } from '../visibility/filter.js';
+import { filterByRole, filterFactsByRole, isVisibleForRole } from '../visibility/role-filter.js';
 
 export interface HelpContext {
   route: string;
@@ -29,19 +30,20 @@ export function resolveHelpContext(
 ): HelpContext {
   const normalized = normalizeRoute(route);
   const visibleFacts = filterFactsForMode(facts, mode);
+  const roleFacts = filterFactsByRole(visibleFacts, userRole);
+  const roleFlows = filterByRole(flows, userRole);
 
   const page = pages.find((item) => normalizeRoute(item.route) === normalized);
-  const pageTitle = page?.title;
+  const pageVisible = page ? isVisibleForRole(page.roleIds, userRole) : false;
+  const pageTitle = pageVisible ? page?.title : undefined;
 
-  const roleOk = (roleIds: string[]) =>
-    roleIds.length === 0 || (userRole ? roleIds.includes(userRole) : true);
+  const pageFlows = roleFlows.filter((flow) => {
+    if (!page || !pageVisible) return flow.pageIds.length === 0;
+    return flow.pageIds.includes(page.id) || flow.pageIds.length === 0;
+  });
 
-  const pageFlows = flows.filter(
-    (flow) => roleOk(flow.roleIds) && (page ? flow.pageIds.includes(page.id) || flow.pageIds.length === 0 : true),
-  );
-
-  const actions = visibleFacts.filter((fact) => {
-    if (page && page.factIds.includes(fact.id)) return true;
+  const actions = roleFacts.filter((fact) => {
+    if (pageVisible && page && page.factIds.includes(fact.id)) return true;
     return fact.key === 'action' || fact.key === 'description';
   });
 

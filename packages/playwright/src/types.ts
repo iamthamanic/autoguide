@@ -13,6 +13,7 @@ export interface PlaywrightStepEvidence {
 export interface PlaywrightTestEvidence {
   title: string;
   file?: string;
+  suiteTitle?: string;
   steps: PlaywrightStepEvidence[];
 }
 

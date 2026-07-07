@@ -2,7 +2,7 @@
  * @autoguide/export — Markdown documentation export.
  */
 
-import { filterFactsForMode } from '@autoguide/core';
+import { filterFactsForMode, filterByRole, filterFactsByRole } from '@autoguide/core';
 import type { FlowRecord, PageRecord } from '@autoguide/core';
 import type { ExportRenderOptions } from './types.js';
 
@@ -13,7 +13,7 @@ export function exportPageMarkdown(
   facts: import('@autoguide/core').Fact[],
   options: MarkdownExportOptions,
 ): string {
-  const visible = filterFactsForMode(facts, options.mode);
+  const visible = filterFactsByRole(filterFactsForMode(facts, options.mode), options.userRole);
   const pageFacts = visible.filter((fact) => page.factIds.includes(fact.id));
   const lines = [
     `# ${page.title}`,
@@ -60,11 +60,14 @@ export function exportKnowledgeMarkdown(
   facts: import('@autoguide/core').Fact[],
   options: MarkdownExportOptions,
 ): string {
+  const rolePages = filterByRole(pages, options.userRole);
+  const roleFlows = filterByRole(flows, options.userRole);
+  const roleLabel = options.userRole ? ` (${options.userRole})` : '';
   const chunks = [
-    '# AutoGuide Dokumentation',
+    `# AutoGuide Dokumentation${roleLabel}`,
     '',
-    ...pages.map((page) => exportPageMarkdown(page, facts, options)),
-    ...flows.map((flow) => exportFlowMarkdown(flow, options)),
+    ...rolePages.map((page) => exportPageMarkdown(page, facts, options)),
+    ...roleFlows.map((flow) => exportFlowMarkdown(flow, options)),
   ];
   return chunks.join('\n\n');
 }

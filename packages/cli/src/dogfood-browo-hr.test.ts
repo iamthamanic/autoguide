@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { filterFactsForMode } from '@autoguide/core';
+import { filterByRole, filterFactsForMode } from '@autoguide/core';
 import { exportKnowledgeMarkdown } from '@autoguide/export';
 import { runScan } from './commands/scan.js';
 import { runExport } from './commands/export.js';
@@ -41,10 +41,25 @@ describe('dogfood browo-hr', () => {
       const publishedFacts = filterFactsForMode(bundle.facts, 'published');
       expect(publishedFacts.length).toBeLessThan(bundle.facts.length);
 
+      const employeeFlows = filterByRole(bundle.flows, 'Mitarbeiter');
+      const adminFlows = filterByRole(bundle.flows, 'HR-Admin');
+      expect(employeeFlows.length).toBeGreaterThanOrEqual(2);
+      expect(adminFlows.length).toBeGreaterThanOrEqual(1);
+
       const exitCode = await runExport(dir, { outDir: 'docs/export' });
       expect(exitCode).toBe(0);
       const exported = await readFile(join(dir, 'docs/export/knowledge.md'), 'utf8');
       expect(exported).toContain('# AutoGuide Dokumentation');
+
+      const roleExport = await runExport(dir, {
+        outDir: 'docs/export-mitarbeiter',
+        role: 'Mitarbeiter',
+      });
+      expect(roleExport).toBe(0);
+      const roleMd = await readFile(join(dir, 'docs/export-mitarbeiter/knowledge.md'), 'utf8');
+      expect(roleMd).toContain('(Mitarbeiter)');
+      expect(roleMd).toMatch(/Wiki/i);
+      expect(roleMd).not.toMatch(/Stammdaten/i);
 
       const htmlExit = await runExport(dir, { format: 'html', outDir: 'docs/export-html' });
       expect(htmlExit).toBe(0);

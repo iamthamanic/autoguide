@@ -3,6 +3,7 @@
  */
 
 import type { FlowRecord, PageRecord } from '../types/records.js';
+import { filterByRole } from '../visibility/role-filter.js';
 
 export interface SearchHit {
   id: string;
@@ -26,18 +27,22 @@ export function searchKnowledge(
   query: string,
   pages: PageRecord[],
   flows: FlowRecord[],
+  userRole?: string,
 ): SearchHit[] {
+  const visiblePages = filterByRole(pages, userRole);
+  const visibleFlows = filterByRole(flows, userRole);
+
   const q = query.trim();
   if (!q) {
     return [
-      ...pages.slice(0, 5).map((page) => ({
+      ...visiblePages.slice(0, 5).map((page) => ({
         id: page.id,
         kind: 'page' as const,
         title: page.title,
         snippet: page.route,
         score: 10,
       })),
-      ...flows.slice(0, 5).map((flow) => ({
+      ...visibleFlows.slice(0, 5).map((flow) => ({
         id: flow.id,
         kind: 'flow' as const,
         title: flow.title,
@@ -48,7 +53,7 @@ export function searchKnowledge(
   }
 
   const hits: SearchHit[] = [];
-  for (const page of pages) {
+  for (const page of visiblePages) {
     const score = Math.max(
       scoreMatch(q, page.title),
       scoreMatch(q, page.route),
@@ -58,7 +63,7 @@ export function searchKnowledge(
       hits.push({ id: page.id, kind: 'page', title: page.title, snippet: page.route, score });
     }
   }
-  for (const flow of flows) {
+  for (const flow of visibleFlows) {
     const stepText = flow.steps.map((step) => step.title).join(' ');
     const score = Math.max(
       scoreMatch(q, flow.title),

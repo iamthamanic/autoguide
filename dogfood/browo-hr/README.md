@@ -24,6 +24,28 @@ pnpm exec autoguide export --format md
 pnpm exec autoguide publish
 ```
 
+## Rollen (Issue #38)
+
+Playwright-Suite-Titel werden in Rollen-Tags übersetzt:
+
+| Suite-Muster | Rolle | Beispiel-Flow |
+|--------------|-------|---------------|
+| `(User)` / Mitarbeiter | `Mitarbeiter` | Wiki-Artikel, Wiki-Suche |
+| `Stammdaten` / Admin | `HR-Admin` | Mitarbeiter Stammdaten prüfen |
+
+Export pro Rolle:
+
+```bash
+pnpm exec autoguide export --format md --role Mitarbeiter --out docs/mitarbeiter
+pnpm exec autoguide export --format pdf --role HR-Admin --out docs/hr-admin
+```
+
+Im Widget filtert `userRole` Help Center und Suche:
+
+```tsx
+<AutoGuideProvider appId="browo-hr" userRole="Mitarbeiter" mode="published">
+```
+
 ## Validierte Abläufe (Alternativen zu Urlaub)
 
 1. Wiki-Artikel im Lernzentrum ansehen
@@ -32,4 +54,4 @@ pnpm exec autoguide publish
 
 ## CI
 
-`packages/cli/src/dogfood-browo-hr.test.ts` nutzt das Fixture-Report und prüft Flows, Markdown-Export und Published-Filter.
+`packages/cli/src/dogfood-browo-hr.test.ts` nutzt das Fixture-Report und prüft Flows, Markdown-Export, Published-Filter und Rollen-Export.

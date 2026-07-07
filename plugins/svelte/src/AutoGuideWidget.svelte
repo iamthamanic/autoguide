@@ -12,7 +12,7 @@
   const helpContext = $derived(
     resolveHelpContext(ctx.route, ctx.pages, ctx.flows, ctx.facts, ctx.mode, ctx.userRole),
   );
-  const searchHits = $derived(searchKnowledge(query, ctx.pages, ctx.flows));
+  const searchHits = $derived(searchKnowledge(query, ctx.pages, ctx.flows, ctx.userRole));
 </script>
 
 <button

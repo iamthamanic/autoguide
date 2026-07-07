@@ -56,6 +56,31 @@ describe('help context', () => {
     expect(ctx.flows[0]?.title).toBe('Urlaub beantragen');
   });
 
+  it('filters flows and facts by userRole', () => {
+    const roleFlows: FlowRecord[] = [
+      { ...flows[0]!, id: 'fl-admin', title: 'Admin Urlaub', roleIds: ['HR-Admin'] },
+      { ...flows[0]!, id: 'fl-user', title: 'Mitarbeiter Urlaub', roleIds: ['Mitarbeiter'] },
+    ];
+    const roleFacts: Fact[] = [
+      { ...facts[0]!, id: 'f-admin', value: 'Admin-Aktion', roleIds: ['HR-Admin'] },
+      { ...facts[0]!, id: 'f-user', value: 'Mitarbeiter-Aktion', roleIds: ['Mitarbeiter'] },
+    ];
+    const adminCtx = resolveHelpContext(
+      '/vacation',
+      pages,
+      roleFlows,
+      roleFacts,
+      'published',
+      'HR-Admin',
+    );
+    expect(adminCtx.flows.map((flow) => flow.title)).toContain('Admin Urlaub');
+    expect(adminCtx.flows.map((flow) => flow.title)).not.toContain('Mitarbeiter Urlaub');
+
+    const hits = searchKnowledge('Urlaub', pages, roleFlows, 'Mitarbeiter');
+    expect(hits.some((hit) => hit.title === 'Mitarbeiter Urlaub')).toBe(true);
+    expect(hits.some((hit) => hit.title === 'Admin Urlaub')).toBe(false);
+  });
+
   it('searches pages and flows deterministically', () => {
     const hits = searchKnowledge('Urlaub', pages, flows);
     expect(hits.some((hit) => hit.kind === 'page')).toBe(true);
