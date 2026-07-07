@@ -1,0 +1,43 @@
+{
+  "name": "@autoguide/angular",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Angular adapter for AutoGuide Help Widget and Inspector",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "ngc -p tsconfig.json",
+    "typecheck": "ngc -p tsconfig.json --noEmit",
+    "test": "pnpm run build && vitest run --config vitest.config.ts"
+  },
+  "dependencies": {
+    "@autoguide/core": "workspace:*",
+    "@autoguide/runtime": "workspace:*"
+  },
+  "peerDependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0"
+  },
+  "devDependencies": {
+    "@angular/common": "^19.2.14",
+    "@angular/compiler": "^19.2.14",
+    "@angular/compiler-cli": "^19.2.14",
+    "@angular/core": "^19.2.14",
+    "@angular/forms": "^19.2.14",
+    "@angular/platform-browser": "^19.2.14",
+    "@angular/platform-browser-dynamic": "^19.2.14",
+    "jsdom": "^26.1.0",
+    "@analogjs/vite-plugin-angular": "^1.16.1",
+    "@angular/build": "^19.2.14",
+    "typescript": "~5.8.3",
+    "zone.js": "^0.15.1"
+  }
+}
