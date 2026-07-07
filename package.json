@@ -7,14 +7,15 @@
   "scripts": {
     "build": "pnpm -r run build",
     "dev": "pnpm --filter @autoguide/example-react-vite dev",
-    "typecheck": "pnpm -r run typecheck",
-    "test": "pnpm -r run test",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
     "verify": "pnpm typecheck && pnpm test",
     "checks": "pnpm run verify",
     "test:e2e": "echo 'Add Playwright — see verify-ui skill'"
   },
   "devDependencies": {
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^3.2.4"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {
