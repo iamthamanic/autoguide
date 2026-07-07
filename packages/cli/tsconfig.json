@@ -12,6 +12,7 @@
     { "path": "../config" },
     { "path": "../storage" },
     { "path": "../scanner" },
-    { "path": "../playwright" }
+    { "path": "../playwright" },
+    { "path": "../ai" }
   ]
 }

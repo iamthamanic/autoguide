@@ -46,8 +46,20 @@ importers:
         specifier: ^6.3.5
         version: 6.4.3(@types/node@26.1.0)
 
+  packages/ai:
+    dependencies:
+      '@autoguide/config':
+        specifier: workspace:*
+        version: link:../config
+      '@autoguide/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/cli:
     dependencies:
+      '@autoguide/ai':
+        specifier: workspace:*
+        version: link:../ai
       '@autoguide/config':
         specifier: workspace:*
         version: link:../config

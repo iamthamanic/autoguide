@@ -71,3 +71,35 @@ export function validatePagesFile(data: unknown): string[] {
   });
   return errors;
 }
+
+export function validateFeaturesFile(data: unknown): string[] {
+  if (!Array.isArray(data)) return ['features.json muss ein Array sein.'];
+  const errors: string[] = [];
+  data.forEach((item, index) => {
+    if (!isFeatureRecord(item)) errors.push(`features[${index}] hat ungültige Struktur.`);
+  });
+  return errors;
+}
+
+export function validateFlowsFile(data: unknown): string[] {
+  if (!Array.isArray(data)) return ['flows.json muss ein Array sein.'];
+  const errors: string[] = [];
+  data.forEach((item, index) => {
+    if (!isFlowRecord(item)) errors.push(`flows[${index}] hat ungültige Struktur.`);
+  });
+  return errors;
+}
+
+export function validateScanArtifacts(artifacts: {
+  pages: unknown;
+  features: unknown;
+  flows: unknown;
+  facts: unknown;
+}): string[] {
+  return [
+    ...validatePagesFile(artifacts.pages),
+    ...validateFeaturesFile(artifacts.features),
+    ...validateFlowsFile(artifacts.flows),
+    ...validateFactsFile(artifacts.facts),
+  ];
+}
