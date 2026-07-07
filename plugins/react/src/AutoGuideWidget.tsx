@@ -2,12 +2,14 @@
  * @autoguide/react — Help Widget FAB and panel placeholder.
  */
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { filterFactsForMode } from '@autoguide/core';
 import { useAutoGuide } from './context.js';
 
 export function AutoGuideWidget() {
-  const { mode } = useAutoGuide();
+  const { mode, facts } = useAutoGuide();
   const [open, setOpen] = useState(false);
+  const visibleFacts = useMemo(() => filterFactsForMode(facts, mode), [facts, mode]);
 
   return (
     <>
@@ -50,10 +52,23 @@ export function AutoGuideWidget() {
           }}
         >
           <h2 style={{ margin: '0 0 8px', fontSize: 16 }}>Hilfe</h2>
-          <p style={{ margin: 0, color: '#64748b', fontSize: 14 }}>
-            Keine Dokumentation für diese Seite.
-            {mode === 'development' ? ' (Entwicklermodus)' : ''}
-          </p>
+          {visibleFacts.length === 0 ? (
+            <p style={{ margin: 0, color: '#64748b', fontSize: 14 }}>
+              Keine Dokumentation für diese Seite.
+              {mode === 'development' ? ' (Entwicklermodus)' : ''}
+            </p>
+          ) : (
+            <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14 }}>
+              {visibleFacts.slice(0, 8).map((fact) => (
+                <li key={fact.id}>
+                  <strong>{String(fact.key)}</strong>: {String(fact.value ?? '')}
+                  {mode === 'development' && fact.confidence < 0.85 ? (
+                    <span style={{ color: '#b45309' }}> (unsicher)</span>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       ) : null}
     </>

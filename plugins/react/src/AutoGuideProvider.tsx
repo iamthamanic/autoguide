@@ -3,13 +3,14 @@
  */
 
 import type { ReactNode } from 'react';
-import type { VisibilityMode } from '@autoguide/core';
+import type { Fact, VisibilityMode } from '@autoguide/core';
 import { AutoGuideContext } from './context.js';
 
 export interface AutoGuideProviderProps {
   appId: string;
   userRole?: string;
   mode?: VisibilityMode;
+  facts?: Fact[];
   children: ReactNode;
 }
 
@@ -17,10 +18,11 @@ export function AutoGuideProvider({
   appId,
   userRole,
   mode = 'development',
+  facts = [],
   children,
 }: AutoGuideProviderProps) {
   return (
-    <AutoGuideContext.Provider value={{ appId, userRole, mode }}>
+    <AutoGuideContext.Provider value={{ appId, userRole, mode, facts }}>
       {children}
     </AutoGuideContext.Provider>
   );

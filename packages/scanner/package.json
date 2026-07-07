@@ -1,12 +1,9 @@
 {
-  "name": "@autoguide/cli",
+  "name": "@autoguide/scanner",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "AutoGuide CLI — init, scan, review, export",
-  "bin": {
-    "autoguide": "./dist/index.js"
-  },
+  "description": "Static source scanner for AutoGuide",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -22,10 +19,8 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/config": "workspace:*",
     "@autoguide/core": "workspace:*",
-    "@autoguide/scanner": "workspace:*",
-    "@autoguide/storage": "workspace:*",
-    "commander": "^13.1.0"
+    "@autoguide/runtime": "workspace:*",
+    "typescript": "^5.7.3"
   }
 }
