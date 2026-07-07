@@ -7,3 +7,5 @@ export * from './types/fact.js';
 export * from './types/records.js';
 export * from './types/graph.js';
 export * from './validators/fact.js';
+export * from './schemas/artifacts.js';
+export * from './schemas/validate-artifacts.js';
