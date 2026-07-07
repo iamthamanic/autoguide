@@ -123,6 +123,6 @@ export class AutoGuideWidgetComponent {
   }
 
   get searchHits() {
-    return searchKnowledge(this.query, this.ctx.pages, this.ctx.flows);
+    return searchKnowledge(this.query, this.ctx.pages, this.ctx.flows, this.ctx.userRole);
   }
 }

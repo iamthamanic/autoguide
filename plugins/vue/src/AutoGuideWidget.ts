@@ -45,7 +45,7 @@ export const AutoGuideWidget = defineComponent({
       resolveHelpContext(route, pages, flows, facts, mode, userRole),
     );
 
-    const searchHits = computed(() => searchKnowledge(query.value, pages, flows));
+    const searchHits = computed(() => searchKnowledge(query.value, pages, flows, userRole));
 
     return () => [
       h(

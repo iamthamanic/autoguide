@@ -3,7 +3,7 @@
  */
 
 import type { Fact } from '@autoguide/core';
-import { filterFactsForMode } from '@autoguide/core';
+import { filterFactsForMode, filterByRole, filterFactsByRole } from '@autoguide/core';
 import type { FlowRecord, PageRecord } from '@autoguide/core';
 import type { ExportRenderOptions } from './types.js';
 
@@ -16,7 +16,7 @@ function escapeHtml(value: string): string {
 }
 
 function exportPageHtml(page: PageRecord, facts: Fact[], options: ExportRenderOptions): string {
-  const visible = filterFactsForMode(facts, options.mode);
+  const visible = filterFactsByRole(filterFactsForMode(facts, options.mode), options.userRole);
   const pageFacts = visible.filter((fact) => page.factIds.includes(fact.id));
   const actions =
     pageFacts.length === 0
@@ -75,10 +75,13 @@ export function exportKnowledgeHtml(
   facts: Fact[],
   options: ExportRenderOptions,
 ): string {
+  const rolePages = filterByRole(pages, options.userRole);
+  const roleFlows = filterByRole(flows, options.userRole);
+  const roleLabel = options.userRole ? ` (${escapeHtml(options.userRole)})` : '';
   const body = [
-    '<h1>AutoGuide Dokumentation</h1>',
-    ...pages.map((page) => exportPageHtml(page, facts, options)),
-    ...flows.map((flow) => exportFlowHtml(flow, options)),
+    `<h1>AutoGuide Dokumentation${roleLabel}</h1>`,
+    ...rolePages.map((page) => exportPageHtml(page, facts, options)),
+    ...roleFlows.map((flow) => exportFlowHtml(flow, options)),
   ].join('\n');
 
   return `<!DOCTYPE html>

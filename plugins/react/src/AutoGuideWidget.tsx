@@ -17,8 +17,8 @@ export function AutoGuideWidget() {
   );
 
   const searchHits = useMemo(
-    () => searchKnowledge(query, pages, flows),
-    [query, pages, flows],
+    () => searchKnowledge(query, pages, flows, userRole),
+    [query, pages, flows, userRole],
   );
 
   return (

@@ -31,7 +31,12 @@ function collectSteps(result: ReportNode): PlaywrightStepEvidence[] {
   return steps;
 }
 
-function walkSuites(node: ReportNode, file: string | undefined, out: PlaywrightTestEvidence[]): void {
+function walkSuites(
+  node: ReportNode,
+  file: string | undefined,
+  suiteTitle: string | undefined,
+  out: PlaywrightTestEvidence[],
+): void {
   const nextFile = node.file ?? file;
   if (node.tests) {
     for (const test of node.tests) {
@@ -40,18 +45,20 @@ function walkSuites(node: ReportNode, file: string | undefined, out: PlaywrightT
         steps.push({ title: test.title });
       }
       if (test.title) {
-        out.push({ title: test.title, file: nextFile, steps });
+        out.push({ title: test.title, file: nextFile, suiteTitle, steps });
       }
     }
   }
-  for (const spec of node.specs ?? []) walkSuites(spec, nextFile, out);
-  for (const suite of node.suites ?? []) walkSuites(suite, nextFile, out);
+  for (const spec of node.specs ?? []) walkSuites(spec, nextFile, suiteTitle, out);
+  for (const suite of node.suites ?? []) {
+    walkSuites(suite, nextFile, suite.title ?? suiteTitle, out);
+  }
 }
 
 export function parsePlaywrightReportJson(content: string): PlaywrightTestEvidence[] {
   const report = JSON.parse(content) as ReportNode;
   const tests: PlaywrightTestEvidence[] = [];
-  walkSuites(report, undefined, tests);
+  walkSuites(report, undefined, undefined, tests);
   return tests;
 }
 

@@ -40,6 +40,7 @@ export interface Fact {
   entityId: string;
   key: string;
   value: unknown;
+  roleIds?: string[];
   status: FactStatus;
   reviewStatus: ReviewStatus;
   confidence: number;
