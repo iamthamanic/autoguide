@@ -1,12 +1,9 @@
 {
-  "name": "@autoguide/cli",
+  "name": "@autoguide/playwright",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "AutoGuide CLI — init, scan, review, export",
-  "bin": {
-    "autoguide": "./dist/index.js"
-  },
+  "description": "Playwright trace import, crawl fallback, and flow generation for AutoGuide",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -22,11 +19,9 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/config": "workspace:*",
-    "@autoguide/core": "workspace:*",
-    "@autoguide/playwright": "workspace:*",
-    "@autoguide/scanner": "workspace:*",
-    "@autoguide/storage": "workspace:*",
-    "commander": "^13.1.0"
+    "@autoguide/core": "workspace:*"
+  },
+  "optionalDependencies": {
+    "playwright": "^1.51.0"
   }
 }

@@ -36,8 +36,21 @@ program
   .command('scan')
   .description('Scan source project and write .autoguide artifacts')
   .option('--source <dir>', 'source directory', 'src')
-  .action(async (options: { source: string }) => {
-    await runScan(process.cwd(), options.source);
+  .option('--playwright-import <path>', 'Playwright JSON report to import')
+  .option('--base-url <url>', 'Base URL for crawl fallback')
+  .option('--crawl', 'Crawl uncovered routes with Playwright')
+  .action(async (options: {
+    source: string;
+    playwrightImport?: string;
+    baseUrl?: string;
+    crawl?: boolean;
+  }) => {
+    await runScan(process.cwd(), {
+      sourceDir: options.source,
+      playwrightReport: options.playwrightImport,
+      baseUrl: options.baseUrl,
+      crawl: options.crawl,
+    });
     console.log('Scan abgeschlossen.');
   });
 

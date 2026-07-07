@@ -11,6 +11,7 @@
     { "path": "../core" },
     { "path": "../config" },
     { "path": "../storage" },
-    { "path": "../scanner" }
+    { "path": "../scanner" },
+    { "path": "../playwright" }
   ]
 }
