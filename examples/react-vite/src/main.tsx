@@ -1,6 +1,6 @@
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AutoGuideProvider, AutoGuideWidget } from '@autoguide/react';
+import { AutoGuideProvider, AutoGuideWidget, InspectorOverlay } from '@autoguide/react';
 
 function App() {
   const [page, setPage] = useState<'home' | 'settings'>('home');
@@ -35,6 +35,7 @@ createRoot(document.getElementById('root')!).render(
     <AutoGuideProvider appId="example-react-vite" userRole="Admin">
       <App />
       <AutoGuideWidget />
+      <InspectorOverlay />
     </AutoGuideProvider>
   </StrictMode>,
 );

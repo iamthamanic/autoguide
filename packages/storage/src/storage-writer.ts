@@ -54,6 +54,10 @@ export class StorageWriter {
     await writeJsonAtomic(path, data);
   }
 
+  async writeRuntimeSnapshot(snapshot: unknown): Promise<void> {
+    await writeJsonAtomic(join(this.paths.outputDir, 'runtime-snapshot.json'), snapshot);
+  }
+
   dispose(): void {
     this.index.close();
   }
