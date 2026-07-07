@@ -26,6 +26,8 @@ describe('version history rescan', () => {
     try {
       await cp(dogfoodDir, dir, { recursive: true });
       await git(dir, ['init']);
+      await git(dir, ['config', 'user.email', 'autoguide@test.local']);
+      await git(dir, ['config', 'user.name', 'AutoGuide Test']);
       await git(dir, ['add', '.']);
       await git(dir, ['commit', '-m', 'init', '--no-gpg-sign']);
 
