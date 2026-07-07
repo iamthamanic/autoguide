@@ -6,6 +6,7 @@
 import { Command } from 'commander';
 import { runInit } from './commands/init.js';
 import { runDoctor } from './commands/doctor.js';
+import { runScan } from './commands/scan.js';
 
 const program = new Command();
 
@@ -29,6 +30,15 @@ program
     const result = runDoctor(process.cwd());
     for (const message of result.messages) console.log(message);
     if (!result.ok) process.exitCode = 1;
+  });
+
+program
+  .command('scan')
+  .description('Scan source project and write .autoguide artifacts')
+  .option('--source <dir>', 'source directory', 'src')
+  .action(async (options: { source: string }) => {
+    await runScan(process.cwd(), options.source);
+    console.log('Scan abgeschlossen.');
   });
 
 program.parseAsync(process.argv).catch((error: unknown) => {

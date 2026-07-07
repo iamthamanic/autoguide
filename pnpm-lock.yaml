@@ -54,6 +54,9 @@ importers:
       '@autoguide/core':
         specifier: workspace:*
         version: link:../core
+      '@autoguide/scanner':
+        specifier: workspace:*
+        version: link:../scanner
       '@autoguide/storage':
         specifier: workspace:*
         version: link:../storage
@@ -78,6 +81,18 @@ importers:
       jsdom:
         specifier: ^26.1.0
         version: 26.1.0
+
+  packages/scanner:
+    dependencies:
+      '@autoguide/core':
+        specifier: workspace:*
+        version: link:../core
+      '@autoguide/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
 
   packages/storage:
     dependencies:
