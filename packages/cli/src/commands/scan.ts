@@ -9,6 +9,7 @@ import {
   KnowledgeGraph,
   ReviewQueue,
   generateRecommendations,
+  linkRecommendationsToReviewQueue,
   buildScanSnapshot,
   detectChanges,
   mergeRescanFacts,
@@ -250,7 +251,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   const queue = new ReviewQueue();
   queue.seedOverridesFromFacts(previousFacts);
-  queue.seedFromFacts(facts);
+  const reviewItems = queue.seedFromFacts(facts);
 
   const recommendationHints = source.elements.map((element) => ({
     filePath: element.filePath,
@@ -260,7 +261,10 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     hasDataDoc: Boolean(element.dataDocKey),
     missingAriaLabel: element.missingAriaLabel,
   }));
-  const recommendations = generateRecommendations(facts, recommendationHints);
+  const recommendations = linkRecommendationsToReviewQueue(
+    generateRecommendations(facts, recommendationHints),
+    reviewItems,
+  );
 
   const featureRecords = buildFeatureRecords(facts);
 

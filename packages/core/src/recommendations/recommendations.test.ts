@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { Fact } from '../types/fact.js';
 import { generateRecommendations } from './engine.js';
+import {
+  formatRecommendationReviewHint,
+  linkRecommendationsToReviewQueue,
+  sortRecommendationsByPriority,
+} from './link.js';
 
 const baseFact = (overrides: Partial<Fact> = {}): Fact => ({
   id: 'fact-1',
@@ -45,8 +50,60 @@ describe('generateRecommendations', () => {
     expect(recs.some((r) => r.category === 'metadata')).toBe(true);
   });
 
-  it('creates recommendations for low-confidence facts', () => {
+  it('creates recommendations for low-confidence facts with factId', () => {
     const recs = generateRecommendations([baseFact()]);
-    expect(recs.some((r) => r.id.startsWith('rec-fact'))).toBe(true);
+    const factRec = recs.find((r) => r.id.startsWith('rec-fact'));
+    expect(factRec?.factId).toBe('fact-1');
+  });
+
+  it('clusters multiple low-confidence facts on the same entity', () => {
+    const recs = generateRecommendations([
+      baseFact({ id: 'fact-a', key: 'label', confidence: 0.4 }),
+      baseFact({ id: 'fact-b', key: 'action', confidence: 0.45 }),
+    ]);
+    const cluster = recs.find((r) => r.id.startsWith('rec-cluster'));
+    expect(cluster?.relatedFactIds).toEqual(['fact-a', 'fact-b']);
+  });
+});
+
+describe('recommendation review links', () => {
+  it('sorts blocking before info', () => {
+    const sorted = sortRecommendationsByPriority([
+      {
+        id: '1',
+        target: 'a',
+        category: 'documentation',
+        severity: 'info',
+        message: 'info',
+        rationale: '',
+      },
+      {
+        id: '2',
+        target: 'b',
+        category: 'documentation',
+        severity: 'blocking',
+        message: 'block',
+        rationale: '',
+      },
+    ]);
+    expect(sorted[0]?.severity).toBe('blocking');
+  });
+
+  it('links fact recommendations to pending review items', () => {
+    const recs = linkRecommendationsToReviewQueue(
+      [{ ...generateRecommendations([baseFact()])[0]!, factId: 'fact-1' }],
+      [
+        {
+          factId: 'fact-1',
+          entityId: 'Page',
+          key: 'title',
+          value: 'Test',
+          confidence: 0.55,
+          reason: 'low',
+        },
+      ],
+    );
+    const hint = formatRecommendationReviewHint(recs[0]!, new Set(['fact-1']));
+    expect(hint).toContain('autoguide review --accept fact-1');
   });
 });

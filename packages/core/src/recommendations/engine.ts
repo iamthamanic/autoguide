@@ -134,6 +134,28 @@ export function generateRecommendations(
       message: `Niedrige Confidence (${fact.confidence}) für Fakt „${fact.key}"`,
       rationale: 'Ergänze Metadaten, Labels oder manuelle Review-Freigabe.',
       filePath,
+      factId: fact.id,
+    });
+  }
+
+  const clusters = new Map<string, Fact[]>();
+  for (const fact of facts) {
+    if (!needsReview(fact.confidence)) continue;
+    const group = clusters.get(fact.entityId) ?? [];
+    group.push(fact);
+    clusters.set(fact.entityId, group);
+  }
+  for (const [entityId, group] of clusters) {
+    if (group.length < 2) continue;
+    remember(`cluster:${entityId}`, {
+      idPrefix: 'rec-cluster',
+      target: entityId,
+      category: 'documentation',
+      severity: 'warning',
+      message: `${group.length} Facts mit niedriger Confidence auf „${entityId}"`,
+      rationale:
+        'Mehrere unsichere Facts auf derselben Entität — Metadaten oder Review bündeln.',
+      relatedFactIds: group.map((fact) => fact.id),
     });
   }
 

@@ -24,6 +24,10 @@ export interface Recommendation {
   filePath?: string;
   line?: number;
   suggestedPatch?: string;
+  /** Links to a fact in the review queue (`autoguide review`). */
+  factId?: string;
+  /** Cluster recommendation: multiple related facts awaiting review. */
+  relatedFactIds?: string[];
 }
 
 export interface RecommendationScanHint {

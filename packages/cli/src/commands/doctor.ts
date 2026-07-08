@@ -5,7 +5,12 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { readFile } from 'node:fs/promises';
-import type { Recommendation } from '@autoguide/core';
+import {
+  type Recommendation,
+  type ReviewItem,
+  sortRecommendationsByPriority,
+  formatRecommendationReviewHint,
+} from '@autoguide/core';
 import { loadScanRegistry } from '../plugins.js';
 
 export interface DoctorResult {
@@ -17,6 +22,12 @@ function isRecommendation(value: unknown): value is Recommendation {
   if (typeof value !== 'object' || value === null) return false;
   const v = value as Record<string, unknown>;
   return typeof v.id === 'string' && typeof v.message === 'string';
+}
+
+function isReviewItem(value: unknown): value is ReviewItem {
+  if (typeof value !== 'object' || value === null) return false;
+  const v = value as Record<string, unknown>;
+  return typeof v.factId === 'string' && typeof v.reason === 'string';
 }
 
 export async function runDoctor(cwd: string): Promise<DoctorResult> {
@@ -51,17 +62,42 @@ export async function runDoctor(cwd: string): Promise<DoctorResult> {
     }
   }
 
+  const reviewsPath = join(outputDir, 'reviews.json');
+  let pendingReviewIds = new Set<string>();
+  if (existsSync(reviewsPath)) {
+    try {
+      const raw = JSON.parse(await readFile(reviewsPath, 'utf8')) as unknown;
+      const items = Array.isArray(raw) ? raw.filter(isReviewItem) : [];
+      pendingReviewIds = new Set(items.map((item) => item.factId));
+      if (items.length > 0) {
+        messages.push(`Review-Warteschlange: ${items.length} offene Facts`);
+      }
+    } catch {
+      messages.push('reviews.json konnte nicht gelesen werden.');
+    }
+  }
+
   const recommendationsPath = join(outputDir, 'recommendations.json');
   if (existsSync(recommendationsPath)) {
     try {
       const raw = JSON.parse(await readFile(recommendationsPath, 'utf8')) as unknown;
-      const list = Array.isArray(raw) ? raw.filter(isRecommendation) : [];
+      const list = sortRecommendationsByPriority(
+        Array.isArray(raw) ? raw.filter(isRecommendation) : [],
+      );
       if (list.length === 0) {
         messages.push('Empfehlungen: keine offenen Hinweise.');
       } else {
-        messages.push(`Empfehlungen (${list.length}):`);
+        messages.push(`Empfehlungen (${list.length}, nach Priorität):`);
         for (const item of list.slice(0, 5)) {
-          messages.push(`- [${item.severity}] ${item.message}`);
+          const location =
+            item.filePath && item.line
+              ? ` @ ${item.filePath}:${item.line}`
+              : item.filePath
+                ? ` @ ${item.filePath}`
+                : '';
+          messages.push(`- [${item.severity}] ${item.message}${location}`);
+          const reviewHint = formatRecommendationReviewHint(item, pendingReviewIds);
+          if (reviewHint) messages.push(`  → ${reviewHint}`);
         }
         if (list.length > 5) {
           messages.push(`- … und ${list.length - 5} weitere`);
