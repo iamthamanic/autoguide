@@ -12,6 +12,7 @@ import { runExport } from './commands/export.js';
 import { runPublish } from './commands/publish.js';
 import { runValidateCommand } from './commands/validate.js';
 import { runGenerate } from './commands/generate.js';
+import { runSearch } from './commands/search.js';
 
 const program = new Command();
 
@@ -139,6 +140,24 @@ program
       soft: options.soft,
       json: options.json,
       maxStale: Number.parseInt(options.maxStale, 10),
+    });
+    if (code !== 0) process.exitCode = code;
+  });
+
+program
+  .command('search <query...>')
+  .description('Search indexed pages and flows (SQLite FTS, JSON fallback)')
+  .option('--role <role>', 'Filter results to a user role')
+  .option('--published', 'Only published records')
+  .option('--limit <count>', 'Maximum results', '20')
+  .option('--json', 'JSON output for CI')
+  .action(async (queryParts: string[], options: { role?: string; published?: boolean; limit: string; json?: boolean }) => {
+    const query = queryParts.join(' ');
+    const code = await runSearch(process.cwd(), query, {
+      role: options.role,
+      publishedOnly: options.published,
+      limit: Number.parseInt(options.limit, 10),
+      json: options.json,
     });
     if (code !== 0) process.exitCode = code;
   });

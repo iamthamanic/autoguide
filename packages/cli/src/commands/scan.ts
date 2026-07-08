@@ -391,6 +391,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
         updatedAt: fact.updatedAt,
       });
     }
+    storage.index.rebuildSearchFts(pageRecords, flowRecords);
   } finally {
     storage.dispose();
   }
