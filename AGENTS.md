@@ -92,6 +92,7 @@ CLI → Source/Runtime/Playwright Scanner → Core (Graph, Confidence, Verificat
 
 - **Verify (deterministic):** `pnpm run verify` (typecheck + test)
 - **Quality gate (ship):** `@ecc-check` — verify + review-ticket + AgentShield (+ verify-ui if UI changed)
+- **Generate (derived artifacts):** `autoguide generate tours|recommendations|bundle` — uses existing `.autoguide/` scan output, no re-scan
 - **Typecheck:** `pnpm typecheck`
 - **Test:** `pnpm test`
 - **Dev (example):** `pnpm dev` → http://localhost:5173

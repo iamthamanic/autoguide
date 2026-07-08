@@ -20,6 +20,8 @@ export interface StoragePaths {
   historyJson: string;
   scanSnapshotJson: string;
   graphJson: string;
+  toursJson: string;
+  docBundleJson: string;
 }
 
 export function resolveStoragePaths(outputDir: string): StoragePaths {
@@ -37,6 +39,8 @@ export function resolveStoragePaths(outputDir: string): StoragePaths {
     historyJson: join(outputDir, 'history.json'),
     scanSnapshotJson: join(outputDir, 'scan-snapshot.json'),
     graphJson: join(outputDir, 'graph.json'),
+    toursJson: join(outputDir, 'tours.json'),
+    docBundleJson: join(outputDir, 'doc-bundle.json'),
   };
 }
 
@@ -72,6 +76,12 @@ export class StorageWriter {
     await writeJsonAtomic(join(this.paths.outputDir, 'graph.json'), {
       entities: [],
       relationships: [],
+    });
+    await writeJsonAtomic(this.paths.toursJson, []);
+    await writeJsonAtomic(this.paths.docBundleJson, {
+      version: '0.1.0',
+      generatedAt: new Date().toISOString(),
+      artifacts: [],
     });
   }
 

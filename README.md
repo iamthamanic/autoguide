@@ -36,6 +36,18 @@ Open [http://localhost:5173](http://localhost:5173) (example app). Integration s
 pnpm run verify    # deterministic: typecheck + test
 ```
 
+## CLI (local)
+
+After `autoguide init` and `autoguide scan` in a host project:
+
+```bash
+npx autoguide generate tours            # tours.json from flows (no re-scan)
+npx autoguide generate recommendations  # refresh recommendations.json from facts
+npx autoguide generate bundle           # tours + recommendations + doc-bundle.json
+npx autoguide export --format md
+npx autoguide validate
+```
+
 Before commit/PR, run **`@ecc-check`** (review-ticket + AgentShield + optional verify-ui). No shimwrappercheck in this repo.
 
 ## Tests
