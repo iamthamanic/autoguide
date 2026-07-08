@@ -15,5 +15,6 @@ export const DEFAULT_CONFIG: Omit<AutoGuideConfig, 'appId'> = {
   },
   scan: {
     safeMode: true,
+    runtime: false,
   },
 };

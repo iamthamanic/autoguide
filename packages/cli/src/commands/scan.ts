@@ -43,6 +43,8 @@ import {
   testsToFacts,
   crawlUncoveredRoutes,
   verifyFlows,
+  captureRuntimeSnapshots,
+  mergeRuntimeSnapshots,
   type PlaywrightTestEvidence,
 } from '@autoguide/playwright';
 import { scanSourceProject, mergeScanResults } from '@autoguide/scanner';
@@ -55,6 +57,8 @@ export interface ScanOptions {
   sourceDir?: string;
   playwrightReport?: string;
   baseUrl?: string;
+  runtime?: boolean;
+  runtimeUrl?: string;
   crawl?: boolean;
   noAi?: boolean;
   cloudConsent?: boolean;
@@ -118,7 +122,9 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   }
 
   const source = await scanSourceProject(join(cwd, sourceDir));
-  const merged = mergeScanResults(source);
+  let merged = mergeScanResults(source);
+  let runtimeSnapshot: Parameters<typeof mergeScanResults>[1];
+  const runtimeWarnings: string[] = [];
 
   const gitHead = await getGitHead(cwd);
   const gitChangedFiles = await getGitChangedFiles(cwd, [sourceDir]);
@@ -189,6 +195,28 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     const importResult = mergePlaywrightEvidence(playwrightTests, knownRoutes, visitedRoutes);
     flowRecords = attachFlowDefaults(importResult.flows);
     extraFacts = [...merged.facts, ...testsToFacts(playwrightTests)];
+  }
+
+  const runtimeEnabled = options.runtime ?? config.scan.runtime ?? false;
+  if (runtimeEnabled) {
+    const runtimeBaseUrl = options.runtimeUrl ?? baseUrl;
+    const routesForRuntime = [
+      ...source.routes.map((route) => route.route),
+      ...visitedRoutes,
+    ];
+    const capture = await captureRuntimeSnapshots({
+      baseUrl: runtimeBaseUrl,
+      routes: routesForRuntime,
+      safeMode: config.scan.safeMode,
+    });
+    runtimeWarnings.push(...capture.warnings);
+    runtimeSnapshot = mergeRuntimeSnapshots(capture.snapshots);
+    merged = mergeScanResults(source, runtimeSnapshot);
+    if (playwrightTests.length > 0) {
+      extraFacts = [...merged.facts, ...testsToFacts(playwrightTests)];
+    } else {
+      extraFacts = merged.facts;
+    }
   }
 
   const pluginScan = await runPluginScans(
@@ -323,6 +351,9 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     await storage.writeJson(storage.paths.confidenceJson, {
       scores: Object.fromEntries(facts.map((f) => [f.id, f.confidence])),
     });
+    if (runtimeSnapshot) {
+      await storage.writeRuntimeSnapshot(runtimeSnapshot);
+    }
 
     const now = new Date().toISOString();
     for (const page of pageRecords) {
@@ -361,5 +392,10 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     ...(await runPluginCleanup(pluginLoad.registry, pluginLoad.enabledIds)),
   );
 
-  return { ok: true, errors: [], warnings: formatPluginWarnings(pluginWarnings), outputDir };
+  return {
+    ok: true,
+    errors: [],
+    warnings: [...formatPluginWarnings(pluginWarnings), ...runtimeWarnings],
+    outputDir,
+  };
 }

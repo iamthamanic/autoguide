@@ -189,6 +189,9 @@ importers:
       '@autoguide/core':
         specifier: workspace:*
         version: link:../core
+      '@autoguide/runtime':
+        specifier: workspace:*
+        version: link:../runtime
     optionalDependencies:
       playwright:
         specifier: ^1.51.0
