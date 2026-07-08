@@ -46,6 +46,7 @@ npx autoguide generate recommendations  # refresh recommendations.json from fact
 npx autoguide generate bundle           # tours + recommendations + doc-bundle.json
 npx autoguide export --format md
 npx autoguide validate
+npx autoguide doctor                  # prioritized recommendations + review hints
 ```
 
 Third-party scanner plugins: add a module path to `plugins` in `autoguide.config.json` (see `examples/stub-plugin/`).

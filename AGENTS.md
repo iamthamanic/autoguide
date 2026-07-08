@@ -94,6 +94,7 @@ CLI → Source/Runtime/Playwright Scanner → Core (Graph, Confidence, Verificat
 - **Quality gate (ship):** `@ecc-check` — verify + review-ticket + AgentShield (+ verify-ui if UI changed)
 - **Generate (derived artifacts):** `autoguide generate tours|recommendations|bundle` — uses existing `.autoguide/` scan output, no re-scan
 - **Plugins:** `autoguide.config.json` → `plugins` array (builtin ids or module paths); lifecycle `setup → scan → transform → cleanup` with isolated failures
+- **Recommendations:** `recommendations.json` on scan; `autoguide doctor` lists prioritized hints with review-queue links
 - **Typecheck:** `pnpm typecheck`
 - **Test:** `pnpm test`
 - **Dev (example):** `pnpm dev` → http://localhost:5173
