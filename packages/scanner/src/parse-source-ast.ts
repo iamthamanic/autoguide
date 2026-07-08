@@ -76,6 +76,51 @@ function jsxTextContent(element: ts.JsxElement): string {
     .join(' ');
 }
 
+function stringArrayFromExpression(expr: ts.Expression | undefined): string | undefined {
+  if (!expr) return undefined;
+  if (ts.isArrayLiteralExpression(expr)) {
+    const values = expr.elements
+      .map((element) => stringFromExpression(element as ts.Expression))
+      .filter((value): value is string => Boolean(value));
+    return values.length > 0 ? values.join(',') : undefined;
+  }
+  return stringFromExpression(expr);
+}
+
+function processDocElement(
+  filePath: string,
+  sourceFile: ts.SourceFile,
+  attributes: ts.JsxAttributes,
+  elements: SourceElementFact[],
+): void {
+  const line = lineOf(sourceFile, attributes);
+  const props: Record<string, string | undefined> = {};
+
+  for (const prop of attributes.properties) {
+    if (!ts.isJsxAttribute(prop)) continue;
+    const attrName = prop.name.getText(sourceFile);
+    if (!['id', 'title', 'description', 'roles'].includes(attrName)) continue;
+    const init = prop.initializer;
+    const expr =
+      init && ts.isJsxExpression(init) ? init.expression : (init as ts.Expression | undefined);
+    props[attrName] =
+      attrName === 'roles' ? stringArrayFromExpression(expr) : stringFromExpression(expr);
+  }
+
+  const keyMap = { id: 'id', title: 'title', description: 'description', roles: 'roles' } as const;
+  for (const [prop, docKey] of Object.entries(keyMap)) {
+    const value = props[prop];
+    if (!value) continue;
+    elements.push({
+      filePath,
+      componentName: 'DocElement',
+      dataDocKey: docKey,
+      dataDocValue: value,
+      line,
+    });
+  }
+}
+
 function processJsxAttributes(
   filePath: string,
   sourceFile: ts.SourceFile,
@@ -86,6 +131,11 @@ function processJsxAttributes(
   routes: RouteCandidate[],
   jsxElement?: ts.JsxElement,
 ): void {
+  if (tag === 'DocElement') {
+    processDocElement(filePath, sourceFile, attributes, elements);
+    return;
+  }
+
   let ariaLabel: string | undefined;
   let handlerName: string | undefined;
   let handlerLine: number | undefined;

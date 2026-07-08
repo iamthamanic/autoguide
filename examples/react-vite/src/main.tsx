@@ -1,6 +1,12 @@
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AutoGuideProvider, AutoGuideWidget, InspectorOverlay, TourRunner } from '@autoguide/react';
+import {
+  AutoGuideProvider,
+  AutoGuideWidget,
+  DocElement,
+  InspectorOverlay,
+  TourRunner,
+} from '@autoguide/react';
 
 const saveTour = {
   id: 'tour-save-action',
@@ -42,9 +48,13 @@ function App() {
       {page === 'home' ? (
         <section>
           <p>Willkommen in der Referenz-App für AutoGuide.</p>
-          <button type="button" data-doc-id="action.save" data-doc-title="Aktion speichern">
-            Aktion speichern
-          </button>
+          <DocElement
+            id="action.save"
+            title="Aktion speichern"
+            description="Speichert die aktuelle Aktion in der Referenz-App."
+          >
+            <button type="button">Aktion speichern</button>
+          </DocElement>
         </section>
       ) : (
         <section>

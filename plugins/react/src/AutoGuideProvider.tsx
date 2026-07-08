@@ -3,8 +3,9 @@
  */
 
 import type { ReactNode } from 'react';
+import { useCallback, useState } from 'react';
 import type { Fact, FlowRecord, PageRecord, VisibilityMode, Tour } from '@autoguide/core';
-import { AutoGuideContext } from './context.js';
+import { AutoGuideContext, type DocElementRegistration } from './context.js';
 
 export interface AutoGuideProviderProps {
   appId: string;
@@ -35,9 +36,34 @@ export function AutoGuideProvider({
   onRetry,
   children,
 }: AutoGuideProviderProps) {
+  const [docElements, setDocElements] = useState<DocElementRegistration[]>([]);
+  const registerDocElement = useCallback((entry: DocElementRegistration) => {
+    setDocElements((prev) => {
+      const index = prev.findIndex((item) => item.id === entry.id);
+      if (index === -1) return [...prev, entry];
+      const next = [...prev];
+      next[index] = entry;
+      return next;
+    });
+  }, []);
+
   return (
     <AutoGuideContext.Provider
-      value={{ appId, userRole, mode, route, facts, pages, flows, tours, loading, error, onRetry }}
+      value={{
+        appId,
+        userRole,
+        mode,
+        route,
+        facts,
+        pages,
+        flows,
+        tours,
+        docElements,
+        registerDocElement,
+        loading,
+        error,
+        onRetry,
+      }}
     >
       {children}
     </AutoGuideContext.Provider>

@@ -1,5 +1,7 @@
 export { AutoGuideProvider } from './AutoGuideProvider.js';
 export type { AutoGuideProviderProps } from './AutoGuideProvider.js';
+export { DocElement } from './DocElement.js';
+export type { DocElementProps } from './DocElement.js';
 export { AutoGuideWidget } from './AutoGuideWidget.js';
 export { InspectorOverlay } from './InspectorOverlay.js';
 export { ReviewBadge } from './ReviewBadge.js';

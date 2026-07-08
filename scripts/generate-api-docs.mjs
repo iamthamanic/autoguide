@@ -25,6 +25,7 @@ const KEY_APIS = {
   react: [
     ['AutoGuideProvider', 'Root context: facts, pages, flows, tours, visibility mode'],
     ['AutoGuideWidget', 'Help FAB + slide-over panel (German UI)'],
+    ['DocElement', 'Wrapper that sets data-doc-* and registers metadata with provider'],
     ['InspectorOverlay', 'Dev inspector for element facts'],
     ['useAutoGuide', 'Hook for route-scoped help context'],
     ['TourRunner', 'In-app guided tour from tours.json'],
