@@ -1,0 +1,26 @@
+name: example_flutter_app
+description: AutoGuide Flutter integration example
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.5.0
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  autoguide_flutter:
+    path: ../../plugins/flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/autoguide/facts.json
+    - assets/autoguide/pages.json
+    - assets/autoguide/flows.json

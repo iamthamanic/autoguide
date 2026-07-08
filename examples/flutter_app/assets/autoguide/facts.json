@@ -1,0 +1,14 @@
+[
+  {
+    "id": "f1",
+    "entityId": "btn-apply",
+    "key": "action",
+    "value": "Antrag stellen",
+    "status": "verified",
+    "reviewStatus": "approved",
+    "confidence": 0.95,
+    "provenance": [],
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  }
+]

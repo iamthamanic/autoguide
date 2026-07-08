@@ -1,0 +1,34 @@
+name: Flutter Adapter
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'plugins/flutter/**'
+      - 'examples/flutter_app/**'
+      - '.github/workflows/flutter-adapter.yml'
+  workflow_dispatch:
+
+jobs:
+  flutter-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Test plugin package
+        working-directory: plugins/flutter
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
+
+      - name: Analyze example app
+        working-directory: examples/flutter_app
+        run: |
+          flutter pub get
+          flutter analyze
