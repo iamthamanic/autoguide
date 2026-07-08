@@ -39,7 +39,7 @@ describe('confidence and graph', () => {
     const fact = makeFact({ id: 'f1', key: 'label', value: 'Save', confidence: 0.4 });
     const items = queue.seedFromFacts([fact]);
     expect(items.length).toBe(1);
-    const approved = queue.applyDecision(fact, 'approved', 'Speichern');
+    const approved = queue.applyDecision(fact, 'approved');
     expect(approved.status).toBe('manual_override');
   });
 });

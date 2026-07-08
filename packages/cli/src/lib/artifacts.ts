@@ -5,7 +5,7 @@
 import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { Fact, FlowRecord, PageRecord, ReviewItem } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord, Recommendation, ReviewActionRecord, ReviewItem } from '@autoguide/core';
 import { StorageWriter } from '@autoguide/storage';
 
 export interface ArtifactBundle {
@@ -14,6 +14,8 @@ export interface ArtifactBundle {
   pages: PageRecord[];
   flows: FlowRecord[];
   reviews: ReviewItem[];
+  reviewHistory: ReviewActionRecord[];
+  recommendations: Recommendation[];
 }
 
 export async function resolveOutputDir(cwd: string): Promise<string> {
@@ -25,21 +27,30 @@ export async function resolveOutputDir(cwd: string): Promise<string> {
   return join(cwd, config.outputDir ?? '.autoguide');
 }
 
+async function readJsonFile<T>(path: string, fallback: T): Promise<T> {
+  if (!existsSync(path)) return fallback;
+  return JSON.parse(await readFile(path, 'utf8')) as T;
+}
+
 export async function loadArtifacts(outputDir: string): Promise<ArtifactBundle> {
   const paths = new StorageWriter(outputDir).paths;
-  const [factsRaw, pagesRaw, flowsRaw, reviewsRaw] = await Promise.all([
-    readFile(paths.factsJson, 'utf8'),
-    readFile(paths.pagesJson, 'utf8'),
-    readFile(paths.flowsJson, 'utf8'),
-    readFile(paths.reviewsJson, 'utf8'),
+  const [facts, pages, flows, reviews, reviewHistory, recommendations] = await Promise.all([
+    readJsonFile<Fact[]>(paths.factsJson, []),
+    readJsonFile<PageRecord[]>(paths.pagesJson, []),
+    readJsonFile<FlowRecord[]>(paths.flowsJson, []),
+    readJsonFile<ReviewItem[]>(paths.reviewsJson, []),
+    readJsonFile<ReviewActionRecord[]>(paths.reviewHistoryJson, []),
+    readJsonFile<Recommendation[]>(paths.recommendationsJson, []),
   ]);
 
   return {
     outputDir,
-    facts: JSON.parse(factsRaw) as Fact[],
-    pages: JSON.parse(pagesRaw) as PageRecord[],
-    flows: JSON.parse(flowsRaw) as FlowRecord[],
-    reviews: JSON.parse(reviewsRaw) as ReviewItem[],
+    facts,
+    pages,
+    flows,
+    reviews,
+    reviewHistory,
+    recommendations,
   };
 }
 
@@ -47,11 +58,17 @@ export async function saveFactsAndReviews(
   outputDir: string,
   facts: Fact[],
   reviews: ReviewItem[],
+  reviewHistory: ReviewActionRecord[],
+  recommendations?: Recommendation[],
 ): Promise<void> {
   const storage = new StorageWriter(outputDir);
   try {
     await storage.writeJson(storage.paths.factsJson, facts);
     await storage.writeJson(storage.paths.reviewsJson, reviews);
+    await storage.writeJson(storage.paths.reviewHistoryJson, reviewHistory);
+    if (recommendations) {
+      await storage.writeJson(storage.paths.recommendationsJson, recommendations);
+    }
   } finally {
     storage.dispose();
   }

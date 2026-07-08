@@ -12,6 +12,7 @@ export const ARTIFACT_FILES = [
   'facts.json',
   'confidence.json',
   'reviews.json',
+  'review-history.json',
   'recommendations.json',
   'history.json',
   'scan-snapshot.json',

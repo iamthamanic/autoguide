@@ -20,6 +20,7 @@ import {
   linkRecordsToGraph,
   type ScanSnapshot,
   type HistoryLog,
+  type ReviewActionRecord,
 } from '@autoguide/core';
 import { getGitChangedFiles, getGitHead } from '../lib/git-changes.js';
 import type { Fact, FlowRecord } from '@autoguide/core';
@@ -87,16 +88,21 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   let previousSnapshot: ScanSnapshot | null = null;
   let previousFacts: Fact[] = [];
+  let reviewHistory: ReviewActionRecord[] = [];
   let historyLog: HistoryLog = createEmptyHistoryLog();
   const snapshotPath = join(outputDir, 'scan-snapshot.json');
   const historyPath = join(outputDir, 'history.json');
   const factsPath = join(outputDir, 'facts.json');
+  const reviewHistoryPath = join(outputDir, 'review-history.json');
 
   if (existsSync(snapshotPath)) {
     previousSnapshot = JSON.parse(await readFile(snapshotPath, 'utf8')) as ScanSnapshot;
   }
   if (existsSync(factsPath)) {
     previousFacts = JSON.parse(await readFile(factsPath, 'utf8')) as Fact[];
+  }
+  if (existsSync(reviewHistoryPath)) {
+    reviewHistory = JSON.parse(await readFile(reviewHistoryPath, 'utf8')) as ReviewActionRecord[];
   }
   if (existsSync(historyPath)) {
     historyLog = JSON.parse(await readFile(historyPath, 'utf8')) as HistoryLog;
@@ -185,6 +191,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   );
 
   const queue = new ReviewQueue();
+  queue.seedOverridesFromFacts(previousFacts);
   queue.seedFromFacts(facts);
 
   const recommendationHints = source.elements.map((element) => ({
@@ -235,6 +242,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     await storage.writeJson(storage.paths.flowsJson, flowRecords);
     await storage.writeJson(storage.paths.factsJson, facts);
     await storage.writeJson(storage.paths.reviewsJson, queue.list());
+    await storage.writeJson(storage.paths.reviewHistoryJson, reviewHistory);
     await storage.writeJson(storage.paths.recommendationsJson, recommendations);
     await storage.writeJson(storage.paths.historyJson, historyLog);
     await storage.writeJson(storage.paths.scanSnapshotJson, currentSnapshot);

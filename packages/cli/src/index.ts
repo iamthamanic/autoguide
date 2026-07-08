@@ -75,12 +75,14 @@ program
   .option('--list', 'List pending review items')
   .option('--accept <factId>', 'Approve a fact')
   .option('--reject <factId>', 'Reject a fact')
-  .option('--value <text>', 'Edited value when accepting')
+  .option('--edit <factId>', 'Edit and re-verify a fact')
+  .option('--value <text>', 'Edited value when accepting or editing')
   .option('--json', 'JSON output for CI')
   .action(async (options: {
     list?: boolean;
     accept?: string;
     reject?: string;
+    edit?: string;
     value?: string;
     json?: boolean;
   }) => {

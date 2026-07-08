@@ -19,6 +19,8 @@ export * from './confidence/score.js';
 export * from './graph/knowledge-graph.js';
 export * from './graph/entity-graph.js';
 export * from './review/review-queue.js';
+export * from './review/types.js';
+export * from './review/verify-fact.js';
 export * from './visibility/filter.js';
 export * from './visibility/role-filter.js';
 export * from './plugins/registry.js';
