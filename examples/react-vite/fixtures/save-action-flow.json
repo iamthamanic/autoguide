@@ -3,10 +3,16 @@
   "title": "Aktion speichern",
   "description": "Referenz-Flow für examples/react-vite",
   "steps": [
-    { "order": 1, "title": "click Aktion speichern", "factIds": [] }
+    {
+      "order": 1,
+      "title": "Aktion speichern",
+      "description": "Speichert die aktuelle Aktion in der Referenz-App.",
+      "elementId": "action.save",
+      "factIds": []
+    }
   ],
   "roleIds": [],
   "pageIds": [],
   "factIds": [],
-  "status": "draft"
+  "status": "published"
 }

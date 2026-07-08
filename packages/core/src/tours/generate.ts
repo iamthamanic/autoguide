@@ -21,6 +21,10 @@ function inferSelector(stepTitle: string): string | undefined {
   return undefined;
 }
 
+function selectorForElementId(elementId: string): string {
+  return `[data-doc-id="${elementId}"]`;
+}
+
 export function generateToursFromFlows(flows: FlowRecord[]): Tour[] {
   return flows
     .filter((flow) => flow.steps.length > 0)
@@ -37,7 +41,9 @@ export function generateToursFromFlows(flows: FlowRecord[]): Tour[] {
           title,
           body: step.description ?? `Schritt ${step.order}: ${title}`,
           action: inferAction(title),
-          targetSelector: step.elementId ? `#${step.elementId}` : inferSelector(title),
+          targetSelector: step.elementId
+            ? selectorForElementId(step.elementId)
+            : inferSelector(title),
           expectedState: step.route,
         };
         return tourStep;

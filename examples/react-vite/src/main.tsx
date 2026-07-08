@@ -2,34 +2,16 @@ import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   AutoGuideProvider,
+  type AutoGuideProviderProps,
   AutoGuideWidget,
   DocElement,
   InspectorOverlay,
   TourRunner,
 } from '@autoguide/react';
+import scanTours from '../fixtures/tours.json';
 
-const saveTour = {
-  id: 'tour-save-action',
-  title: 'Aktion speichern',
-  roleIds: [],
-  status: 'published' as const,
-  steps: [
-    {
-      id: 'step-1',
-      title: 'Willkommen',
-      body: 'Diese Tour zeigt, wie Sie eine Aktion speichern.',
-      targetSelector: 'h1',
-      action: 'observe' as const,
-    },
-    {
-      id: 'step-2',
-      title: 'Speichern',
-      body: 'Klicken Sie hier, um die Aktion zu speichern.',
-      targetSelector: '[data-doc-id="action.save"]',
-      action: 'click' as const,
-    },
-  ],
-};
+const tours = scanTours as NonNullable<AutoGuideProviderProps['tours']>;
+const primaryTour = tours.find((tour) => tour.status === 'published') ?? tours[0];
 
 function App() {
   const [page, setPage] = useState<'home' | 'settings'>('home');
@@ -67,11 +49,16 @@ function App() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AutoGuideProvider appId="example-react-vite" userRole="Admin" mode="published" tours={[saveTour]}>
+    <AutoGuideProvider
+      appId="example-react-vite"
+      userRole="Admin"
+      mode="published"
+      tours={tours}
+    >
       <App />
       <AutoGuideWidget />
       <InspectorOverlay />
-      <TourRunner tourId="tour-save-action" />
+      {primaryTour ? <TourRunner tourId={primaryTour.id} /> : null}
     </AutoGuideProvider>
   </StrictMode>,
 );
