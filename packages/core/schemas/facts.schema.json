@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autoguide.dev/schemas/facts.schema.json",
+  "title": "AutoGuide facts.json",
+  "version": "0.1.0",
+  "type": "array",
+  "items": { "$ref": "#/$defs/fact" },
+  "$defs": {
+    "fact": {
+      "type": "object",
+      "required": [
+        "id",
+        "entityId",
+        "key",
+        "status",
+        "reviewStatus",
+        "confidence",
+        "provenance",
+        "createdAt",
+        "updatedAt"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "entityId": { "type": "string", "minLength": 1 },
+        "key": { "type": "string", "minLength": 1 },
+        "value": true,
+        "roleIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sourceVersion": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "ai_proposal",
+            "needs_review",
+            "conflict",
+            "manual_override",
+            "stale"
+          ]
+        },
+        "reviewStatus": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected"]
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "provenance": {
+          "type": "array",
+          "items": {
+            "$ref": "https://autoguide.dev/schemas/shared.schema.json#/$defs/provenance"
+          }
+        },
+        "createdAt": { "type": "string", "minLength": 1 },
+        "updatedAt": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

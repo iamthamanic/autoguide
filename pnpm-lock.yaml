@@ -159,6 +159,9 @@ importers:
       '@autoguide/storage':
         specifier: workspace:*
         version: link:../storage
+      ajv:
+        specifier: ^8.17.1
+        version: 8.18.0
       commander:
         specifier: ^13.1.0
         version: 13.1.0

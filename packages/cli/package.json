@@ -15,7 +15,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -29,6 +31,7 @@
     "@autoguide/playwright": "workspace:*",
     "@autoguide/scanner": "workspace:*",
     "@autoguide/storage": "workspace:*",
+    "ajv": "^8.17.1",
     "commander": "^13.1.0"
   }
 }
