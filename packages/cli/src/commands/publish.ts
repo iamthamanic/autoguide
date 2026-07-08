@@ -32,6 +32,18 @@ export async function runPublish(cwd: string): Promise<number> {
     return 1;
   }
 
+  const failedFlows = bundle.flows.filter(
+    (flow) =>
+      flow.verification?.status === 'failed' || flow.verification?.status === 'partial',
+  );
+  if (failedFlows.length > 0) {
+    console.error('Veröffentlichung blockiert — Flow-Verifikation fehlgeschlagen:');
+    for (const flow of failedFlows.slice(0, 10)) {
+      console.error(`- ${flow.id} (${flow.title}): ${flow.verification?.status}`);
+    }
+    return 1;
+  }
+
   const nextConfig = {
     ...raw,
     mode: 'published' as const,

@@ -36,6 +36,7 @@ import {
   mergePlaywrightEvidence,
   testsToFacts,
   crawlUncoveredRoutes,
+  verifyFlows,
   type PlaywrightTestEvidence,
 } from '@autoguide/playwright';
 import { scanSourceProject, mergeScanResults } from '@autoguide/scanner';
@@ -50,6 +51,7 @@ export interface ScanOptions {
   crawl?: boolean;
   noAi?: boolean;
   cloudConsent?: boolean;
+  verifyFlows?: boolean;
 }
 
 export interface ScanResult {
@@ -205,6 +207,14 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   const recommendations = generateRecommendations(facts, recommendationHints);
 
   const featureRecords = buildFeatureRecords(facts);
+
+  if (options.verifyFlows && flowRecords.length > 0) {
+    flowRecords = await verifyFlows(flowRecords, {
+      baseUrl,
+      outputDir,
+      safeMode: config.scan.safeMode,
+    });
+  }
 
   let entityGraph = buildEntityGraph({
     pages: pageRecords,

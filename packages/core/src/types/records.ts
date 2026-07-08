@@ -5,6 +5,19 @@
 
 export type RecordStatus = 'draft' | 'reviewed' | 'published' | 'stale';
 
+export type FlowVerificationStatus = 'unverified' | 'verified' | 'failed' | 'partial';
+
+export interface FlowVerificationProfile {
+  status: FlowVerificationStatus;
+  baseUrl: string;
+  verifiedAt?: string;
+  failedStepOrder?: number;
+  expectedRoute?: string;
+  actualRoute?: string;
+  artifactPath?: string;
+  message?: string;
+}
+
 export interface PageRecord {
   id: string;
   route: string;
@@ -48,6 +61,7 @@ export interface FlowRecord {
   pageIds: string[];
   factIds: string[];
   status: RecordStatus;
+  verification?: FlowVerificationProfile;
 }
 
 export interface ElementRecord {
