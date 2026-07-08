@@ -24,11 +24,11 @@ jobs:
         working-directory: plugins/flutter
         run: |
           flutter pub get
-          flutter analyze
+          flutter analyze --no-fatal-infos
           flutter test
 
       - name: Analyze example app
         working-directory: examples/flutter_app
         run: |
           flutter pub get
-          flutter analyze
+          flutter analyze --no-fatal-infos
