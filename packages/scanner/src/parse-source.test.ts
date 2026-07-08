@@ -23,6 +23,23 @@ describe('@autoguide/scanner', () => {
     expect(elements.some((e) => e.missingAriaLabel)).toBe(true);
   });
 
+  it('extracts DocElement props via AST', () => {
+    const content = `
+import { DocElement } from '@autoguide/react';
+export function Page() {
+  return (
+    <DocElement id="vacation.approve" title="Genehmigen" description="Genehmigt Antrag" roles={['HR', 'Teamlead']}>
+      <button>OK</button>
+    </DocElement>
+  );
+}`;
+    const { elements } = extractFromAst('Page.tsx', content);
+    expect(elements.find((e) => e.dataDocKey === 'id')?.dataDocValue).toBe('vacation.approve');
+    expect(elements.find((e) => e.dataDocKey === 'title')?.dataDocValue).toBe('Genehmigen');
+    expect(elements.find((e) => e.dataDocKey === 'description')?.dataDocValue).toBe('Genehmigt Antrag');
+    expect(elements.find((e) => e.dataDocKey === 'roles')?.dataDocValue).toBe('HR,Teamlead');
+  });
+
   it('links onClick handler to function declaration line in same file', () => {
     const content = `
 function approveVacationRequest() {
