@@ -10,6 +10,7 @@ import { runScan } from './commands/scan.js';
 import { runReview } from './commands/review.js';
 import { runExport } from './commands/export.js';
 import { runPublish } from './commands/publish.js';
+import { runValidateCommand } from './commands/validate.js';
 
 const program = new Command();
 
@@ -98,6 +99,21 @@ program
       format: options.format as 'md' | 'html' | 'pdf',
       outDir: options.out,
       role: options.role,
+    });
+    if (code !== 0) process.exitCode = code;
+  });
+
+program
+  .command('validate')
+  .description('Validate .autoguide artifacts for CI (schemas, stale docs)')
+  .option('--soft', 'Warn only for stale docs; still fail on schema errors')
+  .option('--json', 'JSON output for CI')
+  .option('--max-stale <count>', 'Allowed stale facts before failure', '0')
+  .action(async (options: { soft?: boolean; json?: boolean; maxStale: string }) => {
+    const code = await runValidateCommand(process.cwd(), {
+      soft: options.soft,
+      json: options.json,
+      maxStale: Number.parseInt(options.maxStale, 10),
     });
     if (code !== 0) process.exitCode = code;
   });

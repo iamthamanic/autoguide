@@ -55,3 +55,21 @@ Im Widget filtert `userRole` Help Center und Suche:
 ## CI
 
 `packages/cli/src/dogfood-browo-hr.test.ts` nutzt das Fixture-Report und prüft Flows, Markdown-Export, Published-Filter und Rollen-Export.
+
+### Dokumentation validieren (Issue #40)
+
+Nach dem Scan prüft `autoguide validate` Schema, veraltete Facts/Seiten und kritische offene Reviews:
+
+```bash
+cd dogfood/browo-hr
+pnpm exec autoguide scan --no-ai
+pnpm exec autoguide validate
+```
+
+Nur Warnungen (z. B. veraltete Docs in Entwicklung):
+
+```bash
+pnpm exec autoguide validate --soft
+```
+
+GitHub Actions: `.github/workflows/validate-docs.yml` führt Scan + Validate für dieses Dogfood-Projekt aus.

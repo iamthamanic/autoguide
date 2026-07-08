@@ -1,0 +1,30 @@
+name: Validate Documentation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  browo-hr-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @autoguide/cli... build
+
+      - name: Scan browo-hr
+        working-directory: dogfood/browo-hr
+        run: node ../../packages/cli/dist/index.js scan --no-ai
+
+      - name: Validate browo-hr
+        working-directory: dogfood/browo-hr
+        run: node ../../packages/cli/dist/index.js validate
