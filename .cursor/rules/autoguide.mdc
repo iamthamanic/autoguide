@@ -1,0 +1,21 @@
+---
+description: AutoGuide project map — stack, architecture, quality gate
+alwaysApply: true
+---
+
+# AutoGuide
+
+Read [AGENTS.md](../../AGENTS.md) before changing code.
+
+## Stack
+
+- pnpm monorepo: `packages/`, `plugins/`, `examples/`, `dogfood/`
+- TypeScript strict; `@autoguide/core` stays framework-agnostic
+- UI/errors Deutsch; commits and PR text English
+- Quality gate: `pnpm run verify`
+
+## Workflow
+
+- Issue branches only — never commit directly to `main`
+- Acceptance: `.qa/acceptance/<slug>.md` when present
+- Ship only after `@ecc-check` READY

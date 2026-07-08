@@ -153,7 +153,7 @@ Vor Commit/PR: **`@ecc-check`** (nicht shimwrappercheck).
 | A — Deterministic | `pnpm run verify` |
 | B — Acceptance | `@verify-ticket` (wenn `.qa/acceptance/*.md` existiert) |
 | C — Code review | `@review-ticket` bis ACCEPT |
-| D — Security | `npx ecc-agentshield scan --path .cursor` |
+| D — Security | `npx ecc-agentshield scan --path .cursor` (siehe `.cursor/README.md`) |
 | E — UI | `@verify-ui` wenn UI-Dateien im Diff |
 | Ship | `@commit-pr-safe` nur nach **READY** |
 
