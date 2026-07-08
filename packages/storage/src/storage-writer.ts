@@ -18,6 +18,7 @@ export interface StoragePaths {
   recommendationsJson: string;
   historyJson: string;
   scanSnapshotJson: string;
+  graphJson: string;
 }
 
 export function resolveStoragePaths(outputDir: string): StoragePaths {
@@ -33,6 +34,7 @@ export function resolveStoragePaths(outputDir: string): StoragePaths {
     recommendationsJson: join(outputDir, 'recommendations.json'),
     historyJson: join(outputDir, 'history.json'),
     scanSnapshotJson: join(outputDir, 'scan-snapshot.json'),
+    graphJson: join(outputDir, 'graph.json'),
   };
 }
 
@@ -63,6 +65,10 @@ export class StorageWriter {
       scannedAt: new Date().toISOString(),
       routes: [],
       elements: [],
+    });
+    await writeJsonAtomic(join(this.paths.outputDir, 'graph.json'), {
+      entities: [],
+      relationships: [],
     });
   }
 

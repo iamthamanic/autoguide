@@ -24,6 +24,11 @@ describe('integrations/hr-workflows', () => {
       const scan = await runScan(dir, { noAi: true });
       expect(scan.ok, scan.errors.join('; ')).toBe(true);
 
+      const graphRaw = await readFile(join(dir, '.autoguide/graph.json'), 'utf8');
+      const graph = JSON.parse(graphRaw) as { entities: unknown[]; relationships: unknown[] };
+      expect(graph.entities.length).toBeGreaterThan(0);
+      expect(graph.relationships.length).toBeGreaterThan(0);
+
       const bundle = await loadArtifacts(join(dir, '.autoguide'));
       expect(bundle.flows.length).toBeGreaterThanOrEqual(3);
       for (const flow of bundle.flows.slice(0, 3)) {

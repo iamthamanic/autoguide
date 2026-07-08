@@ -5,6 +5,12 @@
 
 import type { Provenance } from './fact.js';
 
+export type KnowledgeRelationshipType =
+  | 'contains'
+  | 'uses'
+  | 'triggers'
+  | 'belongsToRole';
+
 export type KnowledgeEntityType =
   | 'app'
   | 'page'
@@ -29,7 +35,7 @@ export interface KnowledgeRelationship {
   id: string;
   from: string;
   to: string;
-  type: string;
+  type: KnowledgeRelationshipType;
   confidence: number;
   provenance: Provenance[];
 }
