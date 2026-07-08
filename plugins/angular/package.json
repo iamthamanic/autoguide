@@ -21,6 +21,7 @@
   "dependencies": {
     "@autoguide/core": "workspace:*",
     "@autoguide/runtime": "workspace:*",
+    "@autoguide/ui": "workspace:*",
     "tslib": "^2.8.1"
   },
   "peerDependencies": {

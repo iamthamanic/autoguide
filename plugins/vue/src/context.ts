@@ -13,6 +13,9 @@ export interface AutoGuideContextValue {
   facts: Fact[];
   pages: PageRecord[];
   flows: FlowRecord[];
+  loading?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
 }
 
 export const AUTO_GUIDE_KEY: InjectionKey<AutoGuideContextValue> = Symbol('autoguide');

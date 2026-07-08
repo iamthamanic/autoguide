@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@autoguide/core": "workspace:*",
-    "@autoguide/runtime": "workspace:*"
+    "@autoguide/runtime": "workspace:*",
+    "@autoguide/ui": "workspace:*"
   },
   "peerDependencies": {
     "svelte": "^5.0.0"
@@ -29,6 +30,8 @@
   "devDependencies": {
     "@sveltejs/package": "^2.5.7",
     "@sveltejs/vite-plugin-svelte": "^5.1.1",
+    "@testing-library/svelte": "^5.2.8",
+    "jsdom": "^26.1.0",
     "svelte": "^5.43.14",
     "svelte-check": "^4.3.5",
     "typescript": "^5.7.3",
