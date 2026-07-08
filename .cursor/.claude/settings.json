@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git branch*)",
+      "Bash(gh *)",
+      "Bash(pnpm *)",
+      "Bash(npx *)",
+      "Read(*)",
+      "Edit(packages/*)",
+      "Edit(plugins/*)",
+      "Edit(examples/*)",
+      "Edit(tests/*)",
+      "Edit(docs/*)",
+      "Edit(integrations/*)",
+      "Edit(.qa/*)",
+      "Edit(.github/*)",
+      "Write(packages/*)",
+      "Write(plugins/*)",
+      "Write(examples/*)",
+      "Write(tests/*)",
+      "Write(docs/*)",
+      "Write(integrations/*)",
+      "Write(.qa/*)",
+      "Write(.github/*)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(sudo *)",
+      "Bash(chmod 777 *)",
+      "Bash(curl * | bash)",
+      "Bash(wget * | bash)",
+      "Bash(ssh *)",
+      "Bash(> /dev/*)",
+      "Bash(dd *)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)"
+    ]
+  }
+}

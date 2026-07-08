@@ -43,7 +43,7 @@ describe('validate command', () => {
     const dir = await mkdtemp(join(tmpdir(), 'ag-validate-'));
     try {
       const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..');
-      await cp(join(repoRoot, 'dogfood/browo-hr'), dir, { recursive: true });
+      await cp(join(repoRoot, 'integrations/hr-workflows'), dir, { recursive: true });
       const scan = await runScan(dir, { noAi: true });
       expect(scan.ok).toBe(true);
 

@@ -29,10 +29,15 @@ epicPrdSearch:
   - docs/PRD.md
   - docs/SPEC_FULL.md
 
-dogfoodApps:
-  primary: browo-hr
-  secondary:
-    - sagadrive
-    - scriptony-multihost
+# In-repo integration scenarios (CI) — no external repos required
+integrationScenarios:
+  primary: integrations/hr-workflows
 
-referenceAppPath: ../browo-hr/browo-hr/frontend
+# Optional: clone these locally for manual realism checks only (not a build dependency)
+optionalExternalApps:
+  - name: browo-hr
+    typicalPath: ../browo-hr/browo-hr/frontend
+  - name: sagadrive
+    typicalPath: ../sagadrive
+  - name: scriptony-multihost
+    typicalPath: ../scriptony-multihost

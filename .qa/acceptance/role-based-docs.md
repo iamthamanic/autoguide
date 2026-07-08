@@ -8,7 +8,7 @@ Filter docs by userRole prop and fact role metadata.
 ## Happy Path
 - [x] userRole prop filters content
 - [x] Export can target single role
-- [x] browo-hr role example documented
+- [x] HR role example documented in integrations/hr-workflows
 
 ## Edge Cases
 - [x] Missing role shows safe default (all visible)

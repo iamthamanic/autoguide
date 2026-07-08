@@ -45,5 +45,5 @@ function TimeManagementPage() {
 }
 
 function handleLogin() {
-  /* browo-hr login flow */
+  /* HR login flow (fixture scenario) */
 }

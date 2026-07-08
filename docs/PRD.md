@@ -48,11 +48,12 @@ Build a reusable open-source **Documentation Intelligence Engine** that turns th
 | Decision | Choice |
 |----------|--------|
 | Scope | Full spec architecturally; phased delivery in 5 layers |
-| Reference dogfood app | **browo-hr** (sagadrive & scriptony later) |
+| Reference integration scenario | **`integrations/hr-workflows`** (in-repo fixtures; CI) |
+| External validation (optional) | browo-hr, sagadrive, scriptony — manual only, not repo deps |
 | Visibility modes | `development` (dev sees all) / `published` (approved facts only) |
 | Publish gate | Manual `publish`; end-user sees `review_status: approved` AND `confidence >= 0.85` |
 | Playwright | Import existing test traces first; own crawl as fallback |
-| Wow acceptance | ≥3 complete step-by-step flows in browo-hr, exportable Markdown/PDF |
+| Wow acceptance | ≥3 complete step-by-step flows in `integrations/hr-workflows`, exportable Markdown/PDF |
 | AI default | Ollama local |
 | AI cloud | Opt-in; user provides **API key + endpoint URL**; explicit warning for PII |
 | API costs | Each user brings own keys; AutoGuide does not host AI |
@@ -94,11 +95,19 @@ See [SPEC_FULL.md](./SPEC_FULL.md) for complete PRD/TRD:
 - plugin-based, reviewable, version-aware
 - `@autoguide/core` must not import React, Vue, DOM, or Node-specific APIs without abstraction
 
-## Dogfood applications
+## Integration scenarios (in-repo)
+
+| Scenario | Path | Role |
+|----------|------|------|
+| HR workflows | `integrations/hr-workflows` | CI + realistic multi-role flows |
+
+## Optional external validation
+
+Real apps for manual checks only — not required for build or CI.
 
 | App | Role | When |
 |-----|------|------|
-| browo-hr | Primary reference (HR flows, Playwright e2e) | Layer 2+ |
+| browo-hr | Optional HR app realism | Layer 2+ |
 | sagadrive | Supabase/BaaS validation | Layer 4+ |
 | scriptony-multihost | Tauri adapter validation | Layer 5 |
 
@@ -109,7 +118,7 @@ AutoGuide is accepted when (see SPEC_FULL.md for detail):
 - React app installs AutoGuide; scan produces structured `.autoguide/` knowledge
 - Dev reviews uncertain facts; reviewed knowledge cannot be overwritten by AI
 - `published` mode shows only approved content to end users
-- ≥3 flows documented end-to-end in browo-hr reference
+- ≥3 flows documented end-to-end via `integrations/hr-workflows` (checked-in fixtures)
 - Core works without cloud; AI is optional enhancement
 - All public JSON validates against schema
 

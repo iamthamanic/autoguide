@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — browo-hr dogfood integration test (issue #41).
+ * @autoguide/cli — hr-workflows integration scenario test (issue #41).
  */
 
 import { cp, mkdtemp, readFile, rm } from 'node:fs/promises';
@@ -14,13 +14,13 @@ import { runExport } from './commands/export.js';
 import { loadArtifacts } from './lib/artifacts.js';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..');
-const dogfoodDir = join(repoRoot, 'dogfood/browo-hr');
+const integrationDir = join(repoRoot, 'integrations/hr-workflows');
 
-describe('dogfood browo-hr', () => {
+describe('integrations/hr-workflows', () => {
   it('produces three ordered flows from Playwright import and German markdown export', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'ag-dogfood-'));
+    const dir = await mkdtemp(join(tmpdir(), 'ag-hr-workflows-'));
     try {
-      await cp(dogfoodDir, dir, { recursive: true });
+      await cp(integrationDir, dir, { recursive: true });
       const scan = await runScan(dir, { noAi: true });
       expect(scan.ok, scan.errors.join('; ')).toBe(true);
 

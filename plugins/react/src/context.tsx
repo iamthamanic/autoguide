@@ -14,6 +14,9 @@ export interface AutoGuideContextValue {
   pages: PageRecord[];
   flows: FlowRecord[];
   tours?: Tour[];
+  loading?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
 }
 
 export const AutoGuideContext = createContext<AutoGuideContextValue | null>(null);
