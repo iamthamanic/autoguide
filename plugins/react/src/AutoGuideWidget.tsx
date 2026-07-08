@@ -155,7 +155,8 @@ export function AutoGuideWidget() {
                   </p>
                   {mode === 'development' ? (
                     <p style={{ margin: '8px 0 0', color: 'var(--ag-text-muted)', fontSize: 12 }}>
-                      Mit <code>autoguide review list</code> unsichere Einträge prüfen.
+                      Offene Reviews über die Review-Schaltfläche prüfen oder{' '}
+                      <code>autoguide review list</code> in der CLI nutzen.
                     </p>
                   ) : null}
                 </div>

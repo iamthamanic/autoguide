@@ -1,7 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { Fact } from '@autoguide/core';
-import { AutoGuideProvider, AutoGuideWidget, FlowStepList, ReviewBadge } from './index.js';
+import { AutoGuideProvider } from './AutoGuideProvider.js';
+import { AutoGuideWidget } from './AutoGuideWidget.js';
+import { FlowStepList } from './FlowStepList.js';
+import { ReviewBadge } from './ReviewBadge.js';
 
 const sampleFacts: Fact[] = [
   {

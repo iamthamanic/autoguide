@@ -3,9 +3,19 @@
  */
 
 import type { ReactNode } from 'react';
-import { useCallback, useState } from 'react';
-import type { Fact, FlowRecord, PageRecord, VisibilityMode, Tour } from '@autoguide/core';
+import { useCallback, useEffect, useState } from 'react';
+import type {
+  Fact,
+  FlowRecord,
+  PageRecord,
+  ReviewActionRecord,
+  ReviewItem,
+  VisibilityMode,
+  Tour,
+} from '@autoguide/core';
+import { applyReviewDecision } from './apply-review.js';
 import { AutoGuideContext, type DocElementRegistration } from './context.js';
+import type { ReviewDecisionPayload } from './review-types.js';
 
 export interface AutoGuideProviderProps {
   appId: string;
@@ -16,9 +26,12 @@ export interface AutoGuideProviderProps {
   pages?: PageRecord[];
   flows?: FlowRecord[];
   tours?: Tour[];
+  reviews?: ReviewItem[];
+  reviewHistory?: ReviewActionRecord[];
   loading?: boolean;
   error?: string | null;
   onRetry?: () => void;
+  onReviewDecision?: (payload: ReviewDecisionPayload) => void | Promise<void>;
   children: ReactNode;
 }
 
@@ -31,12 +44,31 @@ export function AutoGuideProvider({
   pages = [],
   flows = [],
   tours = [],
+  reviews = [],
+  reviewHistory = [],
   loading = false,
   error = null,
   onRetry,
+  onReviewDecision,
   children,
 }: AutoGuideProviderProps) {
   const [docElements, setDocElements] = useState<DocElementRegistration[]>([]);
+  const [localFacts, setLocalFacts] = useState(facts);
+  const [localReviews, setLocalReviews] = useState(reviews);
+  const [localHistory, setLocalHistory] = useState(reviewHistory);
+
+  useEffect(() => {
+    setLocalFacts(facts);
+  }, [facts]);
+
+  useEffect(() => {
+    setLocalReviews(reviews);
+  }, [reviews]);
+
+  useEffect(() => {
+    setLocalHistory(reviewHistory);
+  }, [reviewHistory]);
+
   const registerDocElement = useCallback((entry: DocElementRegistration) => {
     setDocElements((prev) => {
       const index = prev.findIndex((item) => item.id === entry.id);
@@ -47,6 +79,30 @@ export function AutoGuideProvider({
     });
   }, []);
 
+  const applyReview = useCallback(
+    (factId: string, status: 'approved' | 'rejected', editedValue?: string) => {
+      const payload = applyReviewDecision(
+        factId,
+        status,
+        localFacts,
+        localReviews,
+        localHistory,
+        editedValue,
+      );
+      if (!payload) return;
+
+      if (onReviewDecision) {
+        void onReviewDecision(payload);
+        return;
+      }
+
+      setLocalFacts((prev) => prev.map((entry) => (entry.id === payload.fact.id ? payload.fact : entry)));
+      setLocalReviews(payload.reviews);
+      setLocalHistory(payload.history);
+    },
+    [localFacts, localHistory, localReviews, onReviewDecision],
+  );
+
   return (
     <AutoGuideContext.Provider
       value={{
@@ -54,15 +110,19 @@ export function AutoGuideProvider({
         userRole,
         mode,
         route,
-        facts,
+        facts: localFacts,
         pages,
         flows,
         tours,
+        reviews: localReviews,
+        reviewHistory: localHistory,
         docElements,
         registerDocElement,
         loading,
         error,
         onRetry,
+        applyReview,
+        onReviewDecision,
       }}
     >
       {children}

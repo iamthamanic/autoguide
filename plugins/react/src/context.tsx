@@ -3,7 +3,16 @@
  */
 
 import { createContext, useContext } from 'react';
-import type { Fact, FlowRecord, PageRecord, VisibilityMode, Tour } from '@autoguide/core';
+import type {
+  Fact,
+  FlowRecord,
+  PageRecord,
+  ReviewActionRecord,
+  ReviewItem,
+  VisibilityMode,
+  Tour,
+} from '@autoguide/core';
+import type { ReviewDecisionPayload } from './review-types.js';
 
 export interface DocElementRegistration {
   id: string;
@@ -21,16 +30,21 @@ export interface AutoGuideContextValue {
   pages: PageRecord[];
   flows: FlowRecord[];
   tours?: Tour[];
+  reviews: ReviewItem[];
+  reviewHistory: ReviewActionRecord[];
   docElements: DocElementRegistration[];
   registerDocElement: (entry: DocElementRegistration) => void;
   loading?: boolean;
   error?: string | null;
   onRetry?: () => void;
+  applyReview: (factId: string, status: 'approved' | 'rejected', editedValue?: string) => void;
+  onReviewDecision?: (payload: ReviewDecisionPayload) => void | Promise<void>;
 }
 
 export const AutoGuideContext = createContext<AutoGuideContextValue | null>(null);
 
 const noopRegister = () => {};
+const noopApplyReview = () => {};
 
 export function useAutoGuide(): AutoGuideContextValue {
   const ctx = useContext(AutoGuideContext);
@@ -43,8 +57,11 @@ export function useAutoGuide(): AutoGuideContextValue {
       pages: [],
       flows: [],
       tours: [],
+      reviews: [],
+      reviewHistory: [],
       docElements: [],
       registerDocElement: noopRegister,
+      applyReview: noopApplyReview,
     };
   }
   return ctx;
