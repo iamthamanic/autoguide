@@ -8,6 +8,7 @@ import {
   PROVENANCE_SOURCES,
   type Fact,
   type FactStatus,
+  type FactConflict,
   type Provenance,
   type ProvenanceSource,
   type ReviewStatus,
@@ -29,6 +30,27 @@ export function isFactStatus(value: unknown): value is FactStatus {
 
 export function isReviewStatus(value: unknown): value is ReviewStatus {
   return typeof value === 'string' && (REVIEW_STATUSES as readonly string[]).includes(value);
+}
+
+function isFactConflict(value: unknown): value is FactConflict {
+  if (!isRecord(value)) return false;
+  if (value.status !== 'conflict' && value.status !== 'resolved' && value.status !== 'needs_review') {
+    return false;
+  }
+  if (typeof value.reason !== 'string') return false;
+  if (!Array.isArray(value.competingFacts) || !value.competingFacts.every((item) => typeof item === 'string')) {
+    return false;
+  }
+  if (value.selectedFactId !== undefined && typeof value.selectedFactId !== 'string') return false;
+  if (
+    value.resolutionSource !== undefined &&
+    value.resolutionSource !== 'evidence_tier' &&
+    value.resolutionSource !== 'developer_review' &&
+    value.resolutionSource !== 'manual_override'
+  ) {
+    return false;
+  }
+  return true;
 }
 
 export function isProvenance(value: unknown): value is Provenance {
@@ -55,6 +77,7 @@ export function isFact(value: unknown): value is Fact {
   if (!isReviewStatus(value.reviewStatus)) return false;
   if (typeof value.confidence !== 'number') return false;
   if (!Array.isArray(value.provenance) || !value.provenance.every(isProvenance)) return false;
+  if (value.conflict !== undefined && !isFactConflict(value.conflict)) return false;
   if (typeof value.createdAt !== 'string') return false;
   if (typeof value.updatedAt !== 'string') return false;
   return true;

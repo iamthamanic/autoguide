@@ -41,6 +41,13 @@ describe('confidence and graph', () => {
     const result = graph.mergeFacts([b]);
     expect(result.conflicts.length).toBe(1);
     expect(result.conflicts[0]?.reason).toBe('unresolvable_conflict');
+    const conflictFact = result.facts.find((fact) => fact.key === 'label');
+    expect(conflictFact?.status).toBe('conflict');
+    expect(conflictFact?.conflict).toEqual({
+      status: 'conflict',
+      reason: 'unresolvable_conflict',
+      competingFacts: ['f1', 'f2'],
+    });
   });
 
   it('queues low-confidence facts for review', () => {

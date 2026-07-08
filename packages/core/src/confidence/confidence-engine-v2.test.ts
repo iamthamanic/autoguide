@@ -7,6 +7,7 @@ import {
   minimumConfidenceForFlowStep,
 } from './flow-step.js';
 import { applyFactConfidencePolicies } from './artifact.js';
+import { minimumConfidenceForKey, isDestructiveActionKey } from './score.js';
 import { markAffectedFeaturesStale } from '../history/mark-features-stale.js';
 import type { FeatureRecord, PageRecord } from '../types/records.js';
 
@@ -126,6 +127,13 @@ describe('confidence engine v2', () => {
     });
     const adjusted = applyFactConfidencePolicies(weakDelete);
     expect(adjusted.status).toBe('needs_review');
+  });
+
+  it('treats cancel and reset keys as destructive', () => {
+    expect(isDestructiveActionKey('cancelOrder')).toBe(true);
+    expect(isDestructiveActionKey('resetPassword')).toBe(true);
+    expect(minimumConfidenceForKey('cancelOrder')).toBe(0.9);
+    expect(minimumConfidenceForKey('resetPassword')).toBe(0.9);
   });
 
   it('marks features stale when linked elements change', () => {

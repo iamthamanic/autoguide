@@ -75,7 +75,7 @@ export async function captureRuntimeSnapshots(
       }
       const url = new URL(route, options.baseUrl).toString();
       try {
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15_000 });
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 3_000 });
         const snapshot = await page.evaluate(browserScanDom, route);
         snapshots.push(snapshot);
         visitedRoutes.push(route);

@@ -2,7 +2,7 @@
  * @autoguide/core — conflict resolution by evidence hierarchy.
  */
 
-import type { Fact } from '../types/fact.js';
+import type { Fact, FactConflict, FactConflictResolutionSource } from '../types/fact.js';
 import { maxEvidenceTier, scoreFromProvenance } from './score.js';
 
 export type ConflictWinner = 'existing' | 'incoming' | 'conflict';
@@ -13,6 +13,23 @@ export interface ConflictResolution {
 }
 
 const CONFIDENCE_GAP = 0.05;
+
+export function createFactConflict(
+  existing: Fact,
+  incoming: Fact,
+  reason: string,
+  status: FactConflict['status'] = 'conflict',
+  selectedFactId?: string,
+  resolutionSource?: FactConflictResolutionSource,
+): FactConflict {
+  return {
+    status,
+    reason,
+    competingFacts: [existing.id, incoming.id],
+    ...(selectedFactId ? { selectedFactId } : {}),
+    ...(resolutionSource ? { resolutionSource } : {}),
+  };
+}
 
 export function resolveFactConflict(existing: Fact, incoming: Fact): ConflictResolution {
   if (existing.value === incoming.value) {

@@ -25,6 +25,22 @@ export type ReviewStatus = 'pending' | 'approved' | 'rejected';
 
 export type VisibilityMode = 'development' | 'published';
 
+export type FactConflictStatus = 'conflict' | 'resolved' | 'needs_review';
+
+export type FactConflictResolutionSource =
+  | 'evidence_tier'
+  | 'developer_review'
+  | 'manual_override';
+
+/** Machine-readable conflict metadata on facts (confidence v2). */
+export interface FactConflict {
+  status: FactConflictStatus;
+  reason: string;
+  competingFacts: string[];
+  selectedFactId?: string;
+  resolutionSource?: FactConflictResolutionSource;
+}
+
 export interface Provenance {
   source: ProvenanceSource;
   sourceId?: string;
@@ -46,6 +62,7 @@ export interface Fact {
   reviewStatus: ReviewStatus;
   confidence: number;
   provenance: Provenance[];
+  conflict?: FactConflict;
   createdAt: string;
   updatedAt: string;
 }

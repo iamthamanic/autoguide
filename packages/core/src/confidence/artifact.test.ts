@@ -95,4 +95,22 @@ describe('confidence artifact', () => {
     const adjusted = applyFactConfidencePolicies(weakDelete);
     expect(adjusted.status).toBe('needs_review');
   });
+
+  it('preserves conflict metadata when applying confidence policies', () => {
+    const conflicted = makeFact({
+      id: 'f1',
+      key: 'label',
+      value: 'Save',
+      status: 'conflict',
+      conflict: {
+        status: 'conflict',
+        reason: 'unresolvable_conflict',
+        competingFacts: ['f1', 'f2'],
+      },
+      provenance: [{ source: 'source_code', confidence: 0.9, observedAt: nowIso() }],
+    });
+    const adjusted = applyFactConfidencePolicies(conflicted);
+    expect(adjusted.conflict).toEqual(conflicted.conflict);
+    expect(adjusted.status).toBe('conflict');
+  });
 });
