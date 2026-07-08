@@ -42,7 +42,7 @@ Host apps may use their own design system; AutoGuide widget should be themeable 
 | InspectorOverlay | `plugins/react/src/InspectorOverlay.tsx` | Highlight + fact panel |
 | ReviewBadge | `plugins/react/src/ReviewBadge.tsx` | Dev-only confidence indicator |
 | FlowStepList | `plugins/react/src/FlowStepList.tsx` | Numbered steps |
-| Design tokens | `plugins/react/src/ag-tokens.ts` | `--ag-*` CSS variables on widget root |
+| Design tokens | `packages/ui/src/tokens.ts` | `--ag-*` CSS variables on widget root |
 
 ## Layout
 

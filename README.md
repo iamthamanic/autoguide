@@ -64,7 +64,7 @@ pnpm run test:e2e      # Playwright — bootstrap via @verify-ui skill
 
 ```
 autoguide/
-├── packages/           # @autoguide/core, config, storage, cli
+├── packages/           # @autoguide/core, config, storage, ui, cli
 ├── plugins/            # @autoguide/react (+ future adapters)
 ├── examples/           # minimal reference apps (pnpm dev)
 ├── integrations/       # self-contained scan scenarios (CI fixtures)

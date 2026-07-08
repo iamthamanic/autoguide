@@ -5,7 +5,7 @@
 import { useEffect, useState, type MouseEvent } from 'react';
 import { scanDom } from '@autoguide/runtime';
 import type { RuntimeElement } from '@autoguide/runtime';
-import { AG_TOKEN_VARS } from './ag-tokens.js';
+import { agTokenCssVars } from '@autoguide/ui';
 import { useAutoGuide } from './context.js';
 
 export function InspectorOverlay() {
@@ -66,7 +66,7 @@ export function InspectorOverlay() {
   };
 
   return (
-    <div style={AG_TOKEN_VARS}>
+    <div style={agTokenCssVars()}>
       <div className="sr-only" aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden' }}>
         {announcement}
       </div>

@@ -38,7 +38,7 @@ AutoGuide ist eine **Documentation Intelligence Engine**: SDK, Scanner, CLI und 
 | AI | Ollama default | Cloud: OpenAI-compatible, User API-Key + URL |
 | Storage | JSON + SQLite | JSON = SoT, SQLite = Index/Cache |
 | Tests | Vitest | Playwright für E2E (verify-ui) |
-| UI (Widget) | React + Tailwind | Siehe UI_STYLEGUIDE |
+| UI (Widget) | `@autoguide/ui` + `@autoguide/react` | Tokens/headless state in ui; React shell in plugins |
 
 **Nicht verwenden:** Supabase als AutoGuide-Backend, mandatory Cloud-AI, Framework-Imports in Core
 
@@ -52,6 +52,7 @@ autoguide/
 │   ├── core/           # Types, graph, confidence, verification — NO framework imports
 │   ├── config/         # autoguide.config.ts schema + loader
 │   ├── storage/        # JSON writer, SQLite index
+│   ├── ui/             # Shared tokens + headless widget primitives (no React)
 │   └── cli/            # CLI commands
 ├── plugins/
 │   └── react/          # AutoGuideProvider, Widget, Inspector, DocElement
@@ -64,7 +65,7 @@ autoguide/
 ### Schichtenregeln
 
 1. `@autoguide/core` importiert **niemals** React, Vue, DOM APIs oder Node-spezifische Module ohne Abstraktion
-2. Framework-Logik lebt nur in `plugins/*`
+2. Framework-Logik lebt nur in `plugins/*`; shared tokens/state in `packages/ui`
 3. AI-Provider-Logik bleibt hinter `AIProvider`-Interface — kein Leak in Core
 4. Manual review outranks AI; `ai_proposal` darf verified facts nie überschreiben
 5. `development` mode zeigt alles dem Dev; `published` nur approved + confidence ≥ 0.85

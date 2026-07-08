@@ -4,7 +4,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { resolveHelpContext, searchKnowledge } from '@autoguide/core';
-import { AG_TOKEN_VARS } from './ag-tokens.js';
+import { agTokenCssVars } from '@autoguide/ui';
 import { FlowStepList } from './FlowStepList.js';
 import { PanelSkeleton } from './PanelSkeleton.js';
 import { ReviewBadge } from './ReviewBadge.js';
@@ -32,7 +32,7 @@ export function AutoGuideWidget() {
   const closePanel = () => setOpen(false);
 
   return (
-    <div style={AG_TOKEN_VARS}>
+    <div style={agTokenCssVars()}>
       <button
         type="button"
         aria-label="Hilfe öffnen"

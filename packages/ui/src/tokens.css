@@ -1,0 +1,21 @@
+/**
+ * Shared AutoGuide widget design tokens — import in host app or adapter root.
+ * Source: packages/ui/src/tokens.ts
+ */
+:root {
+  --ag-primary: #2563eb;
+  --ag-surface: #ffffff;
+  --ag-surface-muted: #f8fafc;
+  --ag-border: #e2e8f0;
+  --ag-text: #0f172a;
+  --ag-text-muted: #64748b;
+  --ag-warning: #d97706;
+  --ag-success: #16a34a;
+  --ag-radius: 8px;
+  --ag-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+.ag-widget-root {
+  color: var(--ag-text);
+  font-family: system-ui, sans-serif;
+}
