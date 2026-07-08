@@ -16,6 +16,8 @@ import {
   createEmptyHistoryLog,
   createHistoryEntry,
   appendHistoryEntry,
+  buildEntityGraph,
+  linkRecordsToGraph,
   type ScanSnapshot,
   type HistoryLog,
 } from '@autoguide/core';
@@ -164,7 +166,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     }
   }
 
-  const pageRecords = toPageRecords(merged.pages).map((page) =>
+  let pageRecords = toPageRecords(merged.pages).map((page) =>
     changeDetection.changedRoutes.includes(page.route)
       ? { ...page, status: 'stale' as const }
       : page,
@@ -197,9 +199,27 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   const featureRecords = buildFeatureRecords(facts);
 
-  const validationErrors = validateScanArtifacts({
+  let entityGraph = buildEntityGraph({
     pages: pageRecords,
     features: featureRecords,
+    flows: flowRecords,
+    facts,
+    sourceElements: source.elements,
+  });
+  const linked = linkRecordsToGraph(pageRecords, featureRecords, entityGraph);
+  pageRecords = linked.pages;
+  const linkedFeatures = linked.features;
+  entityGraph = buildEntityGraph({
+    pages: pageRecords,
+    features: linkedFeatures,
+    flows: flowRecords,
+    facts,
+    sourceElements: source.elements,
+  });
+
+  const validationErrors = validateScanArtifacts({
+    pages: pageRecords,
+    features: linkedFeatures,
     flows: flowRecords,
     facts,
   });
@@ -211,13 +231,14 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   const storage = new StorageWriter(outputDir);
   try {
     await storage.writeJson(storage.paths.pagesJson, pageRecords);
-    await storage.writeJson(storage.paths.featuresJson, featureRecords);
+    await storage.writeJson(storage.paths.featuresJson, linkedFeatures);
     await storage.writeJson(storage.paths.flowsJson, flowRecords);
     await storage.writeJson(storage.paths.factsJson, facts);
     await storage.writeJson(storage.paths.reviewsJson, queue.list());
     await storage.writeJson(storage.paths.recommendationsJson, recommendations);
     await storage.writeJson(storage.paths.historyJson, historyLog);
     await storage.writeJson(storage.paths.scanSnapshotJson, currentSnapshot);
+    await storage.writeJson(storage.paths.graphJson, entityGraph.toData());
     await storage.writeJson(storage.paths.confidenceJson, {
       scores: Object.fromEntries(facts.map((f) => [f.id, f.confidence])),
     });
