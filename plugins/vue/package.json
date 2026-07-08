@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "@autoguide/core": "workspace:*",
-    "@autoguide/runtime": "workspace:*"
+    "@autoguide/runtime": "workspace:*",
+    "@autoguide/ui": "workspace:*"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

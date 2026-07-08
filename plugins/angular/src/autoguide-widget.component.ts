@@ -2,86 +2,166 @@
  * @autoguide/angular — Help Widget with context resolution and search.
  */
 
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { resolveHelpContext, searchKnowledge } from '@autoguide/core';
+import { agTokenCssVars, bindFocusTrap } from '@autoguide/ui';
 import { AutoGuideContextService } from './context.js';
+import { FlowStepListComponent } from './flow-step-list.component.js';
+import { PanelSkeletonComponent } from './panel-skeleton.component.js';
+import { ReviewBadgeComponent } from './review-badge.component.js';
 
 @Component({
   selector: 'ag-autoguide-widget',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FlowStepListComponent,
+    PanelSkeletonComponent,
+    ReviewBadgeComponent,
+  ],
   template: `
-    <button
-      type="button"
-      aria-label="Hilfe öffnen"
-      (click)="open = !open"
-      [ngStyle]="fabStyle"
-    >
-      ?
-    </button>
-    @if (open) {
-      <div role="dialog" aria-label="AutoGuide Hilfe" [ngStyle]="panelStyle">
-        <h2 style="margin: 0 0 8px; font-size: 16px">
-          Hilfe{{ helpContext.pageTitle ? ': ' + helpContext.pageTitle : '' }}
-        </h2>
-        <input
-          type="search"
-          placeholder="Suchen…"
-          [(ngModel)]="query"
-          style="width: 100%; margin-bottom: 12px; padding: 8px 10px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 14px"
-        />
-        @if (query.trim()) {
-          <ul style="margin: 0; padding-left: 18px; font-size: 14px">
-            @if (searchHits.length === 0) {
-              <li>Keine Treffer.</li>
-            } @else {
-              @for (hit of searchHits; track hit.kind + hit.id) {
-                <li><strong>{{ hit.title }}</strong> ({{ hit.kind }})</li>
+    <div [ngStyle]="tokenVars">
+      <button
+        type="button"
+        aria-label="Hilfe öffnen"
+        [attr.aria-expanded]="open"
+        (click)="toggleOpen()"
+        [ngStyle]="fabStyle"
+      >
+        ?
+      </button>
+      @if (open) {
+        <div
+          #panel
+          role="dialog"
+          aria-label="AutoGuide Hilfe"
+          [attr.aria-busy]="ctx.loading ? true : null"
+          [ngStyle]="panelStyle"
+        >
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <h2 style="margin: 0 0 8px; font-size: 16px; font-weight: 600">
+              Hilfe{{ helpContext.pageTitle ? ': ' + helpContext.pageTitle : '' }}
+            </h2>
+            <button
+              type="button"
+              aria-label="Hilfe schließen"
+              (click)="closePanel()"
+              style="
+                border: none;
+                background: transparent;
+                color: var(--ag-text-muted);
+                cursor: pointer;
+                font-size: 18px;
+                line-height: 1;
+              "
+            >
+              ×
+            </button>
+          </div>
+
+          @if (ctx.error) {
+            <div role="alert" style="font-size: 14px">
+              <p style="margin: 0 0 12px; color: var(--ag-warning)">{{ ctx.error }}</p>
+              @if (ctx.onRetry) {
+                <button
+                  type="button"
+                  (click)="ctx.onRetry!()"
+                  style="
+                    padding: 8px 12px;
+                    border-radius: var(--ag-radius);
+                    border: 1px solid var(--ag-border);
+                    background: var(--ag-surface-muted);
+                    cursor: pointer;
+                    font-size: 14px;
+                  "
+                >
+                  Erneut versuchen
+                </button>
               }
-            }
-          </ul>
-        } @else if (helpContext.actions.length === 0 && helpContext.flows.length === 0) {
-          <p style="margin: 0; color: #64748b; font-size: 14px">
-            Keine Dokumentation für diese Seite.
-            @if (ctx.mode === 'development') {
-              (Entwicklermodus)
-            }
-          </p>
-        } @else {
-          @if (helpContext.flows.length > 0) {
-            <h3 style="margin: 0 0 6px; font-size: 14px">Abläufe</h3>
-            <ul style="margin: 0 0 12px; padding-left: 18px; font-size: 14px">
-              @for (flow of helpContext.flows; track flow.id) {
-                <li>{{ flow.title }}</li>
-              }
-            </ul>
-          }
-          @if (helpContext.actions.length > 0) {
-            <h3 style="margin: 0 0 6px; font-size: 14px">Aktionen</h3>
-            <ul style="margin: 0; padding-left: 18px; font-size: 14px">
-              @for (fact of helpContext.actions; track fact.id) {
-                <li>
-                  <strong>{{ fact.key }}</strong
-                  >: {{ fact.value }}
-                  @if (ctx.mode === 'development' && fact.confidence < 0.85) {
-                    <span style="color: #b45309"> (unsicher)</span>
+            </div>
+          } @else if (ctx.loading) {
+            <ag-panel-skeleton />
+          } @else {
+            <input
+              type="search"
+              placeholder="Suchen…"
+              [(ngModel)]="query"
+              style="
+                width: 100%;
+                margin-bottom: 12px;
+                padding: 8px 10px;
+                border-radius: 6px;
+                border: 1px solid var(--ag-border);
+                font-size: 14px;
+                color: var(--ag-text);
+              "
+            />
+            @if (query.trim()) {
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px">
+                @if (searchHits.length === 0) {
+                  <li>Keine Treffer.</li>
+                } @else {
+                  @for (hit of searchHits; track hit.kind + hit.id) {
+                    <li><strong>{{ hit.title }}</strong> ({{ hit.kind }})</li>
                   }
-                </li>
+                }
+              </ul>
+            } @else if (helpContext.actions.length === 0 && helpContext.flows.length === 0) {
+              <div style="font-size: 14px">
+                <p style="margin: 0; color: var(--ag-text-muted)">Keine Dokumentation für diese Seite.</p>
+                @if (ctx.mode === 'development') {
+                  <p style="margin: 8px 0 0; color: var(--ag-text-muted); font-size: 12px">
+                    Mit <code>autoguide review list</code> unsichere Einträge prüfen.
+                  </p>
+                }
+              </div>
+            } @else {
+              @if (helpContext.flows.length > 0) {
+                <h3 style="margin: 0 0 6px; font-size: 14px; font-weight: 600">Abläufe</h3>
+                @for (flow of helpContext.flows; track flow.id) {
+                  <div style="margin-bottom: 12px">
+                    <p style="margin: 0 0 6px; font-size: 14px; font-weight: 600">{{ flow.title }}</p>
+                    <ag-flow-step-list [flow]="flow" />
+                  </div>
+                }
               }
-            </ul>
+              @if (helpContext.actions.length > 0) {
+                <h3 style="margin: 0 0 6px; font-size: 14px; font-weight: 600">Aktionen</h3>
+                <ul style="margin: 0; padding-left: 18px; font-size: 14px">
+                  @for (fact of helpContext.actions; track fact.id) {
+                    <li>
+                      <strong>{{ fact.key }}</strong
+                      >: {{ fact.value }}
+                      <ag-review-badge [fact]="fact" [mode]="ctx.mode" />
+                    </li>
+                  }
+                </ul>
+              }
+            }
           }
-        }
-      </div>
-    }
+        </div>
+      }
+    </div>
   `,
 })
-export class AutoGuideWidgetComponent {
+export class AutoGuideWidgetComponent implements OnDestroy {
   protected readonly ctx = inject(AutoGuideContextService);
+
+  @ViewChild('panel') panelRef?: ElementRef<HTMLElement>;
 
   open = false;
   query = '';
+  readonly tokenVars = agTokenCssVars();
+  private focusCleanup?: () => void;
 
   readonly fabStyle = {
     position: 'fixed',
@@ -91,10 +171,11 @@ export class AutoGuideWidgetComponent {
     height: '56px',
     borderRadius: '50%',
     border: 'none',
-    background: '#2563eb',
+    background: 'var(--ag-primary)',
     color: '#fff',
     cursor: 'pointer',
     zIndex: 9999,
+    boxShadow: 'var(--ag-shadow)',
   };
 
   readonly panelStyle = {
@@ -103,12 +184,13 @@ export class AutoGuideWidgetComponent {
     bottom: '96px',
     width: '380px',
     maxWidth: 'calc(100vw - 48px)',
-    background: '#fff',
-    border: '1px solid #e2e8f0',
-    borderRadius: '8px',
-    boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
+    background: 'var(--ag-surface)',
+    border: '1px solid var(--ag-border)',
+    borderRadius: 'var(--ag-radius)',
+    boxShadow: 'var(--ag-shadow)',
     padding: '16px',
     zIndex: 9999,
+    color: 'var(--ag-text)',
   };
 
   get helpContext() {
@@ -124,5 +206,35 @@ export class AutoGuideWidgetComponent {
 
   get searchHits() {
     return searchKnowledge(this.query, this.ctx.pages, this.ctx.flows, this.ctx.userRole);
+  }
+
+  toggleOpen(): void {
+    this.open = !this.open;
+    if (this.open) {
+      queueMicrotask(() => this.attachFocusTrap());
+    } else {
+      this.detachFocusTrap();
+    }
+  }
+
+  closePanel(): void {
+    this.open = false;
+    this.detachFocusTrap();
+  }
+
+  ngOnDestroy(): void {
+    this.detachFocusTrap();
+  }
+
+  private attachFocusTrap(): void {
+    const el = this.panelRef?.nativeElement;
+    if (!el) return;
+    this.detachFocusTrap();
+    this.focusCleanup = bindFocusTrap(el, () => this.closePanel());
+  }
+
+  private detachFocusTrap(): void {
+    this.focusCleanup?.();
+    this.focusCleanup = undefined;
   }
 }

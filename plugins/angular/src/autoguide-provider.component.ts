@@ -22,6 +22,9 @@ export class AutoGuideProviderComponent implements OnInit, OnChanges {
   @Input() facts: Fact[] = [];
   @Input() pages: PageRecord[] = [];
   @Input() flows: FlowRecord[] = [];
+  @Input() loading = false;
+  @Input() error: string | null = null;
+  @Input() onRetry?: () => void;
 
   ngOnInit(): void {
     this.syncContext();
@@ -39,6 +42,9 @@ export class AutoGuideProviderComponent implements OnInit, OnChanges {
     this.ctx.facts = this.facts;
     this.ctx.pages = this.pages;
     this.ctx.flows = this.flows;
+    this.ctx.loading = this.loading;
+    this.ctx.error = this.error;
+    this.ctx.onRetry = this.onRetry;
   }
 }
 
@@ -50,4 +56,7 @@ export type AutoGuideProviderProps = {
   facts?: Fact[];
   pages?: PageRecord[];
   flows?: FlowRecord[];
+  loading?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
 };

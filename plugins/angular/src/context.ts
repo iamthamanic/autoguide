@@ -14,6 +14,9 @@ export class AutoGuideContextService {
   facts: Fact[] = [];
   pages: PageRecord[] = [];
   flows: FlowRecord[] = [];
+  loading = false;
+  error: string | null = null;
+  onRetry?: () => void;
 }
 
 export function useAutoGuide(service: AutoGuideContextService): AutoGuideContextService {

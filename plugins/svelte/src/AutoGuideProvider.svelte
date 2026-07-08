@@ -13,6 +13,9 @@
   export let facts: Fact[] = [];
   export let pages: PageRecord[] = [];
   export let flows: FlowRecord[] = [];
+  export let loading = false;
+  export let error: string | null = null;
+  export let onRetry: (() => void) | undefined = undefined;
 
   setContext(AUTO_GUIDE_KEY, {
     get appId() { return appId; },
@@ -22,6 +25,9 @@
     get facts() { return facts; },
     get pages() { return pages; },
     get flows() { return flows; },
+    get loading() { return loading; },
+    get error() { return error; },
+    get onRetry() { return onRetry; },
   });
 </script>
 

@@ -19,6 +19,9 @@ export const AutoGuideProvider = defineComponent({
     facts: { type: Array as PropType<Fact[]>, default: () => [] },
     pages: { type: Array as PropType<PageRecord[]>, default: () => [] },
     flows: { type: Array as PropType<FlowRecord[]>, default: () => [] },
+    loading: { type: Boolean, default: false },
+    error: { type: String as PropType<string | null>, default: null },
+    onRetry: { type: Function as PropType<() => void>, default: undefined },
   },
   setup(props, { slots }) {
     provide(AUTO_GUIDE_KEY, props);
