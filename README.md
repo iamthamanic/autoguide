@@ -41,6 +41,8 @@ pnpm run verify    # deterministic: typecheck + test
 After `autoguide init` and `autoguide scan` in a host project:
 
 ```bash
+npx autoguide scan --runtime          # optional: capture live DOM at baseUrl (needs running app + Playwright)
+npx autoguide scan --runtime-url http://localhost:3000  # override URL for runtime capture only
 npx autoguide generate tours            # tours.json from flows (no re-scan)
 npx autoguide generate recommendations  # refresh recommendations.json from facts
 npx autoguide generate bundle           # tours + recommendations + doc-bundle.json

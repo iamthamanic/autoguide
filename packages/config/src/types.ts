@@ -15,6 +15,8 @@ export interface AiConfig {
 export interface ScanConfig {
   safeMode: boolean;
   playwrightImportPath?: string;
+  /** When true, `autoguide scan` captures runtime DOM at baseUrl (overridable with --no-runtime). */
+  runtime?: boolean;
 }
 
 export interface RedactionConfig {

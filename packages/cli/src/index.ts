@@ -43,6 +43,8 @@ program
   .option('--source <dir>', 'source directory', 'src')
   .option('--playwright-import <path>', 'Playwright JSON report to import')
   .option('--base-url <url>', 'Base URL for crawl fallback')
+  .option('--runtime', 'Capture runtime DOM via Playwright at baseUrl')
+  .option('--runtime-url <url>', 'Override base URL for runtime capture only')
   .option('--crawl', 'Crawl uncovered routes with Playwright')
   .option('--verify-flows', 'Verify generated flows in a browser via Playwright')
   .option('--no-ai', 'Skip AI enrichment')
@@ -51,6 +53,8 @@ program
     source: string;
     playwrightImport?: string;
     baseUrl?: string;
+    runtime?: boolean;
+    runtimeUrl?: string;
     crawl?: boolean;
     verifyFlows?: boolean;
     noAi?: boolean;
@@ -60,6 +64,8 @@ program
       sourceDir: options.source,
       playwrightReport: options.playwrightImport,
       baseUrl: options.baseUrl,
+      runtime: options.runtime,
+      runtimeUrl: options.runtimeUrl,
       crawl: options.crawl,
       verifyFlows: options.verifyFlows,
       noAi: options.noAi,

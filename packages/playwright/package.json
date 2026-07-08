@@ -19,7 +19,8 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*"
+    "@autoguide/core": "workspace:*",
+    "@autoguide/runtime": "workspace:*"
   },
   "optionalDependencies": {
     "playwright": "^1.51.0"
