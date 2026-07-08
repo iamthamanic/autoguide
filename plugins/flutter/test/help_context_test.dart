@@ -12,10 +12,10 @@ void main() {
   ];
 
   final flows = [
-    FlowRecord(
+    const FlowRecord(
       id: 'fl1',
       title: 'Urlaub beantragen',
-      steps: [const FlowStep(order: 1, title: 'Antrag öffnen')],
+      steps: [FlowStep(order: 1, title: 'Antrag öffnen')],
       pageIds: ['p1'],
     ),
   ];

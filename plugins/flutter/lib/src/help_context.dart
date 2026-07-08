@@ -46,7 +46,7 @@ HelpContext resolveHelpContext({
   }
 
   final pageVisible = page != null && isVisibleForRole(page.roleIds, userRole);
-  final pageTitle = pageVisible ? page?.title : null;
+  final pageTitle = page != null && pageVisible ? page.title : null;
 
   final pageFlows = roleFlows.where((flow) {
     if (!pageVisible || page == null) return flow.pageIds.isEmpty;
