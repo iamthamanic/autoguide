@@ -14,7 +14,7 @@ import { runScan } from './commands/scan.js';
 
 const execFileAsync = promisify(execFile);
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..');
-const dogfoodDir = join(repoRoot, 'dogfood/browo-hr');
+const integrationDir = join(repoRoot, 'integrations/hr-workflows');
 
 async function git(cwd: string, args: string[]): Promise<void> {
   await execFileAsync('git', args, { cwd });
@@ -24,7 +24,7 @@ describe('version history rescan', () => {
   it('appends history and marks stale facts after source change', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'ag-history-'));
     try {
-      await cp(dogfoodDir, dir, { recursive: true });
+      await cp(integrationDir, dir, { recursive: true });
       await git(dir, ['init']);
       await git(dir, ['config', 'user.email', 'autoguide@test.local']);
       await git(dir, ['config', 'user.name', 'AutoGuide Test']);

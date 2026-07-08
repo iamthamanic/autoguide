@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  browo-hr-validate:
+  hr-workflows-validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,10 +21,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @autoguide/cli... build
 
-      - name: Scan browo-hr
-        working-directory: dogfood/browo-hr
+      - name: Scan hr-workflows integration
+        working-directory: integrations/hr-workflows
         run: node ../../packages/cli/dist/index.js scan --no-ai
 
-      - name: Validate browo-hr
-        working-directory: dogfood/browo-hr
+      - name: Validate hr-workflows integration
+        working-directory: integrations/hr-workflows
         run: node ../../packages/cli/dist/index.js validate

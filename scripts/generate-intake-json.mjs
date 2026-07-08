@@ -699,7 +699,7 @@ const slices = [
   },
   {
     title: 'Validate browo-hr integration with three complete flows',
-    featureSlug: 'dogfood-browo-hr',
+    featureSlug: 'hr-workflows-integration',
     priority: 'P0',
     labels: ['P0'],
     dependsOn: ['Implement Markdown documentation export', 'Implement CLI publish command', 'Implement CLI scan command full pipeline'],

@@ -1,5 +1,5 @@
 {
-  "appId": "browo-hr",
+  "appId": "hr-workflows",
   "framework": "react",
   "baseUrl": "http://localhost:3010",
   "outputDir": ".autoguide",

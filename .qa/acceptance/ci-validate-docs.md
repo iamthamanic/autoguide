@@ -8,7 +8,7 @@ CI command fails build when docs invalid or stale beyond threshold.
 ## Happy Path
 - [x] validate exits non-zero on schema failure
 - [x] Example workflow in .github/workflows/
-- [x] Documented for browo-hr integration
+- [x] Documented for integrations/hr-workflows
 
 ## Edge Cases
 - [x] validate --soft for warnings only

@@ -11,6 +11,8 @@ export interface SourceElementFact {
   filePath: string;
   componentName?: string;
   handlerName?: string;
+  handlerDeclarationLine?: number;
+  buttonLabel?: string;
   dataDocKey?: string;
   dataDocValue?: string;
   missingAriaLabel?: boolean;

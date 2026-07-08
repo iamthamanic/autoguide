@@ -28,7 +28,7 @@ pnpm typecheck
 pnpm test
 ```
 
-Open [http://localhost:5173](http://localhost:5173) (example app)
+Open [http://localhost:5173](http://localhost:5173) (example app). Integration scenarios under `integrations/` run without external app repos.
 
 ## Checks (quality gate)
 
@@ -51,7 +51,8 @@ pnpm run test:e2e      # Playwright — bootstrap via @verify-ui skill
 autoguide/
 ├── packages/           # @autoguide/core, config, storage, cli
 ├── plugins/            # @autoguide/react (+ future adapters)
-├── examples/           # reference apps
+├── examples/           # minimal reference apps (pnpm dev)
+├── integrations/       # self-contained scan scenarios (CI fixtures)
 ├── docs/
 │   ├── PRD.md
 │   ├── SPEC_FULL.md

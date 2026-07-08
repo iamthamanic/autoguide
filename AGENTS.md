@@ -57,6 +57,7 @@ autoguide/
 │   └── react/          # AutoGuideProvider, Widget, Inspector, DocElement
 ├── examples/
 │   └── react-vite/     # Reference example app
+├── integrations/       # Self-contained scan scenarios (fixtures, CI)
 └── docs/
 ```
 
@@ -134,13 +135,23 @@ Reference: [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail)
 
 ---
 
-## Dogfood
+## Integrations (in-repo)
 
-| App | Pfad (lokal) | Rolle |
-|-----|--------------|-------|
-| browo-hr | `../browo-hr` | Primäre Referenz, Playwright e2e |
-| sagadrive | `../sagadrive` | Später: Supabase/BaaS |
-| scriptony-multihost | `../scriptony-multihost` | Später: Tauri-Adapter |
+Self-contained scenarios under `integrations/` — fixtures and minimal apps for CI. **No external repos required.**
+
+| Scenario | Path | Purpose |
+|----------|------|---------|
+| HR workflows | `integrations/hr-workflows` | Multi-role flows, Playwright import, export/validate |
+
+## Optional external validation
+
+Real apps for manual realism checks only — clone separately; not a build dependency.
+
+| App | Typical local path | When |
+|-----|-------------------|------|
+| browo-hr | `../browo-hr` | Optional HR app validation |
+| sagadrive | `../sagadrive` | Later: Supabase/BaaS |
+| scriptony-multihost | `../scriptony-multihost` | Later: Tauri adapter |
 
 ---
 

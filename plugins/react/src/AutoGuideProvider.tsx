@@ -15,6 +15,9 @@ export interface AutoGuideProviderProps {
   pages?: PageRecord[];
   flows?: FlowRecord[];
   tours?: Tour[];
+  loading?: boolean;
+  error?: string | null;
+  onRetry?: () => void;
   children: ReactNode;
 }
 
@@ -27,11 +30,14 @@ export function AutoGuideProvider({
   pages = [],
   flows = [],
   tours = [],
+  loading = false,
+  error = null,
+  onRetry,
   children,
 }: AutoGuideProviderProps) {
   return (
     <AutoGuideContext.Provider
-      value={{ appId, userRole, mode, route, facts, pages, flows, tours }}
+      value={{ appId, userRole, mode, route, facts, pages, flows, tours, loading, error, onRetry }}
     >
       {children}
     </AutoGuideContext.Provider>

@@ -17,7 +17,7 @@
       "Edit(examples/*)",
       "Edit(tests/*)",
       "Edit(docs/*)",
-      "Edit(dogfood/*)",
+      "Edit(integrations/*)",
       "Edit(.qa/*)",
       "Edit(.github/*)",
       "Write(packages/*)",
@@ -25,7 +25,7 @@
       "Write(examples/*)",
       "Write(tests/*)",
       "Write(docs/*)",
-      "Write(dogfood/*)",
+      "Write(integrations/*)",
       "Write(.qa/*)",
       "Write(.github/*)"
     ],
