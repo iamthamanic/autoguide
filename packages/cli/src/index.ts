@@ -43,6 +43,7 @@ program
   .option('--playwright-import <path>', 'Playwright JSON report to import')
   .option('--base-url <url>', 'Base URL for crawl fallback')
   .option('--crawl', 'Crawl uncovered routes with Playwright')
+  .option('--verify-flows', 'Verify generated flows in a browser via Playwright')
   .option('--no-ai', 'Skip AI enrichment')
   .option('--cloud-consent', 'Record consent for cloud AI enrichment')
   .action(async (options: {
@@ -50,6 +51,7 @@ program
     playwrightImport?: string;
     baseUrl?: string;
     crawl?: boolean;
+    verifyFlows?: boolean;
     noAi?: boolean;
     cloudConsent?: boolean;
   }) => {
@@ -58,6 +60,7 @@ program
       playwrightReport: options.playwrightImport,
       baseUrl: options.baseUrl,
       crawl: options.crawl,
+      verifyFlows: options.verifyFlows,
       noAi: options.noAi,
       cloudConsent: options.cloudConsent,
     });
