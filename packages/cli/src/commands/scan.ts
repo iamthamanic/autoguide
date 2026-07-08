@@ -13,6 +13,7 @@ import {
   buildScanSnapshot,
   detectChanges,
   mergeRescanFacts,
+  markAffectedFeaturesStale,
   createEmptyHistoryLog,
   createHistoryEntry,
   appendHistoryEntry,
@@ -295,6 +296,12 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   );
 
   const featureRecords = buildFeatureRecords(facts);
+  const linkedFeatures = markAffectedFeaturesStale(
+    featureRecords,
+    changeDetection,
+    pageRecords,
+    new Set(rescanMerge.staleFactIds),
+  );
 
   if (options.verifyFlows && flowRecords.length > 0) {
     flowRecords = await verifyFlows(flowRecords, {
@@ -306,17 +313,17 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   let entityGraph = buildEntityGraph({
     pages: pageRecords,
-    features: featureRecords,
+    features: linkedFeatures,
     flows: flowRecords,
     facts,
     sourceElements: source.elements,
   });
-  const linked = linkRecordsToGraph(pageRecords, featureRecords, entityGraph);
+  const linked = linkRecordsToGraph(pageRecords, linkedFeatures, entityGraph);
   pageRecords = linked.pages;
-  const linkedFeatures = linked.features;
+  const linkedFeaturesFinal = linked.features;
   entityGraph = buildEntityGraph({
     pages: pageRecords,
-    features: linkedFeatures,
+    features: linkedFeaturesFinal,
     flows: flowRecords,
     facts,
     sourceElements: source.elements,
@@ -324,7 +331,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   const validationErrors = validateArtifactsWithJsonSchema({
     pages: pageRecords,
-    features: linkedFeatures,
+    features: linkedFeaturesFinal,
     flows: flowRecords,
     facts,
     confidence: {
@@ -339,7 +346,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   const storage = new StorageWriter(outputDir);
   try {
     await storage.writeJson(storage.paths.pagesJson, pageRecords);
-    await storage.writeJson(storage.paths.featuresJson, linkedFeatures);
+    await storage.writeJson(storage.paths.featuresJson, linkedFeaturesFinal);
     await storage.writeJson(storage.paths.flowsJson, flowRecords);
     await storage.writeJson(storage.paths.factsJson, facts);
     await storage.writeJson(storage.paths.reviewsJson, queue.list());

@@ -3,12 +3,12 @@
  */
 
 import type { Fact } from '../types/fact.js';
-import { factPrecedence } from '../validators/fact.js';
+import { resolveFactConflict } from '../confidence/conflict.js';
 import { scoreFromProvenance } from '../confidence/score.js';
 
 export interface MergeResult {
   facts: Fact[];
-  conflicts: Array<{ existingId: string; incomingId: string; key: string }>;
+  conflicts: Array<{ existingId: string; incomingId: string; key: string; reason: string }>;
 }
 
 function factKey(fact: Fact): string {
@@ -24,8 +24,11 @@ export class KnowledgeGraph {
       this.facts.set(factKey(fact), fact);
       return;
     }
-    if (factPrecedence(fact.status) > factPrecedence(existing.status)) {
+    const resolution = resolveFactConflict(existing, fact);
+    if (resolution.winner === 'incoming') {
       this.facts.set(factKey(fact), fact);
+    } else if (resolution.winner === 'conflict') {
+      this.facts.set(factKey(fact), { ...fact, status: 'conflict' });
     }
   }
 
@@ -39,20 +42,47 @@ export class KnowledgeGraph {
         this.facts.set(key, fact);
         continue;
       }
-      if (existing.value !== fact.value) {
-        conflicts.push({ existingId: existing.id, incomingId: fact.id, key: fact.key });
-        if (factPrecedence(fact.status) >= factPrecedence(existing.status)) {
-          this.facts.set(key, { ...fact, status: 'conflict' });
-        }
+
+      const resolution = resolveFactConflict(existing, fact);
+      if (resolution.winner === 'existing' && resolution.reason === 'same_value') {
+        const mergedProvenance = [...existing.provenance, ...fact.provenance];
+        const confidence = scoreFromProvenance(mergedProvenance);
+        this.facts.set(key, {
+          ...existing,
+          provenance: mergedProvenance,
+          confidence,
+          updatedAt: new Date().toISOString(),
+        });
         continue;
       }
-      const mergedProvenance = [...existing.provenance, ...fact.provenance];
-      const confidence = scoreFromProvenance(mergedProvenance);
-      this.facts.set(key, {
-        ...existing,
-        provenance: mergedProvenance,
-        confidence,
-        updatedAt: new Date().toISOString(),
+
+      if (resolution.winner === 'conflict') {
+        conflicts.push({
+          existingId: existing.id,
+          incomingId: fact.id,
+          key: fact.key,
+          reason: resolution.reason,
+        });
+        this.facts.set(key, { ...existing, status: 'conflict' });
+        continue;
+      }
+
+      if (resolution.winner === 'incoming') {
+        const mergedProvenance = [...existing.provenance, ...fact.provenance];
+        this.facts.set(key, {
+          ...fact,
+          provenance: mergedProvenance,
+          confidence: scoreFromProvenance(mergedProvenance),
+          updatedAt: new Date().toISOString(),
+        });
+        continue;
+      }
+
+      conflicts.push({
+        existingId: existing.id,
+        incomingId: fact.id,
+        key: fact.key,
+        reason: resolution.reason,
       });
     }
 

@@ -16,6 +16,14 @@ function makeFact(partial: Partial<Fact> & Pick<Fact, 'id' | 'key' | 'value'>): 
   };
 }
 
+function nowIso(): string {
+  return new Date().toISOString();
+}
+
+function prov(source: Provenance['source'], confidence = 0.9): Provenance {
+  return { source, confidence, observedAt: nowIso() };
+}
+
 describe('confidence and graph', () => {
   it('scores provenance by evidence hierarchy', () => {
     const provenance: Provenance[] = [
@@ -27,11 +35,12 @@ describe('confidence and graph', () => {
 
   it('merges facts and detects conflicts', () => {
     const graph = new KnowledgeGraph();
-    const a = makeFact({ id: 'f1', key: 'label', value: 'Save' });
-    const b = makeFact({ id: 'f2', key: 'label', value: 'Speichern' });
+    const a = makeFact({ id: 'f1', key: 'label', value: 'Save', provenance: [prov('source_code')] });
+    const b = makeFact({ id: 'f2', key: 'label', value: 'Speichern', provenance: [prov('source_code')] });
     graph.addFact(a);
     const result = graph.mergeFacts([b]);
     expect(result.conflicts.length).toBe(1);
+    expect(result.conflicts[0]?.reason).toBe('unresolvable_conflict');
   });
 
   it('queues low-confidence facts for review', () => {
@@ -43,7 +52,3 @@ describe('confidence and graph', () => {
     expect(approved.status).toBe('manual_override');
   });
 });
-
-function nowIso(): string {
-  return new Date().toISOString();
-}
