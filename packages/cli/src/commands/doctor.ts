@@ -6,7 +6,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { readFile } from 'node:fs/promises';
 import type { Recommendation } from '@autoguide/core';
-import { createBuiltinRegistry } from '../plugins.js';
+import { loadScanRegistry } from '../plugins.js';
 
 export interface DoctorResult {
   ok: boolean;
@@ -38,8 +38,13 @@ export async function runDoctor(cwd: string): Promise<DoctorResult> {
   if (existsSync(configPath)) {
     try {
       const config = JSON.parse(await readFile(configPath, 'utf8')) as { plugins?: string[] };
-      const registry = createBuiltinRegistry(config.plugins ?? []);
+      const { registry } = await loadScanRegistry(cwd, config.plugins ?? []);
       messages.push(`Plugins: ${registry.list().map((item) => item.id).join(', ')}`);
+      for (const entry of registry.describeCapabilities()) {
+        messages.push(
+          `- ${entry.id} (${entry.capabilities.join(', ')}) — ${entry.description ?? 'kein Beschreibungstext'}`,
+        );
+      }
     } catch (error) {
       ok = false;
       messages.push(error instanceof Error ? error.message : 'Plugin-Validierung fehlgeschlagen.');

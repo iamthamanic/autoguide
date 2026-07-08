@@ -70,6 +70,7 @@ program
       process.exitCode = 1;
       return;
     }
+    for (const warning of result.warnings) console.warn(warning);
     console.log(`Scan abgeschlossen (${result.outputDir}).`);
   });
 
