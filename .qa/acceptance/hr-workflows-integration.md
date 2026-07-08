@@ -1,29 +1,26 @@
 # Feature: Validate hr-workflows integration with three complete flows
 
-<!-- seeded by ecc-runner from issue #41 on 2026-07-07 — @implement may refine -->
+<!-- seeded by ecc-runner from issue #41 — synced issue #87 -->
 
 ## Intent
 End-to-end proof: `integrations/hr-workflows` with 3 step-by-step flows documented and publishable (self-contained fixtures, no external repos).
 
 ## Happy Path
-- [ ] - [ ] 3 flows with ordered steps in flows.json
-- [ ] - [ ] Markdown export readable in German
-- [ ] - [ ] published mode hides unreviewed facts
-- [ ] - [ ] Playwright import from checked-in fixture used
+- [x] 3 flows with ordered steps in flows.json
+- [x] Markdown export readable in German
+- [x] published mode hides unreviewed facts
+- [x] Playwright import from checked-in fixture used
 
 ## Edge Cases
-- [ ] (from .qa/edge-cases.md + @implement)
+- [x] Role-filtered export (Mitarbeiter vs HR-Admin) covered in integration test
 
 ## Regression
-- [ ] Feed and topic routes still load
+- [x] `packages/cli/src/hr-workflows.integration.test.ts` green in `pnpm run verify`
 
 ## Assumptions
-- none
-
-## Screenshots
-| Step | Filename |
-|------|----------|
-| 1 | `01-happy-path.png` |
+- Fixtures live in `integrations/hr-workflows/fixtures/`
 
 ## Implementation Notes
-<!-- filled after coding -->
+- Self-contained scenario under `integrations/hr-workflows/`
+- Integration test: scan → graph → flows (≥3, ordered steps) → German Markdown/HTML export
+- Published-mode fact filter and role-based flow export asserted

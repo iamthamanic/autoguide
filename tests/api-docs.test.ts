@@ -35,4 +35,21 @@ describe('public API documentation', () => {
     expect(react).toContain('AutoGuideProvider');
     expect(react).toContain('AutoGuideWidget');
   });
+
+  it('PRD reflects Phase 3 delivery and deferred items', () => {
+    const prd = readFileSync(resolve('docs/PRD.md'), 'utf8');
+    expect(prd).toContain('Delivery status (Phase 2–3');
+    expect(prd).toContain('Still deferred');
+    expect(prd).toContain('Hosted sync');
+    expect(prd).toContain('hr-workflows integration');
+  });
+
+  it('hr-workflows acceptance marks integration test regression', () => {
+    const acceptance = readFileSync(
+      resolve('.qa/acceptance/hr-workflows-integration.md'),
+      'utf8',
+    );
+    expect(acceptance).toContain('[x]');
+    expect(acceptance).toContain('hr-workflows.integration.test.ts');
+  });
 });

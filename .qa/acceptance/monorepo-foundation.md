@@ -1,29 +1,25 @@
 # Feature: Initialize pnpm monorepo and shared TypeScript config
 
-<!-- seeded by ecc-runner from issue #1 on 2026-07-07 — @implement may refine -->
+<!-- seeded by ecc-runner from issue #1 on 2026-07-07 — synced issue #87 -->
 
 ## Intent
 Bootstrap the AutoGuide monorepo with pnpm workspaces, root TypeScript strict config, Vitest placeholder, and CI-ready scripts.
 
 ## Happy Path
-- [ ] - [ ] `pnpm install` succeeds
-- [ ] - [ ] `pnpm typecheck` runs (passes or no-op with no packages)
-- [ ] - [ ] Workspace globs include packages/*, plugins/*, examples/*
-- [ ] - [ ] tsconfig.base.json has strict: true
+- [x] `pnpm install` succeeds
+- [x] `pnpm typecheck` runs (passes across workspace packages)
+- [x] Workspace globs include packages/*, plugins/*, examples/*
+- [x] tsconfig.base.json has strict: true
 
 ## Edge Cases
-- [ ] (from .qa/edge-cases.md + @implement)
+- [x] Empty or new packages do not break workspace typecheck
 
 ## Regression
-- [ ] Feed and topic routes still load
+- [x] `pnpm run verify` passes on main (`.github/workflows/ci.yml`)
 
 ## Assumptions
-- none
-
-## Screenshots
-| Step | Filename |
-|------|----------|
-| 1 | `01-happy-path.png` |
+- Node 20+, pnpm 9+
 
 ## Implementation Notes
-<!-- filled after coding -->
+- `pnpm-workspace.yaml`, `tsconfig.base.json`, root `package.json` scripts
+- `tests/monorepo.test.ts` guards workspace globs and strict mode
