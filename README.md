@@ -48,6 +48,8 @@ npx autoguide export --format md
 npx autoguide validate
 ```
 
+Third-party scanner plugins: add a module path to `plugins` in `autoguide.config.json` (see `examples/stub-plugin/`).
+
 Before commit/PR, run **`@ecc-check`** (review-ticket + AgentShield + optional verify-ui). No shimwrappercheck in this repo.
 
 ## Tests

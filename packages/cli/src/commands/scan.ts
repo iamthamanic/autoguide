@@ -18,9 +18,14 @@ import {
   buildEntityGraph,
   linkRecordsToGraph,
   configureRedaction,
+  runPluginSetup,
+  runPluginScans,
+  runPluginTransforms,
+  runPluginCleanup,
   type ScanSnapshot,
   type HistoryLog,
   type ReviewActionRecord,
+  type PluginLifecycleWarning,
 } from '@autoguide/core';
 import { getGitChangedFiles, getGitHead } from '../lib/git-changes.js';
 import type { Fact, FlowRecord } from '@autoguide/core';
@@ -42,7 +47,7 @@ import {
 import { scanSourceProject, mergeScanResults } from '@autoguide/scanner';
 import { StorageWriter } from '@autoguide/storage';
 import { attachFlowDefaults, buildFeatureRecords, toPageRecords } from '../scan/artifacts.js';
-import { createBuiltinRegistry } from '../plugins.js';
+import { loadScanRegistry } from '../plugins.js';
 import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js';
 
 export interface ScanOptions {
@@ -58,14 +63,19 @@ export interface ScanOptions {
 export interface ScanResult {
   ok: boolean;
   errors: string[];
+  warnings: string[];
   outputDir: string;
+}
+
+function formatPluginWarnings(warnings: PluginLifecycleWarning[]): string[] {
+  return warnings.map((item) => `[${item.pluginId}/${item.phase}] ${item.message}`);
 }
 
 export async function runScan(cwd: string, options: ScanOptions = {}): Promise<ScanResult> {
   const sourceDir = options.sourceDir ?? 'src';
   const configPath = join(cwd, 'autoguide.config.json');
   if (!existsSync(configPath)) {
-    return { ok: false, errors: ['autoguide.config.json fehlt. Bitte zuerst autoguide init ausführen.'], outputDir: '' };
+    return { ok: false, errors: ['autoguide.config.json fehlt. Bitte zuerst autoguide init ausführen.'], warnings: [], outputDir: '' };
   }
 
   const raw = JSON.parse(await readFile(configPath, 'utf8')) as AutoGuideConfigInput;
@@ -75,8 +85,32 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   });
   const outputDir = join(cwd, config.outputDir ?? '.autoguide');
   const baseUrl = options.baseUrl ?? config.baseUrl ?? 'http://localhost:5173';
+  const pluginWarnings: PluginLifecycleWarning[] = [];
 
-  createBuiltinRegistry(config.plugins ?? []);
+  let pluginLoad;
+  try {
+    pluginLoad = await loadScanRegistry(cwd, config.plugins ?? []);
+  } catch (error) {
+    return {
+      ok: false,
+      errors: [error instanceof Error ? error.message : 'Plugin-Laden fehlgeschlagen'],
+      warnings: [],
+      outputDir,
+    };
+  }
+  for (const message of pluginLoad.warnings) {
+    pluginWarnings.push({ pluginId: 'loader', phase: 'setup', message });
+  }
+
+  const setupContext = {
+    cwd,
+    outputDir,
+    sourceDir: join(cwd, sourceDir),
+    config: raw as Record<string, unknown>,
+  };
+  pluginWarnings.push(
+    ...(await runPluginSetup(pluginLoad.registry, setupContext, pluginLoad.enabledIds)),
+  );
 
   if (options.cloudConsent) {
     await recordCloudConsent(outputDir);
@@ -156,6 +190,14 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     extraFacts = [...merged.facts, ...testsToFacts(playwrightTests)];
   }
 
+  const pluginScan = await runPluginScans(
+    pluginLoad.registry,
+    setupContext,
+    pluginLoad.enabledIds,
+  );
+  pluginWarnings.push(...pluginScan.warnings);
+  extraFacts = [...extraFacts, ...pluginScan.facts];
+
   const graph = new KnowledgeGraph();
   let mergeResult = graph.mergeFacts(extraFacts);
 
@@ -177,6 +219,16 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
       }
     }
   }
+
+  const transformGraph = new KnowledgeGraph();
+  mergeResult = transformGraph.mergeFacts(mergeResult.facts);
+  const transformed = await runPluginTransforms(
+    pluginLoad.registry,
+    transformGraph,
+    pluginLoad.enabledIds,
+  );
+  pluginWarnings.push(...transformed.warnings);
+  mergeResult = { ...mergeResult, facts: transformed.graph.listFacts() };
 
   let pageRecords = toPageRecords(merged.pages).map((page) =>
     changeDetection.changedRoutes.includes(page.route)
@@ -249,7 +301,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   });
 
   if (validationErrors.length > 0) {
-    return { ok: false, errors: validationErrors, outputDir };
+    return { ok: false, errors: validationErrors, warnings: formatPluginWarnings(pluginWarnings), outputDir };
   }
 
   const storage = new StorageWriter(outputDir);
@@ -301,5 +353,9 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     storage.dispose();
   }
 
-  return { ok: true, errors: [], outputDir };
+  pluginWarnings.push(
+    ...(await runPluginCleanup(pluginLoad.registry, pluginLoad.enabledIds)),
+  );
+
+  return { ok: true, errors: [], warnings: formatPluginWarnings(pluginWarnings), outputDir };
 }
