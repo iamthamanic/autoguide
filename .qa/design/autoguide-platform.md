@@ -115,9 +115,25 @@ integrations/hr-workflows/ — self-contained HR scenario (CI)
 
 ## Open Questions
 
-- GitHub remote repo name/owner (needed before `gh issue create`)
-- Exact 3 hr-workflows flows for acceptance (Wiki article, Wiki search, Stammdaten — implemented)
+- ~~GitHub remote repo name/owner~~ — `iamthamanic/autoguide`
+- ~~Exact 3 hr-workflows flows for acceptance~~ — Wiki, Stammdaten, Mitarbeiter flows (green in CI)
+
+## Phase 3 roadmap (completion sync — 2026-07)
+
+| Track | Issues (representative) | Status |
+|-------|-------------------------|--------|
+| Runtime & scan depth | #70 snapshot v2, #68 AST scanner, #72 flow verify | ✅ merged |
+| Trust & publish | #71 review loop, #73 redaction, #79 JSON Schema | ✅ merged |
+| CLI & extensibility | #83 generate, #81 plugins, #80 recommendations | ✅ merged |
+| SDK & docs | #86 DocElement, #82 packages/ui, #84 public API docs | ✅ merged |
+| CI & integration | #40 validate, #41 hr-workflows | ✅ green |
+| Adapter parity | Vue/Angular/Svelte UI styleguide (#85) | ⏳ open |
+| Doc truth sync | #87 PRD + acceptance sync | 🔄 this issue |
+| Enterprise / hosted | sync, SSO, analytics | ⏳ deferred (Layer 5) |
+| Tauri / Flutter dogfood | scriptony, Flutter example | ⏳ partial stubs |
+
+**Pipeline queue after #87:** #85 → #74–#78 (per ecc-runner batch).
 
 ## Ready for /implement
 
-NO — pending issue slice approval
+YES — epic slices continue via `@ecc-runner`; documentation synced with main.

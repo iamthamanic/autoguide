@@ -10,23 +10,23 @@ Close the gaps between `docs/UI_STYLEGUIDE.md` and `@autoguide/react`: design to
 - `AutoGuideProvider` wraps host app with facts/pages/flows or empty defaults
 
 ## Happy Path
-- [ ] Help FAB and panel use `--ag-*` tokens (primary, surface, border, text)
-- [ ] Open panel shows flows via numbered `FlowStepList` when flows exist on current route
-- [ ] Dev mode shows `ReviewBadge` with confidence on uncertain facts; provenance on hover/title
-- [ ] Loading state shows skeleton lines and `aria-busy="true"` on panel
-- [ ] Empty state shows German copy and dev-mode hint to run review
-- [ ] Error state shows German message and Retry button when `error` prop set
-- [ ] ESC closes help panel; Tab cycles within open panel (focus trap)
-- [ ] Inspector announces selected element via `aria-live`; ESC exits inspector
+- [x] Help FAB and panel use `--ag-*` tokens (primary, surface, border, text)
+- [x] Open panel shows flows via numbered `FlowStepList` when flows exist on current route
+- [x] Dev mode shows `ReviewBadge` with confidence on uncertain facts; provenance on hover/title
+- [x] Loading state shows skeleton lines and `aria-busy="true"` on panel
+- [x] Empty state shows German copy and dev-mode hint to run review
+- [x] Error state shows German message and Retry button when `error` prop set
+- [x] ESC closes help panel; Tab cycles within open panel (focus trap)
+- [x] Inspector announces selected element via `aria-live`; ESC exits inspector
 
 ## Edge Cases
-- [ ] Published mode hides uncertain facts and dev-only badges
-- [ ] Panel works when facts/pages/flows arrays are empty (empty state only)
+- [x] Published mode hides uncertain facts and dev-only badges
+- [x] Panel works when facts/pages/flows arrays are empty (empty state only)
 
 ## Regression
-- [ ] Existing widget tests pass (FAB render, route title, published filter)
-- [ ] Inspector still hidden in `published` mode
-- [ ] Example app still renders Help + Inspector + TourRunner
+- [x] Existing widget tests pass (FAB render, route title, published filter)
+- [x] Inspector still hidden in `published` mode
+- [x] Example app still renders Help + Inspector + TourRunner
 
 ## Assumptions
 - Review "link" in empty state is dev-mode CLI hint text, not in-app review UI (no review API in widget yet)
@@ -40,7 +40,7 @@ Close the gaps between `docs/UI_STYLEGUIDE.md` and `@autoguide/react`: design to
 | 3 | `03-empty-error-states.png` |
 
 ## Implementation Notes
-- `plugins/react/src/ag-tokens.ts` — CSS variable tokens
+- `packages/ui/src/tokens.ts` — shared CSS variable tokens (`@autoguide/ui`)
 - `plugins/react/src/ReviewBadge.tsx`, `FlowStepList.tsx`, `PanelSkeleton.tsx`, `useFocusTrap.ts`
 - `AutoGuideWidget.tsx` — tokens, states, focus trap, FlowStepList, ReviewBadge
 - `InspectorOverlay.tsx` — tokens, ESC, aria-live

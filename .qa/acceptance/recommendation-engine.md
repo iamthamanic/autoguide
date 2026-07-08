@@ -1,28 +1,15 @@
-# Feature: Implement recommendation engine
+# Feature: Suggest code improvements (recommendation engine)
 
-<!-- seeded by ecc-runner from issue #31 on 2026-07-07 — @implement may refine -->
+<!-- synced issue #87 — see also recommendation-engine-complete.md -->
 
 ## Intent
 Suggest code improvements: missing labels, ambiguous handlers, missing data-doc.
 
 ## Happy Path
-- [ ] - [ ] Missing label detection
-- [ ] - [ ] recommendations.json written
-- [ ] - [ ] CLI doctor surfaces top recommendations
-
-## Edge Cases
-- [ ] (from .qa/edge-cases.md + @implement)
-
-## Regression
-- [ ] Feed and topic routes still load
-
-## Assumptions
-- none
-
-## Screenshots
-| Step | Filename |
-|------|----------|
-| 1 | `01-happy-path.png` |
+- [x] Missing label detection
+- [x] recommendations.json written
+- [x] CLI doctor surfaces top recommendations
 
 ## Implementation Notes
-<!-- filled after coding -->
+- Superseded detail: `.qa/acceptance/recommendation-engine-complete.md`
+- `packages/core/src/recommendations/engine.ts`

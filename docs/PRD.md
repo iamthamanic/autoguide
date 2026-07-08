@@ -71,11 +71,40 @@ Build a reusable open-source **Documentation Intelligence Engine** that turns th
 
 **Explicitly deferred to later issues (not Rung 1):**
 
-- Vue, Angular, Svelte, Tauri, Flutter adapters
+- Vue, Angular, Svelte, Tauri, Flutter adapters *(scaffold packages exist; full parity checklists open)*
 - Hosted sync, SSO, enterprise registry, analytics dashboard
-- PDF/HTML export (Markdown first)
-- Guided tours generation
-- CI validation command
+- External dogfood validation (browo-hr, scriptony) as CI dependencies
+
+## Delivery status (Phase 2–3, synced 2026-07)
+
+**Shipped beyond MVP 0.1:**
+
+| Area | Status |
+|------|--------|
+| Monorepo + `@autoguide/core` | ✅ `pnpm run verify` on main |
+| CLI | ✅ init, doctor, scan, review, generate, export, validate, publish |
+| CI validation | ✅ `autoguide validate` + `.github/workflows/validate-docs.yml` |
+| hr-workflows integration | ✅ 3 flows, German Markdown/HTML export (`hr-workflows.integration.test.ts`) |
+| Playwright | ✅ import + `scan --verify-flows` |
+| JSON Schema | ✅ committed schemas + Ajv in CLI |
+| Source scanner | ✅ TypeScript AST (`parse-source-ast.ts`) |
+| Runtime snapshot | ✅ v2 forms/dialogs/route observer |
+| Review loop | ✅ edit + re-verify + `review-history.json` |
+| Redaction | ✅ PII/secret patterns in storage/export/AI |
+| Plugin API | ✅ lifecycle + config discovery |
+| Recommendations | ✅ engine + doctor + review links |
+| Guided tours | ✅ model, `generate tours`, example `TourRunner` |
+| Export | ✅ Markdown, HTML, PDF |
+| React SDK | ✅ Widget, Inspector, DocElement, `@autoguide/ui` tokens |
+| Public API docs | ✅ `docs/api/` |
+
+**Still deferred (accurate as of Phase 3 sync):**
+
+- Hosted sync, SSO, enterprise registry, analytics dashboard
+- Tauri production dogfood (scriptony-multihost)
+- Flutter beyond stub/example package
+- Vue/Angular/Svelte **full** parity vs React (widgets exist, checklists incomplete)
+- Mandatory cloud AI or AutoGuide-hosted backends
 
 ## Required capabilities (full product)
 
