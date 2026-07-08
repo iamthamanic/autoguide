@@ -69,7 +69,24 @@ export function mergeRescanFacts(
   sourceVersion?: string,
 ): { facts: Fact[]; staleFactIds: string[] } {
   if (detection.changedFiles.length === 0) {
-    return { facts: stampFreshFacts(newFacts, sourceVersion), staleFactIds: [] };
+    const freshByKey = new Map(newFacts.map((fact) => [`${fact.entityId}:${fact.key}`, fact]));
+    const merged: Fact[] = [...newFacts];
+    const staleFactIds: string[] = [];
+
+    for (const previous of previousFacts) {
+      const key = `${previous.entityId}:${previous.key}`;
+      if (freshByKey.has(key) || !shouldMarkStale(previous)) continue;
+      staleFactIds.push(previous.id);
+      merged.push({
+        ...previous,
+        status: 'stale',
+        reviewStatus: 'pending',
+        sourceVersion: previous.sourceVersion ?? sourceVersion,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    return { facts: stampFreshFacts(merged, sourceVersion), staleFactIds };
   }
 
   const freshByKey = new Map(newFacts.map((fact) => [`${fact.entityId}:${fact.key}`, fact]));
@@ -80,7 +97,7 @@ export function mergeRescanFacts(
   for (const previous of previousFacts) {
     const key = `${previous.entityId}:${previous.key}`;
     if (!freshByKey.has(key)) {
-      if (shouldMarkStale(previous) && factIsAffected(previous, detection)) {
+      if (shouldMarkStale(previous)) {
         staleFactIds.push(previous.id);
         merged.push({
           ...previous,

@@ -6,6 +6,7 @@ import {
   isDestructiveFlowStep,
   minimumConfidenceForFlowStep,
 } from './flow-step.js';
+import { applyFactConfidencePolicies } from './artifact.js';
 import { markAffectedFeaturesStale } from '../history/mark-features-stale.js';
 import type { FeatureRecord, PageRecord } from '../types/records.js';
 
@@ -113,6 +114,18 @@ describe('confidence engine v2', () => {
     expect(minimumConfidenceForFlowStep({ title: 'Delete employee record' })).toBe(0.9);
     expect(flowStepNeedsReview({ title: 'Delete employee record' }, 0.85)).toBe(true);
     expect(flowStepNeedsReview({ title: 'Open dashboard' }, 0.85)).toBe(false);
+  });
+
+  it('forces needs_review for weak destructive fact keys', () => {
+    const weakDelete = makeFact({
+      id: 'f-delete',
+      key: 'deleteUser',
+      value: 'Delete',
+      confidence: 0.75,
+      provenance: [prov('ai_enrichment', 0.75)],
+    });
+    const adjusted = applyFactConfidencePolicies(weakDelete);
+    expect(adjusted.status).toBe('needs_review');
   });
 
   it('marks features stale when linked elements change', () => {

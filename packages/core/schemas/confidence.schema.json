@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://autoguide.dev/schemas/confidence.schema.json",
   "title": "AutoGuide confidence.json",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "object",
   "required": ["scores"],
   "additionalProperties": false,
@@ -14,6 +14,52 @@
         "minimum": 0,
         "maximum": 1
       }
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["confidence", "evidenceFamilies", "status", "needsReview"],
+        "additionalProperties": false,
+        "properties": {
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "evidenceFamilies": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "status": { "type": "string" },
+          "needsReview": { "type": "boolean" }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["status", "reason", "competingFacts", "key"],
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["conflict", "resolved", "needs_review"]
+          },
+          "reason": { "type": "string" },
+          "competingFacts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "key": { "type": "string" },
+          "selectedFactId": { "type": "string" },
+          "resolutionSource": {
+            "type": "string",
+            "enum": ["evidence_tier", "developer_review", "manual_override"]
+          }
+        }
+      }
+    },
+    "staleFactIds": {
+      "type": "array",
+      "items": { "type": "string" }
     }
   }
 }

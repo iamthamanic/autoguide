@@ -11,21 +11,22 @@ Wire the existing `@autoguide/runtime` DOM scanner into `autoguide scan` so runt
 - Playwright optional — runtime capture skips gracefully when unavailable
 
 ## Happy Path
-- [ ] `autoguide scan --runtime` captures DOM snapshots at configured `baseUrl`
-- [ ] Runtime facts use `runtime_dom` provenance via `runtimeSnapshotToFacts`
-- [ ] Facts appear in `.autoguide/facts.json` after merge
-- [ ] `runtime-snapshot.json` written when runtime scan runs
-- [ ] Routes scanned: source routes, else Playwright visited routes, else `/`
+- [x] `autoguide scan --runtime` captures DOM snapshots at configured `baseUrl`
+- [x] Runtime facts use `runtime_dom` provenance via `runtimeSnapshotToFacts`
+- [x] Facts appear in `.autoguide/facts.json` after merge
+- [x] `runtime-snapshot.json` written when runtime scan runs
+- [x] Routes scanned: source routes, else Playwright visited routes, else `/`
 
 ## Edge Cases
-- [ ] Without `--runtime`, scan behavior unchanged (no runtime facts)
-- [ ] Playwright missing → warning, scan continues with source/playwright import only
-- [ ] `safeMode` skips destructive route labels (same as crawl)
-- [ ] `--runtime-url` overrides base URL for runtime capture only
+- [x] Without `--runtime`, scan behavior unchanged (no runtime facts)
+- [x] Playwright missing → warning, scan continues with source/playwright import only
+- [x] `safeMode` skips destructive route labels (same as crawl)
+- [x] `--runtime-url` overrides base URL for runtime capture only
+- [x] Unreachable runtime URL → warning, scan continues (partial state)
 
 ## Regression
-- [ ] `integrations/hr-workflows` scan test still passes without `--runtime`
-- [ ] Existing scanner/playwright/cli tests pass
+- [x] `integrations/hr-workflows` scan test still passes without `--runtime`
+- [x] Existing scanner/playwright/cli tests pass
 
 ## Assumptions
 - Runtime capture uses Playwright headless + in-page scan (browser context); Node does not call `scanDom` directly
