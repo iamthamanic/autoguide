@@ -11,6 +11,7 @@ import { runReview } from './commands/review.js';
 import { runExport } from './commands/export.js';
 import { runPublish } from './commands/publish.js';
 import { runValidateCommand } from './commands/validate.js';
+import { runGenerate } from './commands/generate.js';
 
 const program = new Command();
 
@@ -90,6 +91,18 @@ program
     json?: boolean;
   }) => {
     const code = await runReview(process.cwd(), options);
+    if (code !== 0) process.exitCode = code;
+  });
+
+program
+  .command('generate')
+  .description('Generate derived artifacts from existing .autoguide scan output')
+  .argument('[target]', 'tours | recommendations | bundle', 'bundle')
+  .action(async (target: string) => {
+    const normalized = target === 'tours' || target === 'recommendations' || target === 'bundle'
+      ? target
+      : 'bundle';
+    const code = await runGenerate(process.cwd(), normalized);
     if (code !== 0) process.exitCode = code;
   });
 
