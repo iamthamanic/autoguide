@@ -116,6 +116,9 @@ export function InspectorOverlay() {
           <strong>Element</strong>
           <p style={{ margin: '8px 0 0', fontSize: 14 }}>{selected.label ?? selected.selector}</p>
           <p style={{ margin: '4px 0 0', color: 'var(--ag-text-muted)', fontSize: 12 }}>{selected.selector}</p>
+          <p style={{ margin: '4px 0 0', color: 'var(--ag-text-muted)', fontSize: 12 }}>
+            Graph: {selected.entityId ?? selected.id}
+          </p>
         </div>
       ) : null}
     </div>

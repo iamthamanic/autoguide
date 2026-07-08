@@ -10,7 +10,7 @@ export function generateSelector(element: Element): string {
   if (testId) return `[data-testid="${testId}"]`;
 
   const id = element.id;
-  if (id) return `#${CSS.escape(id)}`;
+  if (id) return `#${typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(id) : id.replace(/[^\w-]/g, '\\$&')}`;
 
   const tag = element.tagName.toLowerCase();
   const name = element.getAttribute('name');
