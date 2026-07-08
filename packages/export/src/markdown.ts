@@ -2,7 +2,7 @@
  * @autoguide/export — Markdown documentation export.
  */
 
-import { filterFactsForMode, filterByRole, filterFactsByRole } from '@autoguide/core';
+import { filterFactsForMode, filterByRole, filterFactsByRole, redactString } from '@autoguide/core';
 import type { FlowRecord, PageRecord } from '@autoguide/core';
 import type { ExportRenderOptions } from './types.js';
 
@@ -69,5 +69,5 @@ export function exportKnowledgeMarkdown(
     ...rolePages.map((page) => exportPageMarkdown(page, facts, options)),
     ...roleFlows.map((flow) => exportFlowMarkdown(flow, options)),
   ];
-  return chunks.join('\n\n');
+  return redactString(chunks.join('\n\n'));
 }

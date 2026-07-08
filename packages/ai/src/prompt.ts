@@ -3,10 +3,13 @@
  */
 
 import type { AiEnrichmentInput } from './types.js';
+import { redactString } from '@autoguide/core';
 
 export function buildEnrichmentPrompt(inputs: AiEnrichmentInput[]): string {
   const evidence = inputs
-    .map((item) => `- ${item.entityId} / ${item.key}: ${String(item.value ?? '')}`)
+    .map((item) =>
+      `- ${item.entityId} / ${item.key}: ${redactString(String(item.value ?? ''))}`,
+    )
     .join('\n');
 
   return [

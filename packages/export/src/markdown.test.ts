@@ -62,4 +62,41 @@ describe('@autoguide/export', () => {
     expect(md).not.toContain('Admin Flow');
     expect(md).toContain('(Mitarbeiter)');
   });
+
+  it('redacts secrets from markdown export', () => {
+    const pages: PageRecord[] = [
+      {
+        id: 'p1',
+        route: '/home',
+        title: 'Startseite',
+        roleIds: [],
+        elementIds: [],
+        featureIds: [],
+        flowIds: [],
+        factIds: ['f-secret'],
+        status: 'published',
+      },
+    ];
+    const md = exportKnowledgeMarkdown(
+      pages,
+      [],
+      [
+        {
+          id: 'f-secret',
+          entityId: 'el-1',
+          key: 'note',
+          value: 'notify admin@corp.example Bearer abcdefghijklmnop',
+          status: 'verified',
+          reviewStatus: 'approved',
+          confidence: 0.95,
+          provenance: [],
+          createdAt: '2026-01-01T00:00:00.000Z',
+          updatedAt: '2026-01-01T00:00:00.000Z',
+        },
+      ],
+      { mode: 'published' },
+    );
+    expect(md).not.toContain('admin@corp.example');
+    expect(md).not.toContain('Bearer abcdefghijklmnop');
+  });
 });

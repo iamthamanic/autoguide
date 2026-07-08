@@ -3,7 +3,7 @@
  */
 
 import type { Fact } from '@autoguide/core';
-import { filterFactsForMode, filterByRole, filterFactsByRole } from '@autoguide/core';
+import { filterFactsForMode, filterByRole, filterFactsByRole, redactString } from '@autoguide/core';
 import type { FlowRecord, PageRecord } from '@autoguide/core';
 import type { ExportRenderOptions } from './types.js';
 
@@ -84,7 +84,7 @@ export function exportKnowledgeHtml(
     ...roleFlows.map((flow) => exportFlowHtml(flow, options)),
   ].join('\n');
 
-  return `<!DOCTYPE html>
+  return redactString(`<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="utf-8" />
@@ -95,5 +95,5 @@ export function exportKnowledgeHtml(
 <body>
 ${body}
 </body>
-</html>`;
+</html>`);
 }

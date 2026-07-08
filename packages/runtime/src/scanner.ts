@@ -3,6 +3,7 @@
  */
 
 import { generateSelector, getAccessibleName } from './selector.js';
+import { redactString } from '@autoguide/core';
 import type {
   RuntimeDialog,
   RuntimeElement,
@@ -55,7 +56,7 @@ function extractForms(root: ParentNode): RuntimeFormField[] {
         formId,
         selector: generateSelector(element),
         name: element.name || undefined,
-        label: getAccessibleName(element),
+        label: redactString(getAccessibleName(element) ?? ''),
         inputType: element.type || element.tagName.toLowerCase(),
         disabled: isDisabled(element),
         required: element.required ?? element.hasAttribute('required'),
@@ -77,7 +78,7 @@ function extractDialogs(root: ParentNode): RuntimeDialog[] {
     return {
       id: `dialog-${index + 1}`,
       selector: generateSelector(element),
-      label: getAccessibleName(element),
+      label: redactString(getAccessibleName(element) ?? ''),
       open,
     };
   });
@@ -99,7 +100,7 @@ function extractTextRegions(root: ParentNode): RuntimeTextRegion[] {
       regions.push({
         id: `text-${regions.length + 1}`,
         selector: generateSelector(element),
-        text: text.slice(0, 240),
+        text: redactString(text.slice(0, 240)),
         headingLevel: /^h[1-3]$/.test(tag) ? Number(tag.slice(1)) : undefined,
       });
     });
@@ -126,7 +127,7 @@ export function scanDom(
       entityId: runtimeEntityId(selector),
       tagName: element.tagName.toLowerCase(),
       selector,
-      label: getAccessibleName(element),
+      label: redactString(getAccessibleName(element) ?? ''),
       role: element.getAttribute('role') ?? undefined,
       route,
       interactive: isInteractive(element),

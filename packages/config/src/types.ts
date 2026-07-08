@@ -17,6 +17,11 @@ export interface ScanConfig {
   playwrightImportPath?: string;
 }
 
+export interface RedactionConfig {
+  enabled?: boolean;
+  extraPatterns?: string[];
+}
+
 export interface AutoGuideConfig {
   appId: string;
   framework: 'react' | 'vue' | 'angular' | 'svelte' | 'tauri' | 'flutter' | 'unknown';
@@ -25,6 +30,7 @@ export interface AutoGuideConfig {
   mode: VisibilityMode;
   ai: AiConfig;
   scan: ScanConfig;
+  redaction?: RedactionConfig;
   plugins?: string[];
 }
 

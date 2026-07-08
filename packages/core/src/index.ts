@@ -36,3 +36,6 @@ export * from './history/snapshot.js';
 export * from './history/detect-changes.js';
 export * from './history/apply-stale.js';
 export * from './history/history-log.js';
+export * from './redaction/types.js';
+export * from './redaction/patterns.js';
+export * from './redaction/redact.js';
