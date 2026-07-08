@@ -15,6 +15,7 @@ export interface StoragePaths {
   factsJson: string;
   confidenceJson: string;
   reviewsJson: string;
+  reviewHistoryJson: string;
   recommendationsJson: string;
   historyJson: string;
   scanSnapshotJson: string;
@@ -31,6 +32,7 @@ export function resolveStoragePaths(outputDir: string): StoragePaths {
     factsJson: join(outputDir, 'facts.json'),
     confidenceJson: join(outputDir, 'confidence.json'),
     reviewsJson: join(outputDir, 'reviews.json'),
+    reviewHistoryJson: join(outputDir, 'review-history.json'),
     recommendationsJson: join(outputDir, 'recommendations.json'),
     historyJson: join(outputDir, 'history.json'),
     scanSnapshotJson: join(outputDir, 'scan-snapshot.json'),
@@ -59,6 +61,7 @@ export class StorageWriter {
     await writeJsonAtomic(this.paths.factsJson, []);
     await writeJsonAtomic(this.paths.confidenceJson, { scores: {} });
     await writeJsonAtomic(this.paths.reviewsJson, []);
+    await writeJsonAtomic(this.paths.reviewHistoryJson, []);
     await writeJsonAtomic(this.paths.recommendationsJson, []);
     await writeJsonAtomic(this.paths.historyJson, { version: '0.1.0', entries: [] });
     await writeJsonAtomic(this.paths.scanSnapshotJson, {

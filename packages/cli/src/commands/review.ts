@@ -2,6 +2,7 @@
  * @autoguide/cli — review command for pending facts.
  */
 
+import type { Recommendation } from '@autoguide/core';
 import { ReviewQueue } from '@autoguide/core';
 import { loadArtifacts, resolveOutputDir, saveFactsAndReviews } from '../lib/artifacts.js';
 
@@ -10,7 +11,17 @@ export interface ReviewCommandOptions {
   list?: boolean;
   accept?: string;
   reject?: string;
+  edit?: string;
   value?: string;
+}
+
+function appendRecommendation(
+  existing: Recommendation[],
+  recommendation?: Recommendation,
+): Recommendation[] {
+  if (!recommendation) return existing;
+  if (existing.some((item) => item.id === recommendation.id)) return existing;
+  return [...existing, recommendation];
 }
 
 export async function runReview(cwd: string, options: ReviewCommandOptions = {}): Promise<number> {
@@ -18,8 +29,10 @@ export async function runReview(cwd: string, options: ReviewCommandOptions = {})
   const bundle = await loadArtifacts(outputDir);
   const queue = new ReviewQueue();
   queue.loadFromItems(bundle.reviews);
+  queue.loadHistory(bundle.reviewHistory);
+  queue.seedOverridesFromFacts(bundle.facts);
 
-  if (options.list || (!options.accept && !options.reject)) {
+  if (options.list || (!options.accept && !options.reject && !options.edit)) {
     const items = queue.list();
     if (options.json) {
       console.log(JSON.stringify(items, null, 2));
@@ -35,9 +48,9 @@ export async function runReview(cwd: string, options: ReviewCommandOptions = {})
     return 0;
   }
 
-  const factId = options.accept ?? options.reject;
+  const factId = options.accept ?? options.reject ?? options.edit;
   if (!factId) {
-    console.error('--accept oder --reject mit factId erforderlich.');
+    console.error('--accept, --reject oder --edit mit factId erforderlich.');
     return 1;
   }
 
@@ -47,23 +60,54 @@ export async function runReview(cwd: string, options: ReviewCommandOptions = {})
     return 1;
   }
 
+  if (options.edit && !options.value) {
+    console.error('--edit erfordert --value.');
+    return 1;
+  }
+
   const decision = options.reject ? 'rejected' : 'approved';
-  const updated = queue.applyDecision(
+  const editedValue = options.value ?? bundle.facts[factIndex]!.value;
+  const result = queue.applyReviewWithVerification(
     bundle.facts[factIndex]!,
     decision,
-    options.value ?? bundle.facts[factIndex]!.value,
+    editedValue,
+    bundle.facts,
   );
-  bundle.facts[factIndex] = updated;
-  await saveFactsAndReviews(outputDir, bundle.facts, queue.list());
+  bundle.facts[factIndex] = result.fact;
+  const recommendations = appendRecommendation(bundle.recommendations, result.recommendation);
+
+  await saveFactsAndReviews(
+    outputDir,
+    bundle.facts,
+    queue.list(),
+    queue.getHistory(),
+    recommendations,
+  );
 
   if (options.json) {
-    console.log(JSON.stringify({ fact: updated, pending: queue.list() }, null, 2));
-  } else {
     console.log(
-      decision === 'approved'
-        ? `Fact ${factId} freigegeben.`
-        : `Fact ${factId} abgelehnt.`,
+      JSON.stringify(
+        {
+          fact: result.fact,
+          action: result.record.action,
+          pending: queue.list(),
+          history: queue.getHistory(),
+          recommendation: result.recommendation ?? null,
+        },
+        null,
+        2,
+      ),
     );
+  } else if (decision === 'rejected') {
+    console.log(`Fact ${factId} abgelehnt.`);
+  } else if (result.record.action === 'unsupported_manual_knowledge') {
+    console.log(
+      `Fact ${factId} gespeichert, aber ohne Scan-Evidenz (${result.record.action}). Empfehlung ergänzt.`,
+    );
+  } else if (result.record.action === 'verified_after_edit' || result.record.action === 'edited') {
+    console.log(`Fact ${factId} bearbeitet und verifiziert (${result.record.action}).`);
+  } else {
+    console.log(`Fact ${factId} freigegeben.`);
   }
   return 0;
 }
