@@ -9,6 +9,8 @@ import {
   KnowledgeGraph,
   ReviewQueue,
   generateRecommendations,
+  generateToursFromFlows,
+  validateTours,
   linkRecommendationsToReviewQueue,
   buildScanSnapshot,
   detectChanges,
@@ -339,6 +341,10 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     },
   });
 
+  const tours = generateToursFromFlows(flowRecords);
+  const tourValidationErrors = validateTours(tours).map((error) => `tours.json: ${error}`);
+  validationErrors.push(...tourValidationErrors);
+
   if (validationErrors.length > 0) {
     return { ok: false, errors: validationErrors, warnings: formatPluginWarnings(pluginWarnings), outputDir };
   }
@@ -352,6 +358,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     await storage.writeJson(storage.paths.reviewsJson, queue.list());
     await storage.writeJson(storage.paths.reviewHistoryJson, reviewHistory);
     await storage.writeJson(storage.paths.recommendationsJson, recommendations);
+    await storage.writeJson(storage.paths.toursJson, tours);
     await storage.writeJson(storage.paths.historyJson, historyLog);
     await storage.writeJson(storage.paths.scanSnapshotJson, currentSnapshot);
     await storage.writeJson(storage.paths.graphJson, entityGraph.toData());

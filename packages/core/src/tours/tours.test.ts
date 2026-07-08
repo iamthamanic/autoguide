@@ -29,4 +29,13 @@ describe('guided tours', () => {
     expect(validateTours(tours)).toEqual([]);
     expect(isTour(tours[0])).toBe(true);
   });
+
+  it('maps elementId to data-doc-id selector', () => {
+    const flow: FlowRecord = {
+      ...sampleFlow,
+      steps: [{ order: 1, title: 'Speichern', elementId: 'action.save', factIds: [] }],
+    };
+    const tours = generateToursFromFlows([flow]);
+    expect(tours[0]?.steps[0]?.targetSelector).toBe('[data-doc-id="action.save"]');
+  });
 });

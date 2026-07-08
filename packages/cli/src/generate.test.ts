@@ -15,6 +15,23 @@ const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..');
 const integrationDir = join(repoRoot, 'integrations/hr-workflows');
 
 describe('generate command', () => {
+  it('scan writes tours.json during pipeline', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'ag-scan-tours-'));
+    try {
+      await cp(integrationDir, dir, { recursive: true });
+      const scan = await runScan(dir, { noAi: true });
+      expect(scan.ok).toBe(true);
+
+      const toursPath = join(dir, '.autoguide/tours.json');
+      const tours = JSON.parse(await readFile(toursPath, 'utf8'));
+      expect(Array.isArray(tours)).toBe(true);
+      expect(tours.length).toBeGreaterThan(0);
+      expect(validateTours(tours)).toEqual([]);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
   it('writes tours.json from existing flows', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'ag-generate-'));
     try {
