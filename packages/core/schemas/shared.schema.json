@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autoguide.dev/schemas/shared.schema.json",
+  "version": "0.1.0",
+  "$defs": {
+    "recordStatus": {
+      "type": "string",
+      "enum": ["draft", "reviewed", "published", "stale"]
+    },
+    "provenanceSource": {
+      "type": "string",
+      "enum": [
+        "source_code",
+        "runtime_dom",
+        "accessibility_tree",
+        "playwright_trace",
+        "ai_enrichment",
+        "developer_review",
+        "config",
+        "plugin"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source", "confidence", "observedAt"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "$ref": "#/$defs/provenanceSource" },
+        "sourceId": { "type": "string" },
+        "filePath": { "type": "string" },
+        "selector": { "type": "string" },
+        "route": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "observedAt": { "type": "string", "minLength": 1 }
+      }
+    },
+    "factStatus": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "ai_proposal",
+        "needs_review",
+        "conflict",
+        "manual_override",
+        "stale"
+      ]
+    },
+    "reviewStatus": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected"]
+    },
+    "flowVerificationStatus": {
+      "type": "string",
+      "enum": ["unverified", "verified", "failed", "partial"]
+    },
+    "flowVerificationProfile": {
+      "type": "object",
+      "required": ["status", "baseUrl"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "$ref": "#/$defs/flowVerificationStatus" },
+        "baseUrl": { "type": "string" },
+        "verifiedAt": { "type": "string", "minLength": 1 },
+        "failedStepOrder": { "type": "integer", "minimum": 1 },
+        "expectedRoute": { "type": "string" },
+        "actualRoute": { "type": "string" },
+        "artifactPath": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    }
+  }
+}

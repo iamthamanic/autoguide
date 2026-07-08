@@ -7,11 +7,11 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import {
   isDestructiveActionKey,
-  validateScanArtifacts,
   type FeatureRecord,
 } from '@autoguide/core';
 import { StorageWriter } from '@autoguide/storage';
 import { loadArtifacts, resolveOutputDir } from '../lib/artifacts.js';
+import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js';
 
 export interface ValidateOptions {
   soft?: boolean;
@@ -58,13 +58,16 @@ export async function runValidate(
     const bundle = await loadArtifacts(outputDir);
     const featuresRaw = await readFile(paths.featuresJson, 'utf8');
     features = JSON.parse(featuresRaw) as FeatureRecord[];
+    const confidenceRaw = await readFile(paths.confidenceJson, 'utf8');
+    const confidence = JSON.parse(confidenceRaw) as unknown;
 
     errors.push(
-      ...validateScanArtifacts({
+      ...validateArtifactsWithJsonSchema({
         pages: bundle.pages,
         features,
         flows: bundle.flows,
         facts: bundle.facts,
+        confidence,
       }),
     );
 

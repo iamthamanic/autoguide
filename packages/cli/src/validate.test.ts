@@ -47,6 +47,9 @@ describe('validate command', () => {
       const scan = await runScan(dir, { noAi: true });
       expect(scan.ok).toBe(true);
 
+      const fresh = await runValidate(dir);
+      expect(fresh.ok, fresh.errors.join('; ')).toBe(true);
+
       const factsPath = join(dir, '.autoguide/facts.json');
       const facts = JSON.parse(await readFile(factsPath, 'utf8')) as Fact[];
       facts[0] = {

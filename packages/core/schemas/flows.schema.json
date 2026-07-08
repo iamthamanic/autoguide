@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autoguide.dev/schemas/flows.schema.json",
+  "title": "AutoGuide flows.json",
+  "version": "0.1.0",
+  "type": "array",
+  "items": { "$ref": "#/$defs/flow" },
+  "$defs": {
+    "flowStep": {
+      "type": "object",
+      "required": ["order", "title", "factIds"],
+      "additionalProperties": false,
+      "properties": {
+        "order": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "elementId": { "type": "string" },
+        "route": { "type": "string" },
+        "factIds": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "flow": {
+      "type": "object",
+      "required": ["id", "title", "steps", "roleIds", "pageIds", "factIds", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "steps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/flowStep" }
+        },
+        "roleIds": { "type": "array", "items": { "type": "string" } },
+        "pageIds": { "type": "array", "items": { "type": "string" } },
+        "factIds": { "type": "array", "items": { "type": "string" } },
+        "status": {
+          "$ref": "https://autoguide.dev/schemas/shared.schema.json#/$defs/recordStatus"
+        },
+        "verification": {
+          "$ref": "https://autoguide.dev/schemas/shared.schema.json#/$defs/flowVerificationProfile"
+        }
+      }
+    }
+  }
+}

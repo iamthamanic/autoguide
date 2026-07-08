@@ -8,7 +8,6 @@ import { existsSync } from 'node:fs';
 import {
   KnowledgeGraph,
   ReviewQueue,
-  validateScanArtifacts,
   generateRecommendations,
   buildScanSnapshot,
   detectChanges,
@@ -44,6 +43,7 @@ import { scanSourceProject, mergeScanResults } from '@autoguide/scanner';
 import { StorageWriter } from '@autoguide/storage';
 import { attachFlowDefaults, buildFeatureRecords, toPageRecords } from '../scan/artifacts.js';
 import { createBuiltinRegistry } from '../plugins.js';
+import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js';
 
 export interface ScanOptions {
   sourceDir?: string;
@@ -238,11 +238,14 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     sourceElements: source.elements,
   });
 
-  const validationErrors = validateScanArtifacts({
+  const validationErrors = validateArtifactsWithJsonSchema({
     pages: pageRecords,
     features: linkedFeatures,
     flows: flowRecords,
     facts,
+    confidence: {
+      scores: Object.fromEntries(facts.map((fact) => [fact.id, fact.confidence])),
+    },
   });
 
   if (validationErrors.length > 0) {

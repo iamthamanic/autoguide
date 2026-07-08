@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autoguide.dev/schemas/pages.schema.json",
+  "title": "AutoGuide pages.json",
+  "version": "0.1.0",
+  "type": "array",
+  "items": { "$ref": "#/$defs/page" },
+  "$defs": {
+    "page": {
+      "type": "object",
+      "required": [
+        "id",
+        "route",
+        "title",
+        "roleIds",
+        "elementIds",
+        "featureIds",
+        "flowIds",
+        "factIds",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "route": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "roleIds": { "type": "array", "items": { "type": "string" } },
+        "elementIds": { "type": "array", "items": { "type": "string" } },
+        "featureIds": { "type": "array", "items": { "type": "string" } },
+        "flowIds": { "type": "array", "items": { "type": "string" } },
+        "factIds": { "type": "array", "items": { "type": "string" } },
+        "status": {
+          "$ref": "https://autoguide.dev/schemas/shared.schema.json#/$defs/recordStatus"
+        }
+      }
+    }
+  }
+}
