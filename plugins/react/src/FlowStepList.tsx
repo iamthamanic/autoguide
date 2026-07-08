@@ -3,13 +3,14 @@
  */
 
 import type { FlowRecord } from '@autoguide/core';
+import { listOrderedFlowSteps } from '@autoguide/ui';
 
 export interface FlowStepListProps {
   flow: FlowRecord;
 }
 
 export function FlowStepList({ flow }: FlowStepListProps) {
-  const steps = [...flow.steps].sort((a, b) => a.order - b.order);
+  const steps = listOrderedFlowSteps(flow);
 
   return (
     <ol
