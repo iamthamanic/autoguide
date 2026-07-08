@@ -5,6 +5,7 @@
 import Database from 'better-sqlite3';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { redactString } from '@autoguide/core';
 
 const SCHEMA_SQL = `
 CREATE TABLE IF NOT EXISTS facts_index (
@@ -66,7 +67,11 @@ export class SqliteIndex {
            review_status = excluded.review_status,
            updated_at = excluded.updated_at`,
       )
-      .run(row);
+      .run({
+        ...row,
+        entityId: redactString(row.entityId),
+        key: redactString(row.key),
+      });
   }
 
   upsertPageIndex(row: {
@@ -86,7 +91,11 @@ export class SqliteIndex {
            status = excluded.status,
            updated_at = excluded.updated_at`,
       )
-      .run(row);
+      .run({
+        ...row,
+        route: redactString(row.route),
+        title: redactString(row.title),
+      });
   }
 
   upsertFlowIndex(row: {
@@ -106,7 +115,11 @@ export class SqliteIndex {
            status = excluded.status,
            updated_at = excluded.updated_at`,
       )
-      .run(row);
+      .run({
+        ...row,
+        title: redactString(row.title),
+        body: redactString(row.body),
+      });
   }
 
   search(query: string, limit = 20): Array<{ id: string; kind: string; title: string; snippet: string }> {

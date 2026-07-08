@@ -14,6 +14,18 @@ describe('@autoguide/runtime', () => {
     expect(snapshot.elements[0]?.entityId).toContain('runtime:');
   });
 
+  it('redacts PII from runtime labels and text regions', () => {
+    document.body.innerHTML = `
+      <button>Mail an support@example.com</button>
+      <p>Telefon +49 30 12345678</p>
+    `;
+    const snapshot = scanDom(document, '/');
+    const labels = snapshot.elements.map((element) => element.label).join(' ');
+    const text = snapshot.textRegions.map((region) => region.text).join(' ');
+    expect(labels).not.toContain('support@example.com');
+    expect(text).not.toContain('12345678');
+  });
+
   it('captures forms, dialogs, disabled state, and text regions', () => {
     document.body.innerHTML = `
       <main>

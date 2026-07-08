@@ -18,6 +18,7 @@ import {
   appendHistoryEntry,
   buildEntityGraph,
   linkRecordsToGraph,
+  configureRedaction,
   type ScanSnapshot,
   type HistoryLog,
   type ReviewActionRecord,
@@ -69,6 +70,9 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   const raw = JSON.parse(await readFile(configPath, 'utf8')) as AutoGuideConfigInput;
   const config = loadConfigFromObject(raw);
+  configureRedaction({
+    extraPatterns: config.redaction?.extraPatterns,
+  });
   const outputDir = join(cwd, config.outputDir ?? '.autoguide');
   const baseUrl = options.baseUrl ?? config.baseUrl ?? 'http://localhost:5173';
 

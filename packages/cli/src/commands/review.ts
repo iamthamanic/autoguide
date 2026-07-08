@@ -2,8 +2,13 @@
  * @autoguide/cli — review command for pending facts.
  */
 
+import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import type { Recommendation } from '@autoguide/core';
-import { ReviewQueue } from '@autoguide/core';
+import { loadConfigFromObject } from '@autoguide/config';
+import type { AutoGuideConfigInput } from '@autoguide/config';
+import { configureRedaction, ReviewQueue } from '@autoguide/core';
 import { loadArtifacts, resolveOutputDir, saveFactsAndReviews } from '../lib/artifacts.js';
 
 export interface ReviewCommandOptions {
@@ -25,6 +30,12 @@ function appendRecommendation(
 }
 
 export async function runReview(cwd: string, options: ReviewCommandOptions = {}): Promise<number> {
+  const configPath = join(cwd, 'autoguide.config.json');
+  if (existsSync(configPath)) {
+    const raw = JSON.parse(await readFile(configPath, 'utf8')) as AutoGuideConfigInput;
+    const config = loadConfigFromObject(raw);
+    configureRedaction({ extraPatterns: config.redaction?.extraPatterns });
+  }
   const outputDir = await resolveOutputDir(cwd);
   const bundle = await loadArtifacts(outputDir);
   const queue = new ReviewQueue();
