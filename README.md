@@ -2,7 +2,7 @@
 
 Documentation intelligence engine — make process-heavy software self-explaining.
 
-SDK, CLI, and runtime UI that generate verifiable documentation from code, DOM, and Playwright traces. See [docs/PRD.md](docs/PRD.md) for product scope and [docs/SPEC_FULL.md](docs/SPEC_FULL.md) for the full engineering specification.
+SDK, CLI, and runtime UI that generate verifiable documentation from code, DOM, and Playwright traces. See [docs/PRD.md](docs/PRD.md) for product scope, [docs/SPEC_FULL.md](docs/SPEC_FULL.md) for the full engineering specification, and [docs/api/README.md](docs/api/README.md) for public package APIs.
 
 ## Prerequisites
 
@@ -71,7 +71,8 @@ autoguide/
 ├── docs/
 │   ├── PRD.md
 │   ├── SPEC_FULL.md
-│   └── UI_STYLEGUIDE.md
+│   ├── UI_STYLEGUIDE.md
+│   └── api/            # public package API reference
 ├── .qa/                # design, intake, acceptance, runner config
 └── AGENTS.md
 ```

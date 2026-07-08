@@ -10,6 +10,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r run typecheck",
     "test": "vitest run && pnpm -r run test",
     "verify": "pnpm -r run build && pnpm typecheck && pnpm test",
+    "docs:api": "node scripts/generate-api-docs.mjs",
     "checks": "pnpm run verify",
     "test:e2e": "echo 'Add Playwright — see verify-ui skill'"
   },
