@@ -1,0 +1,24 @@
+[
+  {
+    "id": "p1",
+    "route": "/vacation",
+    "title": "Urlaub",
+    "roleIds": [],
+    "elementIds": [],
+    "featureIds": [],
+    "flowIds": [],
+    "factIds": ["f1"],
+    "status": "published"
+  },
+  {
+    "id": "p2",
+    "route": "/dashboard",
+    "title": "Dashboard",
+    "roleIds": [],
+    "elementIds": [],
+    "featureIds": [],
+    "flowIds": [],
+    "factIds": [],
+    "status": "published"
+  }
+]

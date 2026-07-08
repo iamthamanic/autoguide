@@ -1,0 +1,11 @@
+[
+  {
+    "id": "fl1",
+    "title": "Urlaub beantragen",
+    "steps": [{ "order": 1, "title": "Antrag öffnen", "factIds": [] }],
+    "roleIds": ["Mitarbeiter"],
+    "pageIds": ["p1"],
+    "factIds": [],
+    "status": "published"
+  }
+]
