@@ -72,6 +72,14 @@ describe('cli runtime scan', () => {
       const snapshotRaw = await readFile(join(dir, '.autoguide/runtime-snapshot.json'), 'utf8');
       const snapshot = JSON.parse(snapshotRaw) as { elements: unknown[] };
       expect(snapshot.elements.length).toBeGreaterThan(0);
+
+      const confidence = JSON.parse(
+        await readFile(join(dir, '.autoguide/confidence.json'), 'utf8'),
+      ) as { facts: Record<string, { evidenceFamilies: string[] }> };
+      const runtimeBacked = Object.values(confidence.facts ?? {}).some((entry) =>
+        entry.evidenceFamilies.includes('runtime_dom'),
+      );
+      expect(runtimeBacked).toBe(true);
     } finally {
       await rm(dir, { recursive: true, force: true });
     }

@@ -10,20 +10,23 @@ Upgrade confidence scoring from single-source max weight to multi-signal correla
 - Scan pipeline merges facts via `KnowledgeGraph.mergeFacts`
 
 ## Happy Path
-- [ ] Multi-provenance facts (source_code + runtime_dom + playwright_trace) score higher than single-source
-- [ ] `scoreFromProvenance` applies corroboration bonus per SPEC scoring algorithm
-- [ ] Conflicting values resolved by evidence tier; unresolvable conflicts flagged `status: conflict`
-- [ ] Destructive flow steps require confidence ≥ 0.9 (`minimumConfidenceForFlowStep`)
-- [ ] Features marked `stale` when linked pages, elements, or facts are affected by scan changes
+- [x] Multi-provenance facts (source_code + runtime_dom + playwright_trace) score higher than single-source
+- [x] `scoreFromProvenance` applies corroboration bonus per SPEC scoring algorithm
+- [x] Conflicting values resolved by evidence tier; unresolvable conflicts flagged `status: conflict`
+- [x] Destructive flow steps require confidence ≥ 0.9 (`minimumConfidenceForFlowStep`)
+- [x] Features marked `stale` when linked pages, elements, or facts are affected by scan changes
+- [x] `confidence.json` includes scores, evidence families, conflicts, staleFactIds
 
 ## Edge Cases
-- [ ] AI-only evidence scores lower than corroborated static+runtime signals
-- [ ] Same-value merge still accumulates provenance and recalculates confidence
-- [ ] Feature stale skips already-stale features
+- [x] AI-only evidence scores lower than corroborated static+runtime signals
+- [x] Same-value merge still accumulates provenance and recalculates confidence
+- [x] Feature stale skips already-stale features
+- [x] Weak destructive fact keys forced to `needs_review`
+- [x] Previously verified facts missing in rescan marked `stale`
 
 ## Regression
-- [ ] Existing `graph-confidence.test.ts` and `history.test.ts` pass
-- [ ] hr-workflows integration scan unchanged
+- [x] Existing `graph-confidence.test.ts` and `history.test.ts` pass
+- [x] hr-workflows integration scan unchanged
 
 ## Assumptions
 - Corroboration families: static (source_code/accessibility_tree), runtime (runtime_dom), behavior (playwright_trace)
@@ -32,8 +35,10 @@ Upgrade confidence scoring from single-source max weight to multi-signal correla
 ## Implementation Notes
 - `packages/core/src/confidence/score.ts` — corroboration bonus + ambiguity penalty (v2)
 - `packages/core/src/confidence/conflict.ts` — `resolveFactConflict` by evidence tier
+- `packages/core/src/confidence/artifact.ts` — `buildConfidenceArtifact`, `applyFactConfidencePolicies`
 - `packages/core/src/confidence/flow-step.ts` — destructive flow step threshold 0.9
 - `packages/core/src/graph/knowledge-graph.ts` — conflict resolution policy on merge
 - `packages/core/src/history/mark-features-stale.ts` — feature-level stale detection
-- `packages/cli/src/commands/scan.ts` — applies `markAffectedFeaturesStale` on scan
-- Tests: `confidence-engine-v2.test.ts`, updated `graph-confidence.test.ts`
+- `packages/core/src/history/apply-stale.ts` — missing verified facts → stale
+- `packages/cli/src/commands/scan.ts` — applies policies + writes rich `confidence.json`
+- Tests: `confidence-engine-v2.test.ts`, `artifact.test.ts`, updated `graph-confidence.test.ts`

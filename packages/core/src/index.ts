@@ -17,6 +17,7 @@ export * from './schemas/artifacts.js';
 export * from './schemas/validate-artifacts.js';
 export * from './confidence/score.js';
 export * from './confidence/conflict.js';
+export * from './confidence/artifact.js';
 export * from './confidence/flow-step.js';
 export * from './graph/knowledge-graph.js';
 export * from './graph/entity-graph.js';

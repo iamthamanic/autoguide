@@ -26,6 +26,8 @@ import {
   runPluginScans,
   runPluginTransforms,
   runPluginCleanup,
+  applyFactConfidencePolicies,
+  buildConfidenceArtifact,
   type ScanSnapshot,
   type HistoryLog,
   type ReviewActionRecord,
@@ -232,6 +234,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   const graph = new KnowledgeGraph();
   let mergeResult = graph.mergeFacts(extraFacts);
+  const mergeConflicts = [...mergeResult.conflicts];
 
   if (!options.noAi && config.ai.provider !== 'none') {
     const provider = createAiProvider(config, { outputDir });
@@ -246,6 +249,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
         const aiMerge = mergeAiProposals(mergeResult.facts, proposals);
         const aiGraph = new KnowledgeGraph();
         mergeResult = aiGraph.mergeFacts(aiMerge.facts);
+        mergeConflicts.push(...mergeResult.conflicts);
       } catch {
         // Scan continues without AI when provider is unavailable or invalid.
       }
@@ -254,6 +258,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   const transformGraph = new KnowledgeGraph();
   mergeResult = transformGraph.mergeFacts(mergeResult.facts);
+  mergeConflicts.push(...mergeResult.conflicts);
   const transformed = await runPluginTransforms(
     pluginLoad.registry,
     transformGraph,
@@ -273,7 +278,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     changeDetection,
     gitHead,
   );
-  const facts: Fact[] = rescanMerge.facts;
+  const facts: Fact[] = rescanMerge.facts.map(applyFactConfidencePolicies);
 
   historyLog = appendHistoryEntry(
     historyLog,
@@ -362,9 +367,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     await storage.writeJson(storage.paths.historyJson, historyLog);
     await storage.writeJson(storage.paths.scanSnapshotJson, currentSnapshot);
     await storage.writeJson(storage.paths.graphJson, entityGraph.toData());
-    await storage.writeJson(storage.paths.confidenceJson, {
-      scores: Object.fromEntries(facts.map((f) => [f.id, f.confidence])),
-    });
+    await storage.writeJson(storage.paths.confidenceJson, buildConfidenceArtifact(facts, mergeConflicts));
     if (runtimeSnapshot) {
       await storage.writeRuntimeSnapshot(runtimeSnapshot);
     }

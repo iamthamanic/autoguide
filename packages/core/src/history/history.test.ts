@@ -55,6 +55,27 @@ describe('version history', () => {
     expect(log.entries[0]?.staleFactIds).toEqual(['f1']);
   });
 
+  it('marks missing verified facts stale even without file changes', () => {
+    const previous: Fact[] = [
+      {
+        id: 'f-missing',
+        entityId: 'DashboardPage',
+        key: 'action',
+        value: 'Speichern',
+        status: 'verified',
+        reviewStatus: 'approved',
+        confidence: 0.95,
+        provenance: [{ source: 'source_code', filePath: 'src/App.tsx', confidence: 0.9, observedAt: '' }],
+        createdAt: '',
+        updatedAt: '',
+      },
+    ];
+    const detection = detectChanges(previousSnapshot, currentSnapshot, []);
+    const merged = mergeRescanFacts(previous, [], detection, 'abc123');
+    expect(merged.staleFactIds).toEqual(['f-missing']);
+    expect(merged.facts.some((fact) => fact.id === 'f-missing' && fact.status === 'stale')).toBe(true);
+  });
+
   it('preserves approved facts as stale on rescan merge', () => {
     const previous: Fact[] = [
       {
