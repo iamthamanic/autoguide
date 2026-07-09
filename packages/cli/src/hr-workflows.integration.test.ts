@@ -25,9 +25,27 @@ describe('integrations/hr-workflows', () => {
       expect(scan.ok, scan.errors.join('; ')).toBe(true);
 
       const graphRaw = await readFile(join(dir, '.autoguide/graph.json'), 'utf8');
-      const graph = JSON.parse(graphRaw) as { entities: unknown[]; relationships: unknown[] };
+      const graph = JSON.parse(graphRaw) as {
+        entities: Array<{ id: string }>;
+        relationships: Array<{ from: string; to: string; type: string }>;
+      };
       expect(graph.entities.length).toBeGreaterThan(0);
       expect(graph.relationships.length).toBeGreaterThan(0);
+
+      const pages = JSON.parse(
+        await readFile(join(dir, '.autoguide/pages.json'), 'utf8'),
+      ) as Array<{ id: string; featureIds: string[] }>;
+      const entityIds = new Set(graph.entities.map((entity) => entity.id));
+      for (const page of pages) {
+        for (const featureId of page.featureIds) {
+          expect(entityIds.has(featureId)).toBe(true);
+          expect(
+            graph.relationships.some(
+              (rel) => rel.from === page.id && rel.to === featureId && rel.type === 'contains',
+            ),
+          ).toBe(true);
+        }
+      }
 
       const bundle = await loadArtifacts(join(dir, '.autoguide'));
       expect(bundle.flows.length).toBeGreaterThanOrEqual(3);
