@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://autoguide.dev/schemas/facts.schema.json",
   "title": "AutoGuide facts.json",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "array",
   "items": { "$ref": "#/$defs/fact" },
   "$defs": {
@@ -50,6 +50,27 @@
           "type": "array",
           "items": {
             "$ref": "https://autoguide.dev/schemas/shared.schema.json#/$defs/provenance"
+          }
+        },
+        "conflict": {
+          "type": "object",
+          "required": ["status", "reason", "competingFacts"],
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["conflict", "resolved", "needs_review"]
+            },
+            "reason": { "type": "string" },
+            "competingFacts": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "selectedFactId": { "type": "string" },
+            "resolutionSource": {
+              "type": "string",
+              "enum": ["evidence_tier", "developer_review", "manual_override"]
+            }
           }
         },
         "createdAt": { "type": "string", "minLength": 1 },

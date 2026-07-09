@@ -72,6 +72,11 @@ describe('version history rescan', () => {
       const staleFact = afterFacts.find((fact) => fact.id === target!.id);
       expect(staleFact?.status).toBe('stale');
 
+      const confidence = JSON.parse(
+        await readFile(join(dir, '.autoguide/confidence.json'), 'utf8'),
+      ) as { staleFactIds: string[] };
+      expect(confidence.staleFactIds).toContain(target!.id);
+
       const reviews = JSON.parse(await readFile(join(dir, '.autoguide/reviews.json'), 'utf8')) as Array<{
         factId: string;
         reason: string;

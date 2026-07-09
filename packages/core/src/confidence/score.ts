@@ -97,7 +97,7 @@ export function needsReview(confidence: number): boolean {
 }
 
 export function isDestructiveActionKey(key: string): boolean {
-  return /delete|remove|destroy|approve|reject|submit|archive|revoke|terminate|deactivate|löschen|entfernen/i.test(
+  return /delete|remove|destroy|approve|reject|submit|archive|revoke|terminate|deactivate|cancel|reset|löschen|entfernen/i.test(
     key,
   );
 }

@@ -3,7 +3,7 @@
  */
 
 import type { Fact } from '../types/fact.js';
-import { resolveFactConflict } from '../confidence/conflict.js';
+import { createFactConflict, resolveFactConflict } from '../confidence/conflict.js';
 import { scoreFromProvenance } from '../confidence/score.js';
 
 export interface MergeResult {
@@ -28,7 +28,11 @@ export class KnowledgeGraph {
     if (resolution.winner === 'incoming') {
       this.facts.set(factKey(fact), fact);
     } else if (resolution.winner === 'conflict') {
-      this.facts.set(factKey(fact), { ...fact, status: 'conflict' });
+      this.facts.set(factKey(fact), {
+        ...fact,
+        status: 'conflict',
+        conflict: createFactConflict(existing, fact, resolution.reason),
+      });
     }
   }
 
@@ -63,7 +67,11 @@ export class KnowledgeGraph {
           key: fact.key,
           reason: resolution.reason,
         });
-        this.facts.set(key, { ...existing, status: 'conflict' });
+        this.facts.set(key, {
+          ...existing,
+          status: 'conflict',
+          conflict: createFactConflict(existing, fact, resolution.reason),
+        });
         continue;
       }
 
