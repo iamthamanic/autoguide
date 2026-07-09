@@ -1,5 +1,7 @@
 export { AutoGuideProvider } from './AutoGuideProvider.js';
 export type { AutoGuideProviderProps } from './AutoGuideProvider.js';
+export { AutoGuide } from './AutoGuide.js';
+export type { AutoGuideFeatures, AutoGuideProps } from './AutoGuide.js';
 export { DocElement } from './DocElement.js';
 export type { DocElementProps } from './DocElement.js';
 export { AutoGuideWidget } from './AutoGuideWidget.js';

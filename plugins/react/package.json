@@ -19,6 +19,7 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
+    "@autoguide/client": "workspace:*",
     "@autoguide/core": "workspace:*",
     "@autoguide/runtime": "workspace:*",
     "@autoguide/ui": "workspace:*"
