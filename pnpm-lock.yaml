@@ -383,6 +383,21 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@26.1.0)(jsdom@26.1.0)(sass@1.85.0)
 
+  plugins/vite:
+    devDependencies:
+      '@types/node':
+        specifier: ^22.15.32
+        version: 22.20.0
+      typescript:
+        specifier: ^5.7.3
+        version: 5.8.3
+      vite:
+        specifier: ^6.3.5
+        version: 6.4.3(@types/node@22.20.0)(sass@1.85.0)
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.0)(jsdom@26.1.0)(sass@1.85.0)
+
   plugins/vue:
     dependencies:
       '@autoguide/core':
