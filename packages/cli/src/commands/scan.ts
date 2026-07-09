@@ -232,8 +232,8 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   pluginWarnings.push(...pluginScan.warnings);
   extraFacts = [...extraFacts, ...pluginScan.facts];
 
-  const graph = new KnowledgeGraph();
-  let mergeResult = graph.mergeFacts(extraFacts);
+  const factGraph = new KnowledgeGraph();
+  let mergeResult = factGraph.mergeFacts(extraFacts);
   const mergeConflicts = [...mergeResult.conflicts];
 
   if (!options.noAi && config.ai.provider !== 'none') {
@@ -247,21 +247,21 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
         }));
         const proposals = await provider.proposeDescriptions(inputs);
         const aiMerge = mergeAiProposals(mergeResult.facts, proposals);
-        const aiGraph = new KnowledgeGraph();
-        mergeResult = aiGraph.mergeFacts(aiMerge.facts);
-        mergeConflicts.push(...mergeResult.conflicts);
+        const aiIncoming = aiMerge.facts.slice(mergeResult.facts.length);
+        if (aiIncoming.length > 0) {
+          const aiResult = factGraph.mergeFacts(aiIncoming);
+          mergeConflicts.push(...aiResult.conflicts);
+          mergeResult = aiResult;
+        }
       } catch {
         // Scan continues without AI when provider is unavailable or invalid.
       }
     }
   }
 
-  const transformGraph = new KnowledgeGraph();
-  mergeResult = transformGraph.mergeFacts(mergeResult.facts);
-  mergeConflicts.push(...mergeResult.conflicts);
   const transformed = await runPluginTransforms(
     pluginLoad.registry,
-    transformGraph,
+    factGraph,
     pluginLoad.enabledIds,
   );
   pluginWarnings.push(...transformed.warnings);
@@ -318,7 +318,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     });
   }
 
-  let entityGraph = buildEntityGraph({
+  const entityGraph = buildEntityGraph({
     pages: pageRecords,
     features: linkedFeatures,
     flows: flowRecords,
@@ -328,13 +328,6 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   const linked = linkRecordsToGraph(pageRecords, linkedFeatures, entityGraph);
   pageRecords = linked.pages;
   const linkedFeaturesFinal = linked.features;
-  entityGraph = buildEntityGraph({
-    pages: pageRecords,
-    features: linkedFeaturesFinal,
-    flows: flowRecords,
-    facts,
-    sourceElements: source.elements,
-  });
 
   const validationErrors = validateArtifactsWithJsonSchema({
     pages: pageRecords,
