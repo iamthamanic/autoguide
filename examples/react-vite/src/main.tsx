@@ -1,17 +1,6 @@
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import {
-  AutoGuideProvider,
-  type AutoGuideProviderProps,
-  AutoGuideWidget,
-  DocElement,
-  InspectorOverlay,
-  TourRunner,
-} from '@autoguide/react';
-import scanTours from '../fixtures/tours.json';
-
-const tours = scanTours as NonNullable<AutoGuideProviderProps['tours']>;
-const primaryTour = tours.find((tour) => tour.status === 'published') ?? tours[0];
+import { AutoGuide, DocElement } from '@autoguide/react';
 
 function App() {
   const [page, setPage] = useState<'home' | 'settings'>('home');
@@ -49,16 +38,13 @@ function App() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AutoGuideProvider
+    <AutoGuide
       appId="example-react-vite"
-      userRole="Admin"
       mode="published"
-      tours={tours}
+      userRole="Admin"
+      bundleBase="/autoguide"
     >
       <App />
-      <AutoGuideWidget />
-      <InspectorOverlay />
-      {primaryTour ? <TourRunner tourId={primaryTour.id} /> : null}
-    </AutoGuideProvider>
+    </AutoGuide>
   </StrictMode>,
 );

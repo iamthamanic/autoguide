@@ -1,0 +1,18 @@
+[
+  {
+    "id": "tour-flow-save-action",
+    "title": "Aktion speichern",
+    "description": "Referenz-Flow für examples/react-vite",
+    "roleIds": ["Admin"],
+    "status": "published",
+    "steps": [
+      {
+        "id": "flow-save-action-step-1",
+        "title": "Aktion speichern",
+        "body": "Speichert die aktuelle Aktion in der Referenz-App.",
+        "action": "observe",
+        "targetSelector": "[data-doc-id=\"action.save\"]"
+      }
+    ]
+  }
+]

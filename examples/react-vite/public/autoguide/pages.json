@@ -1,0 +1,26 @@
+[
+  {
+    "id": "page-home",
+    "route": "/",
+    "title": "Startseite",
+    "description": "Hauptseite der Beispiel-App",
+    "roleIds": ["Admin"],
+    "elementIds": ["action.save"],
+    "featureIds": [],
+    "flowIds": ["flow-save-action"],
+    "factIds": ["fact-save-action"],
+    "status": "published"
+  },
+  {
+    "id": "page-settings",
+    "route": "/settings",
+    "title": "Einstellungen",
+    "description": "Einstellungsseite",
+    "roleIds": ["Admin"],
+    "elementIds": [],
+    "featureIds": [],
+    "flowIds": [],
+    "factIds": [],
+    "status": "published"
+  }
+]
