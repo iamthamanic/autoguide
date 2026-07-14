@@ -87,6 +87,7 @@ export async function runGenerateBundle(cwd: string): Promise<GenerateResult> {
     version: '0.1.0',
     generatedAt: new Date().toISOString(),
     artifacts: ['tours.json', 'recommendations.json'],
+    runtimeArtifacts: ['facts.json', 'pages.json', 'flows.json', 'tours.json', 'recommendations.json'],
   };
   const storage = new StorageWriter(outputDir);
   try {

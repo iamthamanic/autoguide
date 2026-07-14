@@ -13,6 +13,7 @@ import { runPublish } from './commands/publish.js';
 import { runValidateCommand } from './commands/validate.js';
 import { runGenerate } from './commands/generate.js';
 import { runSearch } from './commands/search.js';
+import { runSyncCommand } from './commands/sync.js';
 
 const program = new Command();
 
@@ -167,6 +168,16 @@ program
   .description('Validate and switch project to published mode')
   .action(async () => {
     const code = await runPublish(process.cwd());
+    if (code !== 0) process.exitCode = code;
+  });
+
+program
+  .command('sync')
+  .description('Copy publish-ready .autoguide artifacts to a static target directory')
+  .option('--target <dir>', 'Target directory for static assets', 'public/autoguide')
+  .option('--clean', 'Remove target directory before copying')
+  .action(async (options: { target: string; clean?: boolean }) => {
+    const code = await runSyncCommand(process.cwd(), { target: options.target, clean: options.clean });
     if (code !== 0) process.exitCode = code;
   });
 
