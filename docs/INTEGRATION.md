@@ -14,7 +14,7 @@ AutoGuide in 5 Minuten in eine bestehende React + Vite App einbinden.
 npm install @iamthamanic/autoguide-react @iamthamanic/autoguide-vite @iamthamanic/autoguide-cli
 ```
 
-> **Hinweis:** Die Packages sind aktuell `private` und noch nicht auf npm. Bis zum ersten Release das Repo klonen und als Workspace einbinden:
+> **Hinweis:** Pakete werden unter dem Scope `@iamthamanic/autoguide-*` auf npm veröffentlicht. Bis zum ersten Release das Repo klonen und als Workspace einbinden:
 >
 > ```bash
 > git clone https://github.com/iamthamanic/autoguide.git ../autoguide
