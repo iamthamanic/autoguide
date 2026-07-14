@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — deterministic in-memory search over pages and flows.
+ * @iamthamanic/autoguide-core — deterministic in-memory search over pages and flows.
  */
 
 import type { FlowRecord, PageRecord } from '../types/records.js';

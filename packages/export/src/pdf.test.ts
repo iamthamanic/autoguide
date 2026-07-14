@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { FlowRecord, PageRecord } from '@autoguide/core';
+import type { FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
 import { exportKnowledgePdf } from './pdf.js';
 
 const samplePages: PageRecord[] = [

@@ -1,7 +1,11 @@
 {
-  "name": "@autoguide/storage",
+  "name": "@iamthamanic/autoguide-storage",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "JSON persistence and SQLite index for AutoGuide",
   "exports": {
@@ -19,7 +23,7 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*",
+    "@iamthamanic/autoguide-core": "workspace:*",
     "better-sqlite3": "^11.10.0"
   },
   "devDependencies": {

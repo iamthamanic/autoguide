@@ -67,8 +67,8 @@ pnpm run test:e2e      # Playwright — bootstrap via @verify-ui skill
 
 ```
 autoguide/
-├── packages/           # @autoguide/core, config, storage, ui, cli
-├── plugins/            # @autoguide/react (+ future adapters)
+├── packages/           # @iamthamanic/autoguide-core, config, storage, ui, cli
+├── plugins/            # @iamthamanic/autoguide-react (+ future adapters)
 ├── examples/           # minimal reference apps (pnpm dev)
 ├── integrations/       # self-contained scan scenarios (CI fixtures)
 ├── docs/
@@ -101,6 +101,10 @@ For AI-assisted development:
 6. `@verify-ui` — browser verification
 
 See [AGENTS.md](AGENTS.md).
+
+## Recent changes
+
+- **2026-07-15** — npm packages renamed to `@iamthamanic/autoguide-*` scope; publish script added (`chore/npm-scope-iamthamanic`)
 
 ## License
 

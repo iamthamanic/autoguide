@@ -13,7 +13,7 @@ Read `AGENTS.md` at repo root before making changes.
 ## Stack
 
 - pnpm monorepo (`packages/`, `plugins/`, `examples/`)
-- TypeScript strict; keep framework imports out of `@autoguide/core`
+- TypeScript strict; keep framework imports out of `@iamthamanic/autoguide-core`
 - Local knowledge base: `.autoguide/` (gitignored runtime data)
 
 ## Verification

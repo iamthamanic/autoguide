@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
-import type { Fact } from '@autoguide/core';
-import { getReviewBadgeState, listOrderedFlowSteps } from '@autoguide/ui';
+import type { Fact } from '@iamthamanic/autoguide-core';
+import { getReviewBadgeState, listOrderedFlowSteps } from '@iamthamanic/autoguide-ui';
 import { AutoGuideContextService } from './context.js';
 
 const sampleFacts: Fact[] = [
@@ -31,7 +31,7 @@ const sampleFacts: Fact[] = [
   },
 ];
 
-describe('@autoguide/angular', () => {
+describe('@iamthamanic/autoguide-angular', () => {
   it('emits compiled adapter artifacts', () => {
     expect(existsSync(new URL('../dist/index.js', import.meta.url))).toBe(true);
     expect(existsSync(new URL('../dist/autoguide-widget.component.js', import.meta.url))).toBe(true);

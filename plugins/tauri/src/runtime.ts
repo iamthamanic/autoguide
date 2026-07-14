@@ -1,5 +1,5 @@
 /**
- * @autoguide/tauri — detect Tauri webview runtime.
+ * @iamthamanic/autoguide-tauri — detect Tauri webview runtime.
  */
 
 export function isTauriRuntime(): boolean {

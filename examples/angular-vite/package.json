@@ -1,5 +1,5 @@
 {
-  "name": "@autoguide/example-angular-vite",
+  "name": "@iamthamanic/autoguide-example-angular-vite",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     "@angular/core": "^19.2.14",
     "@angular/forms": "^19.2.14",
     "@angular/platform-browser": "^19.2.14",
-    "@autoguide/angular": "workspace:*",
+    "@iamthamanic/autoguide-angular": "workspace:*",
     "rxjs": "^7.8.2",
     "zone.js": "^0.15.1"
   },

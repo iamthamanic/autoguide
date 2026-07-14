@@ -1,5 +1,5 @@
 /**
- * @autoguide/react — apply review decisions via core ReviewQueue.
+ * @iamthamanic/autoguide-react — apply review decisions via core ReviewQueue.
  */
 
 import {
@@ -7,7 +7,7 @@ import {
   type Fact,
   type ReviewActionRecord,
   type ReviewItem,
-} from '@autoguide/core';
+} from '@iamthamanic/autoguide-core';
 import type { ReviewDecisionPayload } from './review-types.js';
 
 export function applyReviewDecision(

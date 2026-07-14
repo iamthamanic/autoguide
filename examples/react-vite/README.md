@@ -15,7 +15,7 @@ pnpm dev    # startet Vite unter http://localhost:5173
 Die App verwendet `<AutoGuide />` als einzige AutoGuide-Komponente:
 
 ```tsx
-import { AutoGuide, DocElement } from '@autoguide/react';
+import { AutoGuide, DocElement } from '@iamthamanic/autoguide-react';
 
 <AutoGuide appId="example-react-vite" mode="published" bundleBase="/autoguide">
   <App />
@@ -25,7 +25,7 @@ import { AutoGuide, DocElement } from '@autoguide/react';
 Das Vite-Plugin kopiert `.autoguide/*.json` automatisch nach `public/autoguide/`:
 
 ```ts
-import autoguide from '@autoguide/vite';
+import autoguide from '@iamthamanic/autoguide-vite';
 plugins: [react(), autoguide()]
 ```
 

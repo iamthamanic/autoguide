@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@autoguide/core';
+  import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@iamthamanic/autoguide-core';
   import AutoGuideProvider from './AutoGuideProvider.svelte';
   import AutoGuideWidget from './AutoGuideWidget.svelte';
 

@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — validate guided tour records.
+ * @iamthamanic/autoguide-core — validate guided tour records.
  */
 
 import type { Tour, TourStep } from './types.js';

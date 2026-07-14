@@ -7,7 +7,7 @@ Deterministic search backed by SQLite FTS5 index populated on scan, with ranked 
 
 ## Preconditions
 - Scan writes pages.json and flows.json to `.autoguide/`
-- `@autoguide/core` exposes `searchKnowledge` for in-memory search
+- `@iamthamanic/autoguide-core` exposes `searchKnowledge` for in-memory search
 
 ## Happy Path
 - [ ] FTS5 `search_fts` table populated on scan with page/flow title, description, route, and step text

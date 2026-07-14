@@ -1,7 +1,7 @@
 import { h } from 'vue';
 import { mount } from '@vue/test-utils';
 import { describe, expect, it, vi } from 'vitest';
-import type { Fact } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
 import { AutoGuideProvider, AutoGuideWidget, FlowStepList, ReviewBadge } from './index.js';
 
 const sampleFacts: Fact[] = [
@@ -31,7 +31,7 @@ const sampleFacts: Fact[] = [
   },
 ];
 
-describe('@autoguide/vue', () => {
+describe('@iamthamanic/autoguide-vue', () => {
   it('renders widget without throwing when docs are missing', () => {
     const wrapper = mount(AutoGuideProvider, {
       props: { appId: 'demo' },

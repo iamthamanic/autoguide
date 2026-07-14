@@ -1,5 +1,5 @@
 {
-  "name": "@autoguide/example-vue-vite",
+  "name": "@iamthamanic/autoguide-example-vue-vite",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
     "test": "echo 'example app — e2e via verify-ui later'"
   },
   "dependencies": {
-    "@autoguide/vue": "workspace:*",
+    "@iamthamanic/autoguide-vue": "workspace:*",
     "vue": "^3.5.13"
   },
   "devDependencies": {

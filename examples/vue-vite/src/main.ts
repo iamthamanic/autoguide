@@ -1,5 +1,5 @@
 /**
- * Vue 3 example — mirrors @autoguide/example-react-vite for adapter parity checks.
+ * Vue 3 example — mirrors @iamthamanic/autoguide-example-react-vite for adapter parity checks.
  */
 
 import { createApp, defineComponent, h, ref } from 'vue';
@@ -7,7 +7,7 @@ import {
   AutoGuideProvider,
   AutoGuideWidget,
   InspectorOverlay,
-} from '@autoguide/vue';
+} from '@iamthamanic/autoguide-vue';
 
 const App = defineComponent({
   name: 'App',

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { defineAutoGuideConfig, ConfigValidationError } from './index.js';
 
-describe('@autoguide/config', () => {
+describe('@iamthamanic/autoguide-config', () => {
   it('applies defaults and validates', () => {
     const config = defineAutoGuideConfig({ appId: 'hrthis' });
     expect(config.mode).toBe('development');

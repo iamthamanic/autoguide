@@ -1,8 +1,8 @@
 /**
- * @autoguide/ai — provider factory from AutoGuide config.
+ * @iamthamanic/autoguide-ai — provider factory from AutoGuide config.
  */
 
-import type { AutoGuideConfig } from '@autoguide/config';
+import type { AutoGuideConfig } from '@iamthamanic/autoguide-config';
 import type { AiProvider } from './types.js';
 import { OllamaProvider } from './ollama.js';
 import { OpenAiCompatibleProvider } from './openai-compatible.js';

@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — generate derived artifacts without re-scanning.
+ * @iamthamanic/autoguide-cli — generate derived artifacts without re-scanning.
  */
 
 import { existsSync } from 'node:fs';
@@ -8,8 +8,8 @@ import {
   generateRecommendations,
   generateToursFromFlows,
   validateTours,
-} from '@autoguide/core';
-import { StorageWriter } from '@autoguide/storage';
+} from '@iamthamanic/autoguide-core';
+import { StorageWriter } from '@iamthamanic/autoguide-storage';
 import { loadArtifacts, resolveOutputDir } from '../lib/artifacts.js';
 
 export type GenerateTarget = 'tours' | 'recommendations' | 'bundle';

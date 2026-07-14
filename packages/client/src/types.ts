@@ -1,5 +1,5 @@
 /**
- * @autoguide/client — types for browser artifact loading.
+ * @iamthamanic/autoguide-client — types for browser artifact loading.
  */
 
 import type {
@@ -10,7 +10,7 @@ import type {
   ReviewActionRecord,
   ReviewItem,
   Tour,
-} from '@autoguide/core';
+} from '@iamthamanic/autoguide-core';
 
 export interface DocBundleManifest {
   version?: string;

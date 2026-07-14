@@ -35,7 +35,7 @@ importers:
       '@angular/platform-browser':
         specifier: ^19.2.14
         version: 19.2.25(@angular/common@19.2.25(@angular/core@19.2.25(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@19.2.25(rxjs@7.8.2)(zone.js@0.15.1))
-      '@autoguide/angular':
+      '@iamthamanic/autoguide-angular':
         specifier: workspace:*
         version: link:../../plugins/angular
       rxjs:
@@ -60,10 +60,10 @@ importers:
 
   examples/react-vite:
     dependencies:
-      '@autoguide/react':
+      '@iamthamanic/autoguide-react':
         specifier: workspace:*
         version: link:../../plugins/react
-      '@autoguide/vite':
+      '@iamthamanic/autoguide-vite':
         specifier: workspace:*
         version: link:../../plugins/vite
       react:
@@ -91,7 +91,7 @@ importers:
 
   examples/svelte-vite:
     dependencies:
-      '@autoguide/svelte':
+      '@iamthamanic/autoguide-svelte':
         specifier: workspace:*
         version: link:../../plugins/svelte
       svelte:
@@ -113,7 +113,7 @@ importers:
 
   examples/vue-vite:
     dependencies:
-      '@autoguide/vue':
+      '@iamthamanic/autoguide-vue':
         specifier: workspace:*
         version: link:../../plugins/vue
       vue:
@@ -132,34 +132,34 @@ importers:
 
   packages/ai:
     dependencies:
-      '@autoguide/config':
+      '@iamthamanic/autoguide-config':
         specifier: workspace:*
         version: link:../config
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
 
   packages/cli:
     dependencies:
-      '@autoguide/ai':
+      '@iamthamanic/autoguide-ai':
         specifier: workspace:*
         version: link:../ai
-      '@autoguide/config':
+      '@iamthamanic/autoguide-config':
         specifier: workspace:*
         version: link:../config
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
-      '@autoguide/export':
+      '@iamthamanic/autoguide-export':
         specifier: workspace:*
         version: link:../export
-      '@autoguide/playwright':
+      '@iamthamanic/autoguide-playwright':
         specifier: workspace:*
         version: link:../playwright
-      '@autoguide/scanner':
+      '@iamthamanic/autoguide-scanner':
         specifier: workspace:*
         version: link:../scanner
-      '@autoguide/storage':
+      '@iamthamanic/autoguide-storage':
         specifier: workspace:*
         version: link:../storage
       ajv:
@@ -171,13 +171,13 @@ importers:
 
   packages/client:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
 
   packages/config:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
 
@@ -185,7 +185,7 @@ importers:
 
   packages/export:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
     optionalDependencies:
@@ -195,10 +195,10 @@ importers:
 
   packages/playwright:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
-      '@autoguide/runtime':
+      '@iamthamanic/autoguide-runtime':
         specifier: workspace:*
         version: link:../runtime
     optionalDependencies:
@@ -208,7 +208,7 @@ importers:
 
   packages/runtime:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -218,10 +218,10 @@ importers:
 
   packages/scanner:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
-      '@autoguide/runtime':
+      '@iamthamanic/autoguide-runtime':
         specifier: workspace:*
         version: link:../runtime
       typescript:
@@ -230,7 +230,7 @@ importers:
 
   packages/storage:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
       better-sqlite3:
@@ -243,19 +243,19 @@ importers:
 
   packages/ui:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../core
 
   plugins/angular:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@autoguide/runtime':
+      '@iamthamanic/autoguide-runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
-      '@autoguide/ui':
+      '@iamthamanic/autoguide-ui':
         specifier: workspace:*
         version: link:../../packages/ui
       tslib:
@@ -301,16 +301,16 @@ importers:
 
   plugins/react:
     dependencies:
-      '@autoguide/client':
+      '@iamthamanic/autoguide-client':
         specifier: workspace:*
         version: link:../../packages/client
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@autoguide/runtime':
+      '@iamthamanic/autoguide-runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
-      '@autoguide/ui':
+      '@iamthamanic/autoguide-ui':
         specifier: workspace:*
         version: link:../../packages/ui
     devDependencies:
@@ -335,13 +335,13 @@ importers:
 
   plugins/svelte:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@autoguide/runtime':
+      '@iamthamanic/autoguide-runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
-      '@autoguide/ui':
+      '@iamthamanic/autoguide-ui':
         specifier: workspace:*
         version: link:../../packages/ui
     devDependencies:
@@ -372,13 +372,13 @@ importers:
 
   plugins/tauri:
     dependencies:
-      '@autoguide/config':
+      '@iamthamanic/autoguide-config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@autoguide/runtime':
+      '@iamthamanic/autoguide-runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
     devDependencies:
@@ -406,13 +406,13 @@ importers:
 
   plugins/vue:
     dependencies:
-      '@autoguide/core':
+      '@iamthamanic/autoguide-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@autoguide/runtime':
+      '@iamthamanic/autoguide-runtime':
         specifier: workspace:*
         version: link:../../packages/runtime
-      '@autoguide/ui':
+      '@iamthamanic/autoguide-ui':
         specifier: workspace:*
         version: link:../../packages/ui
     devDependencies:

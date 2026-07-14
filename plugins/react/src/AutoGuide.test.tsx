@@ -1,12 +1,12 @@
 /**
- * @autoguide/react — AutoGuide drop-in component tests.
+ * @iamthamanic/autoguide-react — AutoGuide drop-in component tests.
  */
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { AutoGuide } from './AutoGuide.js';
 
-vi.mock('@autoguide/client', () => ({
+vi.mock('@iamthamanic/autoguide-client', () => ({
   loadArtifactBundle: vi.fn(async () => ({
     baseUrl: '/autoguide',
     facts: [],
@@ -40,7 +40,7 @@ describe('AutoGuide root component', () => {
   });
 
   it('shows German error when load fails', async () => {
-    const { loadArtifactBundle } = await import('@autoguide/client');
+    const { loadArtifactBundle } = await import('@iamthamanic/autoguide-client');
     vi.mocked(loadArtifactBundle).mockRejectedValueOnce(new Error('Netzwerkfehler'));
 
     render(<AutoGuide appId="demo-app" />);

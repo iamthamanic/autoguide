@@ -1,8 +1,8 @@
 /**
- * @autoguide/client — fetch knowledge artifacts from a static base URL.
+ * @iamthamanic/autoguide-client — fetch knowledge artifacts from a static base URL.
  */
 
-import type { Fact, FlowRecord, PageRecord, Recommendation, ReviewActionRecord, ReviewItem, Tour } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord, Recommendation, ReviewActionRecord, ReviewItem, Tour } from '@iamthamanic/autoguide-core';
 import { RUNTIME_ARTIFACT_FILES } from './artifacts.js';
 import type { ClientArtifactBundle, DocBundleManifest, LoadArtifactBundleOptions } from './types.js';
 

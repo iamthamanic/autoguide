@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — validate command for CI documentation checks.
+ * @iamthamanic/autoguide-cli — validate command for CI documentation checks.
  */
 
 import { existsSync } from 'node:fs';
@@ -8,8 +8,8 @@ import { join } from 'node:path';
 import {
   isDestructiveActionKey,
   type FeatureRecord,
-} from '@autoguide/core';
-import { StorageWriter } from '@autoguide/storage';
+} from '@iamthamanic/autoguide-core';
+import { StorageWriter } from '@iamthamanic/autoguide-storage';
 import { loadArtifacts, resolveOutputDir } from '../lib/artifacts.js';
 import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js';
 

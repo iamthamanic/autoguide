@@ -1,5 +1,5 @@
 /**
- * @autoguide/config — load config from project file or object.
+ * @iamthamanic/autoguide-config — load config from project file or object.
  */
 
 import { defineAutoGuideConfig } from './define.js';

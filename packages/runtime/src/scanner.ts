@@ -1,9 +1,9 @@
 /**
- * @autoguide/runtime — passive DOM traversal and accessibility extraction (v2).
+ * @iamthamanic/autoguide-runtime — passive DOM traversal and accessibility extraction (v2).
  */
 
 import { generateSelector, getAccessibleName } from './selector.js';
-import { redactString } from '@autoguide/core';
+import { redactString } from '@iamthamanic/autoguide-core';
 import type {
   RuntimeDialog,
   RuntimeElement,

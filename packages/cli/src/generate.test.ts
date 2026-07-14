@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — generate command tests.
+ * @iamthamanic/autoguide-cli — generate command tests.
  */
 
 import { cp, mkdtemp, readFile, rm } from 'node:fs/promises';
@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { validateTours } from '@autoguide/core';
+import { validateTours } from '@iamthamanic/autoguide-core';
 import { runGenerate, runGenerateBundle, runGenerateTours } from './commands/generate.js';
 import { runScan } from './commands/scan.js';
 

@@ -1,5 +1,5 @@
 /**
- * @autoguide/client — loadArtifactBundle tests.
+ * @iamthamanic/autoguide-client — loadArtifactBundle tests.
  */
 
 import { describe, expect, it, vi } from 'vitest';

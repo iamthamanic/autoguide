@@ -1,5 +1,5 @@
 /**
- * @autoguide/storage — search API with SQLite FTS and in-memory fallback.
+ * @iamthamanic/autoguide-storage — search API with SQLite FTS and in-memory fallback.
  */
 
 import { existsSync } from 'node:fs';
@@ -10,7 +10,7 @@ import {
   type PageRecord,
   type SearchHit,
   searchKnowledge,
-} from '@autoguide/core';
+} from '@iamthamanic/autoguide-core';
 import { SqliteIndex } from './sqlite-index.js';
 
 export interface SearchOptions {

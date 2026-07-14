@@ -1,5 +1,5 @@
 {
-  "name": "@autoguide/react",
+  "name": "@iamthamanic/autoguide-react",
   "version": "0.1.0",
   "private": false,
   "type": "module",
@@ -29,10 +29,10 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/client": "workspace:*",
-    "@autoguide/core": "workspace:*",
-    "@autoguide/runtime": "workspace:*",
-    "@autoguide/ui": "workspace:*"
+    "@iamthamanic/autoguide-client": "workspace:*",
+    "@iamthamanic/autoguide-core": "workspace:*",
+    "@iamthamanic/autoguide-runtime": "workspace:*",
+    "@iamthamanic/autoguide-ui": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

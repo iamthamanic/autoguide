@@ -1,5 +1,5 @@
 /**
- * @autoguide/scanner — source scan result types.
+ * @iamthamanic/autoguide-scanner — source scan result types.
  */
 
 export interface RouteCandidate {

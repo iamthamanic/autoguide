@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { Fact } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
 import { AutoGuideProvider } from './AutoGuideProvider.js';
 import { AutoGuideWidget } from './AutoGuideWidget.js';
 import { FlowStepList } from './FlowStepList.js';
@@ -33,7 +33,7 @@ const sampleFacts: Fact[] = [
   },
 ];
 
-describe('@autoguide/react', () => {
+describe('@iamthamanic/autoguide-react', () => {
   it('renders widget without throwing when docs are missing', () => {
     render(
       <AutoGuideProvider appId="demo">

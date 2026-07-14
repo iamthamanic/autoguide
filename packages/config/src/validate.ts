@@ -1,5 +1,5 @@
 /**
- * @autoguide/config — configuration validation with German error messages.
+ * @iamthamanic/autoguide-config — configuration validation with German error messages.
  */
 
 import type { AutoGuideConfig } from './types.js';

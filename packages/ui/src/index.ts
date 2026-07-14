@@ -1,5 +1,5 @@
 /**
- * @autoguide/ui — public package exports.
+ * @iamthamanic/autoguide-ui — public package exports.
  */
 
 export * from './tokens.js';

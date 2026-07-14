@@ -1,7 +1,11 @@
 {
-  "name": "@autoguide/ai",
+  "name": "@iamthamanic/autoguide-ai",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "AI enrichment providers for AutoGuide",
   "exports": {
@@ -19,7 +23,7 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/config": "workspace:*",
-    "@autoguide/core": "workspace:*"
+    "@iamthamanic/autoguide-config": "workspace:*",
+    "@iamthamanic/autoguide-core": "workspace:*"
   }
 }

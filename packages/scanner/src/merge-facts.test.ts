@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { RuntimeSnapshot } from '@autoguide/runtime';
+import type { RuntimeSnapshot } from '@iamthamanic/autoguide-runtime';
 import { mergeScanResults, runtimeSnapshotToFacts } from './merge-facts.js';
 import type { SourceScanResult } from './types.js';
 

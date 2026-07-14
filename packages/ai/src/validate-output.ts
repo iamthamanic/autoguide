@@ -1,9 +1,9 @@
 /**
- * @autoguide/ai — validate and convert AI JSON output to facts.
+ * @iamthamanic/autoguide-ai — validate and convert AI JSON output to facts.
  */
 
-import type { Fact } from '@autoguide/core';
-import { scoreFromProvenance } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
+import { scoreFromProvenance } from '@iamthamanic/autoguide-core';
 import type { AiProposalDraft } from './types.js';
 import { AI_PROPOSAL_CONFIDENCE_CAP } from './types.js';
 

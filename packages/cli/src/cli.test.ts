@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { runInit } from './commands/init.js';
 import { runDoctor } from './commands/doctor.js';
 
-describe('@autoguide/cli', () => {
+describe('@iamthamanic/autoguide-cli', () => {
   it('init creates config and .autoguide', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'ag-cli-'));
     const prev = process.cwd();

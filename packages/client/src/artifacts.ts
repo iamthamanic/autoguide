@@ -1,5 +1,5 @@
 /**
- * @autoguide/client — runtime artifact file names (mirrors @autoguide/storage paths).
+ * @iamthamanic/autoguide-client — runtime artifact file names (mirrors @iamthamanic/autoguide-storage paths).
  */
 
 export const RUNTIME_ARTIFACT_FILES = {

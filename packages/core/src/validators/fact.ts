@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — runtime validators for facts and provenance.
+ * @iamthamanic/autoguide-core — runtime validators for facts and provenance.
  * Location: packages/core/src/validators/fact.ts
  */
 

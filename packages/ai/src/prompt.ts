@@ -1,9 +1,9 @@
 /**
- * @autoguide/ai — evidence-only prompt for structured proposals.
+ * @iamthamanic/autoguide-ai — evidence-only prompt for structured proposals.
  */
 
 import type { AiEnrichmentInput } from './types.js';
-import { redactString } from '@autoguide/core';
+import { redactString } from '@iamthamanic/autoguide-core';
 
 export function buildEnrichmentPrompt(inputs: AiEnrichmentInput[]): string {
   const evidence = inputs

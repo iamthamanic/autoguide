@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — sync command tests.
+ * @iamthamanic/autoguide-cli — sync command tests.
  */
 
 import { cp, mkdtemp, readFile, rm, writeFile, mkdir } from 'node:fs/promises';

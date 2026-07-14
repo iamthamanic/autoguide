@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — attach review-queue links to scan recommendations.
+ * @iamthamanic/autoguide-core — attach review-queue links to scan recommendations.
  */
 
 import type { ReviewItem } from '../review/review-queue.js';

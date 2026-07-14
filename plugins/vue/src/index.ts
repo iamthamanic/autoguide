@@ -1,6 +1,6 @@
 /**
- * @autoguide/vue — public exports.
- * API parity with @autoguide/react: AutoGuideProvider, AutoGuideWidget,
+ * @iamthamanic/autoguide-vue — public exports.
+ * API parity with @iamthamanic/autoguide-react: AutoGuideProvider, AutoGuideWidget,
  * InspectorOverlay, useAutoGuide (Vue inject vs React context).
  */
 

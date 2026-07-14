@@ -1,14 +1,14 @@
 /**
- * @autoguide/cli — review command for pending facts.
+ * @iamthamanic/autoguide-cli — review command for pending facts.
  */
 
 import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { Recommendation } from '@autoguide/core';
-import { loadConfigFromObject } from '@autoguide/config';
-import type { AutoGuideConfigInput } from '@autoguide/config';
-import { configureRedaction, ReviewQueue } from '@autoguide/core';
+import type { Recommendation } from '@iamthamanic/autoguide-core';
+import { loadConfigFromObject } from '@iamthamanic/autoguide-config';
+import type { AutoGuideConfigInput } from '@iamthamanic/autoguide-config';
+import { configureRedaction, ReviewQueue } from '@iamthamanic/autoguide-core';
 import { loadArtifacts, resolveOutputDir, saveFactsAndReviews } from '../lib/artifacts.js';
 
 export interface ReviewCommandOptions {

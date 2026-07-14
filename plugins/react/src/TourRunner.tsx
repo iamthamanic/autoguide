@@ -1,9 +1,9 @@
 /**
- * @autoguide/react — guided tour runner with spotlight steps.
+ * @iamthamanic/autoguide-react — guided tour runner with spotlight steps.
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import type { Tour } from '@autoguide/core';
+import type { Tour } from '@iamthamanic/autoguide-core';
 import { useAutoGuide } from './context.js';
 
 export interface TourRunnerProps {

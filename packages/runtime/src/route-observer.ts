@@ -1,5 +1,5 @@
 /**
- * @autoguide/runtime — route change observer for SPA snapshot refresh.
+ * @iamthamanic/autoguide-runtime — route change observer for SPA snapshot refresh.
  */
 
 import { scanDom } from './scanner.js';

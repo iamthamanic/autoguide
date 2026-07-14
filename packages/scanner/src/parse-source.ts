@@ -1,5 +1,5 @@
 /**
- * @autoguide/scanner — extract routes, handlers, and data-doc metadata from source.
+ * @iamthamanic/autoguide-scanner — extract routes, handlers, and data-doc metadata from source.
  */
 
 import type { RouteCandidate, SourceElementFact, SourceScanResult } from './types.js';

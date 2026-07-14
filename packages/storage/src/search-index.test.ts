@@ -2,7 +2,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import type { FlowRecord, PageRecord } from '@autoguide/core';
+import type { FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
 import { describe, expect, it } from 'vitest';
 import {
   SqliteIndex,

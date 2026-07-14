@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — doctor health checks.
+ * @iamthamanic/autoguide-cli — doctor health checks.
  */
 
 import { existsSync } from 'node:fs';
@@ -10,7 +10,7 @@ import {
   type ReviewItem,
   sortRecommendationsByPriority,
   formatRecommendationReviewHint,
-} from '@autoguide/core';
+} from '@iamthamanic/autoguide-core';
 import { loadScanRegistry } from '../plugins.js';
 
 export interface DoctorResult {

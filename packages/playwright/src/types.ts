@@ -1,8 +1,8 @@
 /**
- * @autoguide/playwright — types for trace import and crawl.
+ * @iamthamanic/autoguide-playwright — types for trace import and crawl.
  */
 
-import type { FlowRecord } from '@autoguide/core';
+import type { FlowRecord } from '@iamthamanic/autoguide-core';
 
 export interface PlaywrightStepEvidence {
   title: string;

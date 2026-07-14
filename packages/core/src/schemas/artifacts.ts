@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — JSON schema version and artifact file names.
+ * @iamthamanic/autoguide-core — JSON schema version and artifact file names.
  */
 
 export const SCHEMA_VERSION = '0.1.0';

@@ -1,10 +1,10 @@
 /**
- * @autoguide/vue — dev-only confidence and provenance badge for facts.
+ * @iamthamanic/autoguide-vue — dev-only confidence and provenance badge for facts.
  */
 
 import { defineComponent, h, type PropType } from 'vue';
-import type { Fact, VisibilityMode } from '@autoguide/core';
-import { getReviewBadgeState } from '@autoguide/ui';
+import type { Fact, VisibilityMode } from '@iamthamanic/autoguide-core';
+import { getReviewBadgeState } from '@iamthamanic/autoguide-ui';
 
 export const ReviewBadge = defineComponent({
   name: 'ReviewBadge',

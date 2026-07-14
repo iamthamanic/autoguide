@@ -1,9 +1,9 @@
 /**
- * @autoguide/export — PDF export via Playwright print.
+ * @iamthamanic/autoguide-export — PDF export via Playwright print.
  */
 
-import type { Fact } from '@autoguide/core';
-import type { FlowRecord, PageRecord } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
+import type { FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
 import { exportKnowledgeHtml } from './html.js';
 import type { ExportRenderOptions } from './types.js';
 

@@ -1,9 +1,9 @@
 /**
- * @autoguide/react — focus trap and ESC handler for floating panels.
+ * @iamthamanic/autoguide-react — focus trap and ESC handler for floating panels.
  */
 
 import { useEffect, type RefObject } from 'react';
-import { bindFocusTrap } from '@autoguide/ui';
+import { bindFocusTrap } from '@iamthamanic/autoguide-ui';
 
 export function useFocusTrap(
   containerRef: RefObject<HTMLElement | null>,

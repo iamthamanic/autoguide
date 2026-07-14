@@ -1,7 +1,11 @@
 {
-  "name": "@autoguide/runtime",
+  "name": "@iamthamanic/autoguide-runtime",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "Browser runtime DOM scanner for AutoGuide",
   "exports": {
@@ -19,7 +23,7 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*"
+    "@iamthamanic/autoguide-core": "workspace:*"
   },
   "devDependencies": {
     "jsdom": "^26.1.0"

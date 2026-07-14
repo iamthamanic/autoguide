@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — filter records and facts by user role.
+ * @iamthamanic/autoguide-core — filter records and facts by user role.
  */
 
 import type { Fact } from '../types/fact.js';

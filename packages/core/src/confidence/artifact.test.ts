@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — confidence artifact builder tests.
+ * @iamthamanic/autoguide-core — confidence artifact builder tests.
  */
 
 import { describe, expect, it } from 'vitest';

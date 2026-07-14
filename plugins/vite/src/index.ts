@@ -1,5 +1,5 @@
 /**
- * @autoguide/vite — Vite plugin for AutoGuide runtime artifacts.
+ * @iamthamanic/autoguide-vite — Vite plugin for AutoGuide runtime artifacts.
  */
 
 import { cpSync, existsSync, mkdirSync, readdirSync } from 'node:fs';

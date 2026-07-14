@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — git diff helper for rescan change detection.
+ * @iamthamanic/autoguide-cli — git diff helper for rescan change detection.
  */
 
 import { execFile } from 'node:child_process';

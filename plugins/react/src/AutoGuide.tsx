@@ -1,5 +1,5 @@
 /**
- * @autoguide/react — drop-in root component with automatic artifact loading.
+ * @iamthamanic/autoguide-react — drop-in root component with automatic artifact loading.
  */
 
 import type { ReactNode } from 'react';
@@ -12,8 +12,8 @@ import type {
   ReviewItem,
   Tour,
   VisibilityMode,
-} from '@autoguide/core';
-import { loadArtifactBundle } from '@autoguide/client';
+} from '@iamthamanic/autoguide-core';
+import { loadArtifactBundle } from '@iamthamanic/autoguide-client';
 import { AutoGuideProvider } from './AutoGuideProvider.js';
 import { AutoGuideWidget } from './AutoGuideWidget.js';
 import { InspectorOverlay } from './InspectorOverlay.js';

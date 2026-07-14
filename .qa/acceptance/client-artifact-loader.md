@@ -1,9 +1,9 @@
-# Feature: Implement browser artifact loader package @autoguide/client
+# Feature: Implement browser artifact loader package @iamthamanic/autoguide-client
 
 <!-- seeded by ecc-runner from issue #110 on 2026-07-09 — @implement may refine -->
 
 ## Intent
-Add `@autoguide/client` — a browser-safe loader that fetches AutoGuide knowledge artifacts (facts, pages, flows, tours) from a base URL or manifest, matching the CLI `ArtifactBundle` shape.
+Add `@iamthamanic/autoguide-client` — a browser-safe loader that fetches AutoGuide knowledge artifacts (facts, pages, flows, tours) from a base URL or manifest, matching the CLI `ArtifactBundle` shape.
 
 ## Happy Path
 - [x] `loadArtifactBundle` returns facts, pages, flows, tours

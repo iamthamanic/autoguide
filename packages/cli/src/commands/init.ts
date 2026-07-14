@@ -1,11 +1,11 @@
 /**
- * @autoguide/cli — init command.
+ * @iamthamanic/autoguide-cli — init command.
  */
 
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { defineAutoGuideConfig } from '@autoguide/config';
-import { StorageWriter } from '@autoguide/storage';
+import { defineAutoGuideConfig } from '@iamthamanic/autoguide-config';
+import { StorageWriter } from '@iamthamanic/autoguide-storage';
 import { detectFramework } from '../detect.js';
 
 export async function runInit(cwd: string): Promise<void> {

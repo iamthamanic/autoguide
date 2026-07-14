@@ -1,11 +1,11 @@
 /**
- * @autoguide/angular — dev-only confidence and provenance badge for facts.
+ * @iamthamanic/autoguide-angular — dev-only confidence and provenance badge for facts.
  */
 
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type { Fact, VisibilityMode } from '@autoguide/core';
-import { getReviewBadgeState } from '@autoguide/ui';
+import type { Fact, VisibilityMode } from '@iamthamanic/autoguide-core';
+import { getReviewBadgeState } from '@iamthamanic/autoguide-ui';
 
 @Component({
   selector: 'ag-review-badge',

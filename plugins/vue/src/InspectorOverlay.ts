@@ -1,10 +1,10 @@
 /**
- * @autoguide/vue — Inspector overlay for dev-mode element inspection.
+ * @iamthamanic/autoguide-vue — Inspector overlay for dev-mode element inspection.
  */
 
 import { defineComponent, h, ref } from 'vue';
-import { scanDom } from '@autoguide/runtime';
-import type { RuntimeElement } from '@autoguide/runtime';
+import { scanDom } from '@iamthamanic/autoguide-runtime';
+import type { RuntimeElement } from '@iamthamanic/autoguide-runtime';
 import { useAutoGuide } from './context.js';
 
 export const InspectorOverlay = defineComponent({

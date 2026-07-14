@@ -30,7 +30,7 @@ const SAMPLE_REPORT = JSON.stringify({
   ],
 });
 
-describe('@autoguide/playwright', () => {
+describe('@iamthamanic/autoguide-playwright', () => {
   it('parses playwright json report steps', () => {
     const tests = parsePlaywrightReportJson(SAMPLE_REPORT);
     expect(tests[0]?.steps.length).toBe(3);

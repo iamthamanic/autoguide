@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — validate command tests.
+ * @iamthamanic/autoguide-cli — validate command tests.
  */
 
 import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import type { Fact } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
 import { runInit } from './commands/init.js';
 import { runScan } from './commands/scan.js';
 import { runValidate, runValidateCommand } from './commands/validate.js';

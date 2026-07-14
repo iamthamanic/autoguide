@@ -5,7 +5,7 @@ import {
   AutoGuideProvider,
   AutoGuideWidget,
   InspectorOverlay,
-} from '@autoguide/angular';
+} from '@iamthamanic/autoguide-angular';
 
 @Component({
   selector: 'app-root',

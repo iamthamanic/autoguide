@@ -1,5 +1,5 @@
 /**
- * @autoguide/ui — design tokens from docs/UI_STYLEGUIDE.md (framework-agnostic).
+ * @iamthamanic/autoguide-ui — design tokens from docs/UI_STYLEGUIDE.md (framework-agnostic).
  */
 
 export const AG_DESIGN_TOKENS = {

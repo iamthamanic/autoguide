@@ -3,7 +3,7 @@
     AutoGuideProvider,
     AutoGuideWidget,
     InspectorOverlay,
-  } from '@autoguide/svelte';
+  } from '@iamthamanic/autoguide-svelte';
 </script>
 
 <AutoGuideProvider appId="example-svelte-vite" userRole="Admin">

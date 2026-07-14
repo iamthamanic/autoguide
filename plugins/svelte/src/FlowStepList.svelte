@@ -1,9 +1,9 @@
 <script lang="ts">
   /**
-   * @autoguide/svelte — numbered flow steps for Help Widget panel.
+   * @iamthamanic/autoguide-svelte — numbered flow steps for Help Widget panel.
    */
-  import type { FlowRecord } from '@autoguide/core';
-  import { listOrderedFlowSteps } from '@autoguide/ui';
+  import type { FlowRecord } from '@iamthamanic/autoguide-core';
+  import { listOrderedFlowSteps } from '@iamthamanic/autoguide-ui';
 
   const { flow } = $props<{ flow: FlowRecord }>();
 

@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — plugin discovery and scan integration tests.
+ * @iamthamanic/autoguide-cli — plugin discovery and scan integration tests.
  */
 
 import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { isFact } from '@autoguide/core';
+import { isFact } from '@iamthamanic/autoguide-core';
 import { runScan } from './commands/scan.js';
 import { loadScanRegistry } from './plugins.js';
 

@@ -12,7 +12,7 @@ AutoGuide ist eine **Documentation Intelligence Engine**: SDK, Scanner, CLI und 
 
 ### Was dieses Repo **ist**
 
-- pnpm Monorepo mit framework-unabhängigem `@autoguide/core`
+- pnpm Monorepo mit framework-unabhängigem `@iamthamanic/autoguide-core`
 - CLI (`autoguide init|scan|review|generate|export|doctor`)
 - Framework-Adapter (React zuerst, dann Vue/Angular/Svelte/Tauri/Flutter)
 - Lokale Wissensbasis in `.autoguide/` (JSON SoT, SQLite Index)
@@ -32,13 +32,13 @@ AutoGuide ist eine **Documentation Intelligence Engine**: SDK, Scanner, CLI und 
 |---------|-------------|-------|
 | Monorepo | pnpm workspaces | packages/, plugins/, examples/ |
 | Sprache | TypeScript strict | Kein `any` ohne Begründung |
-| Core | `@autoguide/core` | Kein React/DOM/Node ohne Abstraktion |
-| React Adapter | `@autoguide/react` | Vite-first, kein Next.js-Zwang |
+| Core | `@iamthamanic/autoguide-core` | Kein React/DOM/Node ohne Abstraktion |
+| React Adapter | `@iamthamanic/autoguide-react` | Vite-first, kein Next.js-Zwang |
 | Scanner | Playwright | Import bestehender Tests, eigener Crawl als Fallback |
 | AI | Ollama default | Cloud: OpenAI-compatible, User API-Key + URL |
 | Storage | JSON + SQLite | JSON = SoT, SQLite = Index/Cache |
 | Tests | Vitest | Playwright für E2E (verify-ui) |
-| UI (Widget) | `@autoguide/ui` + `@autoguide/react` | Tokens/headless state in ui; React shell in plugins |
+| UI (Widget) | `@iamthamanic/autoguide-ui` + `@iamthamanic/autoguide-react` | Tokens/headless state in ui; React shell in plugins |
 
 **Nicht verwenden:** Supabase als AutoGuide-Backend, mandatory Cloud-AI, Framework-Imports in Core
 
@@ -64,7 +64,7 @@ autoguide/
 
 ### Schichtenregeln
 
-1. `@autoguide/core` importiert **niemals** React, Vue, DOM APIs oder Node-spezifische Module ohne Abstraktion
+1. `@iamthamanic/autoguide-core` importiert **niemals** React, Vue, DOM APIs oder Node-spezifische Module ohne Abstraktion
 2. Framework-Logik lebt nur in `plugins/*`; shared tokens/state in `packages/ui`
 3. AI-Provider-Logik bleibt hinter `AIProvider`-Interface — kein Leak in Core
 4. Manual review outranks AI; `ai_proposal` darf verified facts nie überschreiben

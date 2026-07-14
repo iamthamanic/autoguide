@@ -1,9 +1,9 @@
 /**
- * @autoguide/angular — root provider for host applications.
+ * @iamthamanic/autoguide-angular — root provider for host applications.
  */
 
 import { Component, Input, OnChanges, OnInit, inject } from '@angular/core';
-import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@iamthamanic/autoguide-core';
 import { AutoGuideContextService } from './context.js';
 
 @Component({

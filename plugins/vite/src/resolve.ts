@@ -1,5 +1,5 @@
 /**
- * @autoguide/vite — resolve autoguide.config.json output directory.
+ * @iamthamanic/autoguide-vite — resolve autoguide.config.json output directory.
  */
 
 import { existsSync, readFileSync } from 'node:fs';

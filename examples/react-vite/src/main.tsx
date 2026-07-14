@@ -1,6 +1,6 @@
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AutoGuide, DocElement } from '@autoguide/react';
+import { AutoGuide, DocElement } from '@iamthamanic/autoguide-react';
 
 function App() {
   const [page, setPage] = useState<'home' | 'settings'>('home');

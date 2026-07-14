@@ -1,5 +1,5 @@
 /**
- * @autoguide/playwright — capture-runtime integration (unreachable host).
+ * @iamthamanic/autoguide-playwright — capture-runtime integration (unreachable host).
  */
 
 import { describe, expect, it } from 'vitest';

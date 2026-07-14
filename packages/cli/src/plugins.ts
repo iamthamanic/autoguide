@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — plugin discovery and built-in bootstrap for scan/doctor.
+ * @iamthamanic/autoguide-cli — plugin discovery and built-in bootstrap for scan/doctor.
  */
 
 import { join } from 'node:path';
@@ -8,8 +8,8 @@ import {
   createPluginRegistry,
   type AutoGuidePlugin,
   type PluginRegistry,
-} from '@autoguide/core';
-import { sourceScannerPlugin } from '@autoguide/scanner';
+} from '@iamthamanic/autoguide-core';
+import { sourceScannerPlugin } from '@iamthamanic/autoguide-scanner';
 
 const BUILTIN_PLUGINS: AutoGuidePlugin[] = [sourceScannerPlugin];
 

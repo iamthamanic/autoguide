@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — recommendation types for developer guidance.
+ * @iamthamanic/autoguide-core — recommendation types for developer guidance.
  * Location: packages/core/src/recommendations/types.ts
  */
 

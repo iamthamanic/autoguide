@@ -20,6 +20,6 @@ Filter docs by userRole prop and fact role metadata.
 - Playwright suite titles infer `Mitarbeiter` / `HR-Admin` roles
 
 ## Implementation Notes
-- `@autoguide/core`: `filterByRole`, `filterFactsByRole`, optional `Fact.roleIds`
+- `@iamthamanic/autoguide-core`: `filterByRole`, `filterFactsByRole`, optional `Fact.roleIds`
 - Export/CLI: `--role` flag
 - Widgets pass `userRole` to `searchKnowledge`

@@ -34,14 +34,14 @@ const KEY_APIS = {
 const PACKAGES = [
   {
     id: 'core',
-    title: '@autoguide/core',
+    title: '@iamthamanic/autoguide-core',
     entry: 'packages/core/src/index.ts',
     overview: `Framework-agnostic types, fact model, knowledge graph, review queue, plugins, and scan helpers.
 No React/DOM imports — safe for Node CLI and browser bundles.`,
   },
   {
     id: 'react',
-    title: '@autoguide/react',
+    title: '@iamthamanic/autoguide-react',
     entry: 'plugins/react/src/index.ts',
     overview: `React adapter: Provider, Help Widget, Inspector, tours, and dev review UI.
 Load facts/pages/flows from \`.autoguide/\` JSON in the host app.`,
@@ -115,7 +115,7 @@ function writePackageDoc(pkg, parsed) {
 
 function writeCliDoc() {
   const lines = [
-    '# @autoguide/cli',
+    '# @iamthamanic/autoguide-cli',
     '',
     'Command-line interface for init, scan, review, export, validate, and publish.',
     'Binary: `autoguide` (see `packages/cli/src/index.ts`).',
@@ -160,9 +160,9 @@ pnpm run docs:api
 
 | Package | Doc |
 |---------|-----|
-| \`@autoguide/core\` | [core.md](./core.md) |
-| \`@autoguide/cli\` | [cli.md](./cli.md) |
-| \`@autoguide/react\` | [react.md](./react.md) |
+| \`@iamthamanic/autoguide-core\` | [core.md](./core.md) |
+| \`@iamthamanic/autoguide-cli\` | [cli.md](./cli.md) |
+| \`@iamthamanic/autoguide-react\` | [react.md](./react.md) |
 
 ## Boundaries
 

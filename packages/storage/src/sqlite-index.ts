@@ -1,19 +1,19 @@
 /**
- * @autoguide/storage — SQLite index with FTS5 search for pages and flows.
+ * @iamthamanic/autoguide-storage — SQLite index with FTS5 search for pages and flows.
  */
 
-import type { SearchHit } from '@autoguide/core';
+import type { SearchHit } from '@iamthamanic/autoguide-core';
 import Database from 'better-sqlite3';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { redactString } from '@autoguide/core';
+import { redactString } from '@iamthamanic/autoguide-core';
 import {
   buildSearchFtsRows,
   matchesRoleFilter,
   toFtsMatchQuery,
   type SearchFtsRow,
 } from './search-fts.js';
-import type { FlowRecord, PageRecord } from '@autoguide/core';
+import type { FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
 
 const SCHEMA_SQL = `
 CREATE TABLE IF NOT EXISTS facts_index (

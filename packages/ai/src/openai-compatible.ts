@@ -1,9 +1,9 @@
 /**
- * @autoguide/ai — OpenAI-compatible cloud provider (opt-in).
+ * @iamthamanic/autoguide-ai — OpenAI-compatible cloud provider (opt-in).
  */
 
-import type { AutoGuideConfig } from '@autoguide/config';
-import { resolveAiApiKey } from '@autoguide/config';
+import type { AutoGuideConfig } from '@iamthamanic/autoguide-config';
+import { resolveAiApiKey } from '@iamthamanic/autoguide-config';
 import type { AiEnrichmentInput, AiProvider, AiProposalDraft } from './types.js';
 import { CLOUD_CONSENT_MESSAGE, hasCloudConsent } from './consent.js';
 import { requestStructuredProposals } from './http-client.js';

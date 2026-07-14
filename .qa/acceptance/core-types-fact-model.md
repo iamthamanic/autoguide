@@ -1,4 +1,4 @@
-# Feature: Define core types and fact model in @autoguide/core
+# Feature: Define core types and fact model in @iamthamanic/autoguide-core
 
 <!-- synced issue #87 -->
 

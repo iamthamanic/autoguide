@@ -1,9 +1,9 @@
 /**
- * @autoguide/react — dev-only in-app review panel for pending facts.
+ * @iamthamanic/autoguide-react — dev-only in-app review panel for pending facts.
  */
 
 import { useMemo, useRef, useState } from 'react';
-import { agTokenCssVars } from '@autoguide/ui';
+import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { useFocusTrap } from './useFocusTrap.js';
 import { useAutoGuide } from './context.js';
 

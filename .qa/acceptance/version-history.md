@@ -21,5 +21,5 @@ Track doc staleness across git scans; mark changed artifacts stale.
 - Git diff against HEAD when repo available; snapshot diff as fallback
 
 ## Implementation Notes
-- `@autoguide/core/history/*`: snapshot, detectChanges, markAffectedFactsStale, history.json
+- `@iamthamanic/autoguide-core/history/*`: snapshot, detectChanges, markAffectedFactsStale, history.json
 - Scan command loads previous snapshot/facts and appends history entries

@@ -1,9 +1,9 @@
 /**
- * @autoguide/tauri — webview bridge helpers for DOM runtime scan.
+ * @iamthamanic/autoguide-tauri — webview bridge helpers for DOM runtime scan.
  */
 
-import { scanDom } from '@autoguide/runtime';
-import type { RuntimeSnapshot } from '@autoguide/runtime';
+import { scanDom } from '@iamthamanic/autoguide-runtime';
+import type { RuntimeSnapshot } from '@iamthamanic/autoguide-runtime';
 import { isTauriRuntime } from './runtime.js';
 
 export interface WebviewScanOptions {

@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — runtime scan integration (issue #74).
+ * @iamthamanic/autoguide-cli — runtime scan integration (issue #74).
  */
 
 import { createServer, type Server } from 'node:http';

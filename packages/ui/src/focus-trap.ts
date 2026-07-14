@@ -1,5 +1,5 @@
 /**
- * @autoguide/ui — framework-agnostic focus trap and ESC handler for panels.
+ * @iamthamanic/autoguide-ui — framework-agnostic focus trap and ESC handler for panels.
  */
 
 const FOCUSABLE =

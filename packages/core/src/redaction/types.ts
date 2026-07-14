@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — redaction rule types.
+ * @iamthamanic/autoguide-core — redaction rule types.
  */
 
 export interface RedactionRule {

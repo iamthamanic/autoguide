@@ -299,7 +299,7 @@ Developer realizes documentation debt exists because a new internal app needs on
 Developer runs:
 
 ```bash
-npm install @autoguide/react
+npm install @iamthamanic/autoguide-react
 npx autoguide init
 ```
 
@@ -1256,7 +1256,7 @@ Core
 
 ## Critical boundary
 
-`@autoguide/core` must not import from React, Vue, Angular, Svelte, Flutter, DOM APIs or Node-specific APIs unless abstracted.
+`@iamthamanic/autoguide-core` must not import from React, Vue, Angular, Svelte, Flutter, DOM APIs or Node-specific APIs unless abstracted.
 
 
 ---
@@ -1328,7 +1328,7 @@ Provide equivalent AutoGuide integration for Angular applications.
 
 ## Core requirements
 
-- Must reuse `@autoguide/core`.
+- Must reuse `@iamthamanic/autoguide-core`.
 - Must reuse canonical JSON model.
 - Must not fork confidence logic.
 - Must expose framework-native provider/component APIs.
@@ -1377,7 +1377,7 @@ Provide equivalent AutoGuide integration for Flutter applications.
 
 ## Core requirements
 
-- Must reuse `@autoguide/core`.
+- Must reuse `@iamthamanic/autoguide-core`.
 - Must reuse canonical JSON model.
 - Must not fork confidence logic.
 - Must expose framework-native provider/component APIs.
@@ -1483,7 +1483,7 @@ Framework adapters and public host-app integration API.
 
 ## Package
 
-`@autoguide/react`
+`@iamthamanic/autoguide-react`
 
 ## Responsibilities
 
@@ -1543,7 +1543,7 @@ plugins/react/src/
 ## React MVP API
 
 ```tsx
-import { AutoGuideProvider, AutoGuideWidget } from '@autoguide/react';
+import { AutoGuideProvider, AutoGuideWidget } from '@iamthamanic/autoguide-react';
 
 export function Root() {
   return (
@@ -1628,7 +1628,7 @@ Provide equivalent AutoGuide integration for Svelte applications.
 
 ## Core requirements
 
-- Must reuse `@autoguide/core`.
+- Must reuse `@iamthamanic/autoguide-core`.
 - Must reuse canonical JSON model.
 - Must not fork confidence logic.
 - Must expose framework-native provider/component APIs.
@@ -1677,7 +1677,7 @@ Provide equivalent AutoGuide integration for Tauri applications.
 
 ## Core requirements
 
-- Must reuse `@autoguide/core`.
+- Must reuse `@iamthamanic/autoguide-core`.
 - Must reuse canonical JSON model.
 - Must not fork confidence logic.
 - Must expose framework-native provider/component APIs.
@@ -1726,7 +1726,7 @@ Provide equivalent AutoGuide integration for Vue applications.
 
 ## Core requirements
 
-- Must reuse `@autoguide/core`.
+- Must reuse `@iamthamanic/autoguide-core`.
 - Must reuse canonical JSON model.
 - Must not fork confidence logic.
 - Must expose framework-native provider/component APIs.
@@ -2907,7 +2907,7 @@ CREATE TABLE reviews (id TEXT PRIMARY KEY, fact_id TEXT NOT NULL, status TEXT NO
 `autoguide.config.ts`
 
 ```ts
-import { defineAutoGuideConfig } from '@autoguide/config';
+import { defineAutoGuideConfig } from '@iamthamanic/autoguide-config';
 
 export default defineAutoGuideConfig({
   appId: 'hrthis',

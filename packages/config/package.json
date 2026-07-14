@@ -1,7 +1,11 @@
 {
-  "name": "@autoguide/config",
+  "name": "@iamthamanic/autoguide-config",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "AutoGuide configuration schema and loader",
   "exports": {
@@ -19,6 +23,6 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*"
+    "@iamthamanic/autoguide-core": "workspace:*"
   }
 }

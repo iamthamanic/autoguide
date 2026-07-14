@@ -1,11 +1,11 @@
 /**
- * @autoguide/storage — atomic JSON file writes.
+ * @iamthamanic/autoguide-storage — atomic JSON file writes.
  */
 
 import { mkdir, rename, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { redactUnknown } from '@autoguide/core';
+import { redactUnknown } from '@iamthamanic/autoguide-core';
 
 export async function ensureDir(dirPath: string): Promise<void> {
   await mkdir(dirPath, { recursive: true });

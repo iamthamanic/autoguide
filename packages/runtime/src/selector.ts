@@ -1,5 +1,5 @@
 /**
- * @autoguide/runtime — stable CSS selector generation.
+ * @iamthamanic/autoguide-runtime — stable CSS selector generation.
  */
 
 export function generateSelector(element: Element): string {

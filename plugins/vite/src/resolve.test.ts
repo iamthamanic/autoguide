@@ -1,5 +1,5 @@
 /**
- * @autoguide/vite — resolve helper tests.
+ * @iamthamanic/autoguide-vite — resolve helper tests.
  */
 
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';

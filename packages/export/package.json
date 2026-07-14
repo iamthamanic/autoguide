@@ -1,7 +1,11 @@
 {
-  "name": "@autoguide/export",
+  "name": "@iamthamanic/autoguide-export",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "Documentation export generators for AutoGuide",
   "exports": {
@@ -19,7 +23,7 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*"
+    "@iamthamanic/autoguide-core": "workspace:*"
   },
   "optionalDependencies": {
     "playwright": "^1.51.0"

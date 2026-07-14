@@ -1,11 +1,11 @@
 /**
- * @autoguide/angular — numbered flow steps for Help Widget panel.
+ * @iamthamanic/autoguide-angular — numbered flow steps for Help Widget panel.
  */
 
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type { FlowRecord } from '@autoguide/core';
-import { listOrderedFlowSteps } from '@autoguide/ui';
+import type { FlowRecord } from '@iamthamanic/autoguide-core';
+import { listOrderedFlowSteps } from '@iamthamanic/autoguide-ui';
 
 @Component({
   selector: 'ag-flow-step-list',

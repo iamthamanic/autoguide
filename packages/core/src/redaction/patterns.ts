@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — default secret and PII redaction patterns.
+ * @iamthamanic/autoguide-core — default secret and PII redaction patterns.
  */
 
 import type { RedactionRule } from './types.js';

@@ -1,11 +1,11 @@
 /**
- * @autoguide/scanner — convert source scan results to core facts.
+ * @iamthamanic/autoguide-scanner — convert source scan results to core facts.
  */
 
-import type { Fact } from '@autoguide/core';
-import { scoreFromProvenance } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
+import { scoreFromProvenance } from '@iamthamanic/autoguide-core';
 import type { SourceElementFact, SourceScanResult } from './types.js';
-import type { RuntimeSnapshot } from '@autoguide/runtime';
+import type { RuntimeSnapshot } from '@iamthamanic/autoguide-runtime';
 
 function now(): string {
   return new Date().toISOString();

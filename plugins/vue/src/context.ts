@@ -1,9 +1,9 @@
 /**
- * @autoguide/vue — Vue provide/inject context for AutoGuide runtime.
+ * @iamthamanic/autoguide-vue — Vue provide/inject context for AutoGuide runtime.
  */
 
 import { inject, type InjectionKey } from 'vue';
-import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@iamthamanic/autoguide-core';
 
 export interface AutoGuideContextValue {
   appId: string;

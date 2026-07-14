@@ -9,5 +9,5 @@ Issue: #82
 
 ## Implementation Notes
 - `packages/ui` — tokens, `getReviewBadgeState`, `listOrderedFlowSteps`, `resolveWidgetPanelStatus`
-- `plugins/react` imports `@autoguide/ui`; removed `ag-tokens.ts`
+- `plugins/react` imports `@iamthamanic/autoguide-ui`; removed `ag-tokens.ts`
 - `tokens.css` export for host apps

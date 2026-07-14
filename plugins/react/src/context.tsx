@@ -1,5 +1,5 @@
 /**
- * @autoguide/react — React context for AutoGuide runtime.
+ * @iamthamanic/autoguide-react — React context for AutoGuide runtime.
  */
 
 import { createContext, useContext } from 'react';
@@ -11,7 +11,7 @@ import type {
   ReviewItem,
   VisibilityMode,
   Tour,
-} from '@autoguide/core';
+} from '@iamthamanic/autoguide-core';
 import type { ReviewDecisionPayload } from './review-types.js';
 
 export interface DocElementRegistration {

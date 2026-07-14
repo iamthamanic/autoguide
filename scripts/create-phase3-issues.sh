@@ -95,7 +95,7 @@ Collect richer live UI state beyond static button querySelector.
 - [ ] Snapshot includes forms and dialogs
 - [ ] Snapshot updates after simulated route change in tests
 - [ ] Inspector resolves selected element to runtime entity id
-- [ ] No DOM APIs leak into `@autoguide/core`
+- [ ] No DOM APIs leak into `@iamthamanic/autoguide-core`
 
 **Feature slug:** `runtime-snapshot-v2`
 EOF
@@ -159,7 +159,7 @@ create \
 Meet SPEC security acceptance: no secrets/PII in docs or cloud AI payloads.
 
 ## Scope
-- Redaction utilities in `@autoguide/core` or `@autoguide/ai`
+- Redaction utilities in `@iamthamanic/autoguide-core` or `@iamthamanic/autoguide-ai`
 - Hook before AI enrichment and export
 - Env var names, API keys, email patterns (configurable)
 - Tests with sample HR-like strings
@@ -246,7 +246,7 @@ create \
 Developers review uncertain facts in-app, not only via CLI.
 
 ## Scope
-- Review panel in `@autoguide/react` (dev mode only)
+- Review panel in `@iamthamanic/autoguide-react` (dev mode only)
 - List pending facts, accept/edit/reject
 - Persist via host callback or local `.autoguide` API stub
 - German UI copy per styleguide
@@ -388,7 +388,7 @@ EOF
 )"
 
 create \
-  "Public API documentation for @autoguide packages" \
+  "Public API documentation for @iamthamanic packages" \
   "P2,agent-ready" \
   "$(cat <<'EOF'
 ## Intent

@@ -1,10 +1,10 @@
 /**
- * @autoguide/angular — Inspector overlay for dev-mode element inspection.
+ * @iamthamanic/autoguide-angular — Inspector overlay for dev-mode element inspection.
  */
 
 import { Component, inject } from '@angular/core';
-import { scanDom } from '@autoguide/runtime';
-import type { RuntimeElement } from '@autoguide/runtime';
+import { scanDom } from '@iamthamanic/autoguide-runtime';
+import type { RuntimeElement } from '@iamthamanic/autoguide-runtime';
 import { AutoGuideContextService } from './context.js';
 
 @Component({

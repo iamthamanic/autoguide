@@ -1,5 +1,5 @@
 /**
- * @autoguide/angular — Help Widget with context resolution and search.
+ * @iamthamanic/autoguide-angular — Help Widget with context resolution and search.
  */
 
 import {
@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { resolveHelpContext, searchKnowledge } from '@autoguide/core';
-import { agTokenCssVars, bindFocusTrap } from '@autoguide/ui';
+import { resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+import { agTokenCssVars, bindFocusTrap } from '@iamthamanic/autoguide-ui';
 import { AutoGuideContextService } from './context.js';
 import { FlowStepListComponent } from './flow-step-list.component.js';
 import { PanelSkeletonComponent } from './panel-skeleton.component.js';

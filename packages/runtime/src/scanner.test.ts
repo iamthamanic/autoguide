@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { scanDom } from './scanner.js';
 import { createSnapshotRecorder, observeRouteChanges } from './route-observer.js';
 
-describe('@autoguide/runtime', () => {
+describe('@iamthamanic/autoguide-runtime', () => {
   it('detects interactive elements with accessible names', () => {
     document.body.innerHTML = `
       <button data-testid="save">Speichern</button>

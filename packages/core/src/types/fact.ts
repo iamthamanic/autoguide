@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — provenance and fact status types.
+ * @iamthamanic/autoguide-core — provenance and fact status types.
  * Location: packages/core/src/types/fact.ts
  */
 

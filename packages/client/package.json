@@ -1,5 +1,5 @@
 {
-  "name": "@autoguide/client",
+  "name": "@iamthamanic/autoguide-client",
   "version": "0.1.0",
   "private": false,
   "type": "module",
@@ -29,6 +29,6 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*"
+    "@iamthamanic/autoguide-core": "workspace:*"
   }
 }

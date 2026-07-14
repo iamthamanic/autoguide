@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Fact, ReviewItem } from '@autoguide/core';
+import type { Fact, ReviewItem } from '@iamthamanic/autoguide-core';
 import { applyReviewDecision } from './apply-review.js';
 
 const pendingFact: Fact = {

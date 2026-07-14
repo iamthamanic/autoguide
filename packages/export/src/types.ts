@@ -1,8 +1,8 @@
 /**
- * @autoguide/export — shared export options.
+ * @iamthamanic/autoguide-export — shared export options.
  */
 
-import type { VisibilityMode } from '@autoguide/core';
+import type { VisibilityMode } from '@iamthamanic/autoguide-core';
 
 export interface ExportRenderOptions {
   mode: VisibilityMode;

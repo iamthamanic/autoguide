@@ -1,9 +1,9 @@
 /**
- * @autoguide/playwright — build flow candidates from Playwright evidence.
+ * @iamthamanic/autoguide-playwright — build flow candidates from Playwright evidence.
  */
 
-import type { Fact, FlowRecord } from '@autoguide/core';
-import { scoreFromProvenance } from '@autoguide/core';
+import type { Fact, FlowRecord } from '@iamthamanic/autoguide-core';
+import { scoreFromProvenance } from '@iamthamanic/autoguide-core';
 import type { PlaywrightImportResult, PlaywrightTestEvidence } from './types.js';
 
 function now(): string {

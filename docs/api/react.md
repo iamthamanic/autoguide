@@ -1,4 +1,4 @@
-# @autoguide/react
+# @iamthamanic/autoguide-react
 
 React adapter: Provider, Help Widget, Inspector, tours, and dev review UI.
 Load facts/pages/flows from `.autoguide/` JSON in the host app.

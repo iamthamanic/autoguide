@@ -1,10 +1,10 @@
 /**
- * @autoguide/vue — numbered flow steps for Help Widget panel.
+ * @iamthamanic/autoguide-vue — numbered flow steps for Help Widget panel.
  */
 
 import { defineComponent, h, type PropType } from 'vue';
-import type { FlowRecord } from '@autoguide/core';
-import { listOrderedFlowSteps } from '@autoguide/ui';
+import type { FlowRecord } from '@iamthamanic/autoguide-core';
+import { listOrderedFlowSteps } from '@iamthamanic/autoguide-ui';
 
 export const FlowStepList = defineComponent({
   name: 'FlowStepList',

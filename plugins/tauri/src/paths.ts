@@ -1,8 +1,8 @@
 /**
- * @autoguide/tauri — resolve .autoguide paths in Tauri app data directory.
+ * @iamthamanic/autoguide-tauri — resolve .autoguide paths in Tauri app data directory.
  */
 
-import type { AutoGuideConfigInput } from '@autoguide/config';
+import type { AutoGuideConfigInput } from '@iamthamanic/autoguide-config';
 import { isTauriRuntime } from './runtime.js';
 
 export async function resolveAutoguideOutputDir(appId: string): Promise<string> {

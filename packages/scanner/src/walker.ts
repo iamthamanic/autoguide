@@ -1,5 +1,5 @@
 /**
- * @autoguide/scanner — walk project files for TS/TSX sources.
+ * @iamthamanic/autoguide-scanner — walk project files for TS/TSX sources.
  */
 
 import { readdir, readFile } from 'node:fs/promises';

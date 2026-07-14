@@ -1,5 +1,5 @@
 /**
- * @autoguide/scanner — TypeScript AST extraction for routes, JSX, handlers, data-doc.
+ * @iamthamanic/autoguide-scanner — TypeScript AST extraction for routes, JSX, handlers, data-doc.
  */
 
 import ts from 'typescript';

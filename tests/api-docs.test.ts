@@ -8,7 +8,7 @@ describe('public API documentation', () => {
   it('has docs/api/README.md index', () => {
     expect(existsSync(resolve(apiDir, 'README.md'))).toBe(true);
     const readme = readFileSync(resolve(apiDir, 'README.md'), 'utf8');
-    expect(readme).toContain('@autoguide/core');
+    expect(readme).toContain('@iamthamanic/autoguide-core');
     expect(readme).toContain('[cli.md](./cli.md)');
   });
 

@@ -1,5 +1,5 @@
 {
-  "name": "@autoguide/cli",
+  "name": "@iamthamanic/autoguide-cli",
   "version": "0.1.0",
   "private": false,
   "type": "module",
@@ -34,13 +34,13 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/ai": "workspace:*",
-    "@autoguide/config": "workspace:*",
-    "@autoguide/core": "workspace:*",
-    "@autoguide/export": "workspace:*",
-    "@autoguide/playwright": "workspace:*",
-    "@autoguide/scanner": "workspace:*",
-    "@autoguide/storage": "workspace:*",
+    "@iamthamanic/autoguide-ai": "workspace:*",
+    "@iamthamanic/autoguide-config": "workspace:*",
+    "@iamthamanic/autoguide-core": "workspace:*",
+    "@iamthamanic/autoguide-export": "workspace:*",
+    "@iamthamanic/autoguide-playwright": "workspace:*",
+    "@iamthamanic/autoguide-scanner": "workspace:*",
+    "@iamthamanic/autoguide-storage": "workspace:*",
     "ajv": "^8.17.1",
     "commander": "^13.1.0"
   }

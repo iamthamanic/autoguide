@@ -48,11 +48,11 @@ Nach `autoguide scan` (mit/ohne `--runtime`, mit/ohne Rescan) sind die Kern-Arte
 
 ## Issue 2 — `runtime-dom-single-source`
 
-**Intent:** `runtime_dom`-Facts aus CLI-Runtime-Scan und `@autoguide/runtime` nutzen dieselbe Selector/A11y-Logik — Drift unmöglich machen.
+**Intent:** `runtime_dom`-Facts aus CLI-Runtime-Scan und `@iamthamanic/autoguide-runtime` nutzen dieselbe Selector/A11y-Logik — Drift unmöglich machen.
 
 ### Acceptance
 
-- [ ] `browserScanDom` (Playwright `page.evaluate`) und `scanDom` (`@autoguide/runtime`) produzieren für gleiches Fixture-HTML **dieselben** `entityId` / accessible names (Snapshot- oder Unit-Test)
+- [ ] `browserScanDom` (Playwright `page.evaluate`) und `scanDom` (`@iamthamanic/autoguide-runtime`) produzieren für gleiches Fixture-HTML **dieselben** `entityId` / accessible names (Snapshot- oder Unit-Test)
 - [ ] Keine duplizierte `generateSelector` / `getAccessibleName` Logik in `browser-scan-dom.ts` (Bundle oder Build-Step aus runtime)
 - [ ] `capture-runtime.integration.test.ts` bleibt grün (unreachable host)
 - [ ] `runtime-scan.integration.test.ts`: `runtime_dom` in `facts.json` + `confidence.json.facts[*].evidenceFamilies`

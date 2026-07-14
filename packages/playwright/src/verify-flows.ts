@@ -1,10 +1,10 @@
 /**
- * @autoguide/playwright — execute flow steps in a browser and record verification results.
+ * @iamthamanic/autoguide-playwright — execute flow steps in a browser and record verification results.
  */
 
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { FlowRecord, FlowStep, FlowVerificationProfile } from '@autoguide/core';
+import type { FlowRecord, FlowStep, FlowVerificationProfile } from '@iamthamanic/autoguide-core';
 import { isSafeAction } from './crawl.js';
 
 export interface VerifyFlowsOptions {

@@ -3,7 +3,7 @@
 <!-- seeded by ecc-runner from issue #112 on 2026-07-09 — @implement may refine -->
 
 ## Intent
-Add `@autoguide/vite` — Vite plugin that exposes `virtual:autoguide` and optionally copies `.autoguide/` into `public/autoguide/` during dev/build.
+Add `@iamthamanic/autoguide-vite` — Vite plugin that exposes `virtual:autoguide` and optionally copies `.autoguide/` into `public/autoguide/` during dev/build.
 
 ## Happy Path
 - [ ] - [ ] Plugin registers virtual module

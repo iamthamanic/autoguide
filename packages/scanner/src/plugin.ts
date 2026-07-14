@@ -1,8 +1,8 @@
 /**
- * @autoguide/scanner — built-in source scanner plugin registration.
+ * @iamthamanic/autoguide-scanner — built-in source scanner plugin registration.
  */
 
-import type { AutoGuidePlugin } from '@autoguide/core';
+import type { AutoGuidePlugin } from '@iamthamanic/autoguide-core';
 
 export const sourceScannerPlugin: AutoGuidePlugin = {
   descriptor: {

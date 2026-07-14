@@ -1,17 +1,17 @@
 /**
- * @autoguide/cli — export command.
+ * @iamthamanic/autoguide-cli — export command.
  */
 
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { readFile } from 'node:fs/promises';
-import { loadConfigFromObject } from '@autoguide/config';
-import type { AutoGuideConfigInput } from '@autoguide/config';
+import { loadConfigFromObject } from '@iamthamanic/autoguide-config';
+import type { AutoGuideConfigInput } from '@iamthamanic/autoguide-config';
 import {
   exportKnowledgeHtml,
   exportKnowledgeMarkdown,
   exportKnowledgePdf,
-} from '@autoguide/export';
+} from '@iamthamanic/autoguide-export';
 import { loadArtifacts, resolveOutputDir } from '../lib/artifacts.js';
 
 export type ExportFormat = 'md' | 'html' | 'pdf';

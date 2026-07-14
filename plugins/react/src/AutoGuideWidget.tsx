@@ -1,10 +1,10 @@
 /**
- * @autoguide/react — Help Widget with context resolution and search.
+ * @iamthamanic/autoguide-react — Help Widget with context resolution and search.
  */
 
 import { useMemo, useRef, useState } from 'react';
-import { resolveHelpContext, searchKnowledge } from '@autoguide/core';
-import { agTokenCssVars } from '@autoguide/ui';
+import { resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { FlowStepList } from './FlowStepList.js';
 import { PanelSkeleton } from './PanelSkeleton.js';
 import { ReviewBadge } from './ReviewBadge.js';

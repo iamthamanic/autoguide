@@ -20,5 +20,5 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @autoguide/export exec playwright install chromium
+      - run: pnpm --filter @iamthamanic/autoguide-export exec playwright install chromium
       - run: pnpm run verify

@@ -7,7 +7,7 @@ import 'models.dart';
 /// Bridge to AutoGuide knowledge artifacts.
 ///
 /// v1 loads bundled JSON (same shape as `.autoguide/*.json`).
-/// Future: platform channel or FFI to `@autoguide/core` Node runtime.
+/// Future: platform channel or FFI to `@iamthamanic/autoguide-core` Node runtime.
 abstract class AutoGuideCoreBridge {
   Future<ArtifactBundle> loadArtifacts();
 }

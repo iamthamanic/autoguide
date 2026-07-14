@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — resolve Help Center content for current route and role.
+ * @iamthamanic/autoguide-core — resolve Help Center content for current route and role.
  */
 
 import type { Fact, VisibilityMode } from '../types/fact.js';

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { extractElementsFromText, extractRoutesFromText } from './parse-source.js';
 import { extractFromAst } from './parse-source-ast.js';
 
-describe('@autoguide/scanner', () => {
+describe('@iamthamanic/autoguide-scanner', () => {
   it('extracts react-router paths via AST', () => {
     const content = `<Route path="/settings" element={<Settings />} />`;
     const routes = extractRoutesFromText('App.tsx', content);
@@ -25,7 +25,7 @@ describe('@autoguide/scanner', () => {
 
   it('extracts DocElement props via AST', () => {
     const content = `
-import { DocElement } from '@autoguide/react';
+import { DocElement } from '@iamthamanic/autoguide-react';
 export function Page() {
   return (
     <DocElement id="vacation.approve" title="Genehmigen" description="Genehmigt Antrag" roles={['HR', 'Teamlead']}>

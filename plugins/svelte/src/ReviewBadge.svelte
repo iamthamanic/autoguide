@@ -1,9 +1,9 @@
 <script lang="ts">
   /**
-   * @autoguide/svelte — dev-only confidence and provenance badge for facts.
+   * @iamthamanic/autoguide-svelte — dev-only confidence and provenance badge for facts.
    */
-  import type { Fact, VisibilityMode } from '@autoguide/core';
-  import { getReviewBadgeState } from '@autoguide/ui';
+  import type { Fact, VisibilityMode } from '@iamthamanic/autoguide-core';
+  import { getReviewBadgeState } from '@iamthamanic/autoguide-ui';
 
   const { fact, mode } = $props<{ fact: Fact; mode: VisibilityMode }>();
 

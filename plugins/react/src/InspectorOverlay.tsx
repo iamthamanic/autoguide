@@ -1,11 +1,11 @@
 /**
- * @autoguide/react — Inspector overlay for dev-mode element inspection.
+ * @iamthamanic/autoguide-react — Inspector overlay for dev-mode element inspection.
  */
 
 import { useEffect, useState, type MouseEvent } from 'react';
-import { scanDom } from '@autoguide/runtime';
-import type { RuntimeElement } from '@autoguide/runtime';
-import { agTokenCssVars } from '@autoguide/ui';
+import { scanDom } from '@iamthamanic/autoguide-runtime';
+import type { RuntimeElement } from '@iamthamanic/autoguide-runtime';
+import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { useAutoGuide } from './context.js';
 
 export function InspectorOverlay() {

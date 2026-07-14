@@ -1,5 +1,5 @@
 /**
- * @autoguide/client — browser artifact loader for host applications.
+ * @iamthamanic/autoguide-client — browser artifact loader for host applications.
  */
 
 export { loadArtifactBundle } from './load.js';

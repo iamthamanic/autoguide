@@ -1,7 +1,11 @@
 {
-  "name": "@autoguide/scanner",
+  "name": "@iamthamanic/autoguide-scanner",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "Static source scanner for AutoGuide",
   "exports": {
@@ -19,8 +23,8 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*",
-    "@autoguide/runtime": "workspace:*",
+    "@iamthamanic/autoguide-core": "workspace:*",
+    "@iamthamanic/autoguide-runtime": "workspace:*",
     "typescript": "^5.7.3"
   }
 }
