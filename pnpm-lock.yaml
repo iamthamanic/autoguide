@@ -63,6 +63,9 @@ importers:
       '@autoguide/react':
         specifier: workspace:*
         version: link:../../plugins/react
+      '@autoguide/vite':
+        specifier: workspace:*
+        version: link:../../plugins/vite
       react:
         specifier: ^18.3.1
         version: 18.3.1
