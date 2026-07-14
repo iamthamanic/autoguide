@@ -1,0 +1,23 @@
+[
+  {
+    "id": "flow-save-action",
+    "title": "Aktion speichern",
+    "description": "Referenz-Flow: eine Aktion speichern",
+    "pageId": "page-home",
+    "roleIds": ["Admin"],
+    "steps": [
+      {
+        "id": "flow-save-action-step-1",
+        "title": "Aktion speichern",
+        "body": "Klicke auf „Aktion speichern\", um die aktuelle Eingabe zu sichern.",
+        "action": "click",
+        "targetSelector": "[data-doc-id=\"action.save\"]"
+      }
+    ],
+    "verification": {
+      "status": "verified",
+      "baseUrl": "http://localhost:5173"
+    },
+    "status": "published"
+  }
+]
