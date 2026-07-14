@@ -1,9 +1,19 @@
 {
   "name": "@autoguide/vite",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "Vite plugin — virtual:autoguide module and public artifact copy",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamthamanic/autoguide.git",
+    "directory": "plugins/vite"
+  },
+  "keywords": ["autoguide", "vite", "plugin", "documentation", "sdk"],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

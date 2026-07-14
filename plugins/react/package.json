@@ -1,9 +1,19 @@
 {
   "name": "@autoguide/react",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "React adapter for AutoGuide Help Widget and Inspector",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamthamanic/autoguide.git",
+    "directory": "plugins/react"
+  },
+  "keywords": ["autoguide", "react", "documentation", "help-widget", "sdk"],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
