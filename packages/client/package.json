@@ -1,9 +1,19 @@
 {
   "name": "@autoguide/client",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "Browser-safe loader for AutoGuide knowledge artifacts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamthamanic/autoguide.git",
+    "directory": "packages/client"
+  },
+  "keywords": ["autoguide", "documentation", "browser", "loader", "sdk"],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

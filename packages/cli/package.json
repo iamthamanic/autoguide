@@ -1,9 +1,19 @@
 {
   "name": "@autoguide/cli",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
-  "description": "AutoGuide CLI — init, scan, review, export",
+  "description": "AutoGuide CLI — init, scan, review, export, sync, publish",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iamthamanic/autoguide.git",
+    "directory": "packages/cli"
+  },
+  "keywords": ["autoguide", "cli", "documentation", "scanner", "sdk"],
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "autoguide": "./dist/index.js"
   },
