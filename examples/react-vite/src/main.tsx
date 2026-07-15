@@ -40,9 +40,10 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AutoGuide
       appId="example-react-vite"
-      mode="published"
+      mode="development"
       userRole="Admin"
       bundleBase="/autoguide"
+      features={{ widget: true, inspector: true, tours: true }}
     >
       <App />
     </AutoGuide>

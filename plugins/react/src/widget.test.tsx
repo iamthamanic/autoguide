@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { Fact } from '@iamthamanic/autoguide-core';
+import type { Fact, Tour } from '@iamthamanic/autoguide-core';
+import { AutoGuideBar } from './AutoGuideBar.js';
 import { AutoGuideProvider } from './AutoGuideProvider.js';
-import { AutoGuideWidget } from './AutoGuideWidget.js';
 import { FlowStepList } from './FlowStepList.js';
 import { ReviewBadge } from './ReviewBadge.js';
 
@@ -33,11 +33,54 @@ const sampleFacts: Fact[] = [
   },
 ];
 
+const sampleTour: Tour = {
+  id: 'tour-1',
+  title: 'Demo Tour',
+  description: 'Test',
+  roleIds: [],
+  status: 'published',
+  steps: [{ id: 's1', title: 'Step', body: 'Body', action: 'observe' }],
+};
+
 describe('@iamthamanic/autoguide-react', () => {
+  it('opens inspect from dev settings menu', () => {
+    render(
+      <AutoGuideProvider appId="demo" mode="development">
+        <AutoGuideBar features={{ widget: true, inspector: true }} />
+      </AutoGuideProvider>,
+    );
+    expect(screen.queryByLabelText('Inspect')).toBeNull();
+    fireEvent.click(screen.getByLabelText('Entwickler-Menü'));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Element inspizieren' }));
+    expect(screen.getByLabelText('Entwickler-Menü').getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('lists review in dev settings menu even when queue is empty', () => {
+    render(
+      <AutoGuideProvider appId="demo" mode="development" reviews={[]}>
+        <AutoGuideBar features={{ widget: true, inspector: true }} />
+      </AutoGuideProvider>,
+    );
+    fireEvent.click(screen.getByLabelText('Entwickler-Menü'));
+    expect(screen.getByRole('menuitem', { name: 'Review-Warteschlange öffnen' })).toBeTruthy();
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Review-Warteschlange öffnen' }));
+    expect(screen.getByRole('dialog', { name: 'Review-Warteschlange' })).toBeTruthy();
+    expect(screen.getByText(/Keine offenen Reviews/)).toBeTruthy();
+  });
+
+  it('shows tour button when tours feature is enabled', () => {
+    render(
+      <AutoGuideProvider appId="demo" mode="development" tours={[sampleTour]}>
+        <AutoGuideBar features={{ widget: true, tours: true }} />
+      </AutoGuideProvider>,
+    );
+    expect(screen.getByLabelText('Tour starten: Demo Tour')).toBeTruthy();
+  });
+
   it('renders widget without throwing when docs are missing', () => {
     render(
       <AutoGuideProvider appId="demo">
-        <AutoGuideWidget />
+        <AutoGuideBar features={{ widget: true }} />
       </AutoGuideProvider>,
     );
     expect(screen.getByLabelText('Hilfe öffnen')).toBeTruthy();
@@ -76,7 +119,7 @@ describe('@iamthamanic/autoguide-react', () => {
           },
         ]}
       >
-        <AutoGuideWidget />
+        <AutoGuideBar features={{ widget: true }} />
       </AutoGuideProvider>,
     );
     fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
@@ -89,7 +132,7 @@ describe('@iamthamanic/autoguide-react', () => {
   it('shows uncertain facts only in published mode', () => {
     render(
       <AutoGuideProvider appId="demo" mode="published" facts={sampleFacts}>
-        <AutoGuideWidget />
+        <AutoGuideBar features={{ widget: true }} />
       </AutoGuideProvider>,
     );
     fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
@@ -100,7 +143,7 @@ describe('@iamthamanic/autoguide-react', () => {
   it('shows loading skeleton with aria-busy', () => {
     render(
       <AutoGuideProvider appId="demo" loading>
-        <AutoGuideWidget />
+        <AutoGuideBar features={{ widget: true }} />
       </AutoGuideProvider>,
     );
     fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
@@ -111,7 +154,7 @@ describe('@iamthamanic/autoguide-react', () => {
     const onRetry = vi.fn();
     render(
       <AutoGuideProvider appId="demo" error="Dokumentation konnte nicht geladen werden." onRetry={onRetry}>
-        <AutoGuideWidget />
+        <AutoGuideBar features={{ widget: true }} />
       </AutoGuideProvider>,
     );
     fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
@@ -123,7 +166,7 @@ describe('@iamthamanic/autoguide-react', () => {
   it('closes panel on Escape', () => {
     render(
       <AutoGuideProvider appId="demo">
-        <AutoGuideWidget />
+        <AutoGuideBar features={{ widget: true }} />
       </AutoGuideProvider>,
     );
     fireEvent.click(screen.getByLabelText('Hilfe öffnen'));

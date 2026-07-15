@@ -1,6 +1,6 @@
 {
   "name": "@iamthamanic/autoguide-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "type": "module",
   "description": "Browser-safe loader for AutoGuide knowledge artifacts",
@@ -10,7 +10,13 @@
     "url": "https://github.com/iamthamanic/autoguide.git",
     "directory": "packages/client"
   },
-  "keywords": ["autoguide", "documentation", "browser", "loader", "sdk"],
+  "keywords": [
+    "autoguide",
+    "documentation",
+    "browser",
+    "loader",
+    "sdk"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -22,7 +28,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",

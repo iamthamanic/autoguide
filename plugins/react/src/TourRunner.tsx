@@ -1,13 +1,17 @@
 /**
- * @iamthamanic/autoguide-react — guided tour runner with spotlight steps.
+ * @iamthamanic/autoguide-react — guided tour runner (controlled by AutoGuideBar).
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import type { Tour } from '@iamthamanic/autoguide-core';
 import { useAutoGuide } from './context.js';
+import { AG_BAR_BOTTOM, AG_BAR_GAP, AG_DOCK_HEIGHT } from './bar-styles.js';
+
+const TOUR_PANEL_BOTTOM = AG_BAR_BOTTOM + AG_DOCK_HEIGHT + AG_BAR_GAP;
 
 export interface TourRunnerProps {
   tourId?: string;
+  active: boolean;
+  onActiveChange: (active: boolean) => void;
 }
 
 function findTarget(selector?: string): HTMLElement | null {
@@ -19,9 +23,8 @@ function findTarget(selector?: string): HTMLElement | null {
   }
 }
 
-export function TourRunner({ tourId }: TourRunnerProps) {
-  const { mode, tours = [] } = useAutoGuide();
-  const [active, setActive] = useState(false);
+export function TourRunner({ tourId, active, onActiveChange }: TourRunnerProps) {
+  const { tours = [] } = useAutoGuide();
   const [stepIndex, setStepIndex] = useState(0);
 
   const tour = useMemo(
@@ -33,6 +36,12 @@ export function TourRunner({ tourId }: TourRunnerProps) {
   const target = step ? findTarget(step.targetSelector) : null;
 
   useEffect(() => {
+    if (!active) {
+      setStepIndex(0);
+    }
+  }, [active]);
+
+  useEffect(() => {
     if (!target) return;
     target.style.outline = '3px solid #2563eb';
     target.style.outlineOffset = '2px';
@@ -42,52 +51,25 @@ export function TourRunner({ tourId }: TourRunnerProps) {
     };
   }, [target, stepIndex]);
 
-  if (mode !== 'published' || !tour) return null;
-
-  const startTour = () => {
-    setStepIndex(0);
-    setActive(true);
-  };
+  if (!tour || !active) return null;
 
   const next = () => {
     if (!tour) return;
     const nextIndex = stepIndex + 1;
     if (nextIndex >= tour.steps.length) {
-      setActive(false);
+      onActiveChange(false);
       setStepIndex(0);
       return;
     }
     const nextStep = tour.steps[nextIndex];
     if (nextStep?.targetSelector && !findTarget(nextStep.targetSelector)) {
-      setStepIndex(nextIndex + 1 < tour.steps.length ? nextIndex + 1 : 0);
-      setActive(nextIndex + 1 < tour.steps.length);
+      const skipTo = nextIndex + 1 < tour.steps.length ? nextIndex + 1 : 0;
+      setStepIndex(skipTo);
+      onActiveChange(skipTo < tour.steps.length);
       return;
     }
     setStepIndex(nextIndex);
   };
-
-  if (!active) {
-    return (
-      <button
-        type="button"
-        onClick={startTour}
-        style={{
-          position: 'fixed',
-          left: 24,
-          bottom: 24,
-          zIndex: 9999,
-          padding: '10px 14px',
-          borderRadius: 8,
-          border: 'none',
-          background: '#0f766e',
-          color: '#fff',
-          cursor: 'pointer',
-        }}
-      >
-        Tour: {tour.title}
-      </button>
-    );
-  }
 
   if (!step) return null;
 
@@ -96,9 +78,10 @@ export function TourRunner({ tourId }: TourRunnerProps) {
       <div
         style={{
           position: 'fixed',
-          left: 24,
-          bottom: 96,
-          zIndex: 9999,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          bottom: TOUR_PANEL_BOTTOM,
+          zIndex: 10000,
           background: '#fff',
           border: '1px solid #e2e8f0',
           borderRadius: 8,
@@ -137,10 +120,19 @@ export function TourRunner({ tourId }: TourRunnerProps) {
         <button type="button" onClick={next}>
           {stepIndex + 1 >= (tour?.steps.length ?? 0) ? 'Fertig' : 'Weiter'}
         </button>
-        <button type="button" onClick={() => setActive(false)}>
+        <button type="button" onClick={() => onActiveChange(false)}>
           Beenden
         </button>
       </div>
     </div>
+  );
+}
+
+/** Resolves the primary tour for bar visibility. */
+export function usePrimaryTour(tourId?: string) {
+  const { tours = [] } = useAutoGuide();
+  return useMemo(
+    () => tours.find((item) => (tourId ? item.id === tourId : item.status === 'published')),
+    [tours, tourId],
   );
 }

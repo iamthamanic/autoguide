@@ -2,22 +2,19 @@
   {
     "id": "flow-save-action",
     "title": "Aktion speichern",
-    "description": "Referenz-Flow: eine Aktion speichern",
-    "pageId": "page-home",
-    "roleIds": ["Admin"],
+    "description": "Referenz-Flow für examples/react-vite",
     "steps": [
       {
-        "id": "flow-save-action-step-1",
+        "order": 1,
         "title": "Aktion speichern",
-        "body": "Klicke auf „Aktion speichern\", um die aktuelle Eingabe zu sichern.",
-        "action": "click",
-        "targetSelector": "[data-doc-id=\"action.save\"]"
+        "description": "Speichert die aktuelle Aktion in der Referenz-App.",
+        "elementId": "action.save",
+        "factIds": []
       }
     ],
-    "verification": {
-      "status": "verified",
-      "baseUrl": "http://localhost:5173"
-    },
+    "roleIds": ["Admin"],
+    "pageIds": ["page-home"],
+    "factIds": ["fact-save-action"],
     "status": "published"
   }
 ]

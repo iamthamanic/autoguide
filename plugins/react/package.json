@@ -1,6 +1,6 @@
 {
   "name": "@iamthamanic/autoguide-react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "type": "module",
   "description": "React adapter for AutoGuide Help Widget and Inspector",
@@ -10,7 +10,13 @@
     "url": "https://github.com/iamthamanic/autoguide.git",
     "directory": "plugins/react"
   },
-  "keywords": ["autoguide", "react", "documentation", "help-widget", "sdk"],
+  "keywords": [
+    "autoguide",
+    "react",
+    "documentation",
+    "help-widget",
+    "sdk"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -22,7 +28,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -32,7 +40,8 @@
     "@iamthamanic/autoguide-client": "workspace:*",
     "@iamthamanic/autoguide-core": "workspace:*",
     "@iamthamanic/autoguide-runtime": "workspace:*",
-    "@iamthamanic/autoguide-ui": "workspace:*"
+    "@iamthamanic/autoguide-ui": "workspace:*",
+    "lucide-react": "^1.24.0"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

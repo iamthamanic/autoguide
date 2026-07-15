@@ -1,6 +1,6 @@
 {
   "name": "@iamthamanic/autoguide-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "type": "module",
   "description": "AutoGuide CLI — init, scan, review, export, sync, publish",
@@ -10,7 +10,13 @@
     "url": "https://github.com/iamthamanic/autoguide.git",
     "directory": "packages/cli"
   },
-  "keywords": ["autoguide", "cli", "documentation", "scanner", "sdk"],
+  "keywords": [
+    "autoguide",
+    "cli",
+    "documentation",
+    "scanner",
+    "sdk"
+  ],
   "publishConfig": {
     "access": "public"
   },

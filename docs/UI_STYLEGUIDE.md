@@ -14,8 +14,10 @@ Host apps may use their own design system; AutoGuide widget should be themeable 
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--ag-primary` | `#2563eb` | Primary actions, active inspector |
-| `--ag-surface` | `#ffffff` | Panel backgrounds |
+| `--ag-primary` | `#1d4ed8` | Primary actions, brand, active dock |
+| `--ag-surface-glass` | frosted white | Dock + panels (`backdrop-filter`) |
+| `--ag-radius-lg` | `20px` | Dock shell, panels |
+| `--ag-shadow-dock` | layered soft | Bottom dock elevation |
 | `--ag-surface-muted` | `#f8fafc` | Secondary panels |
 | `--ag-border` | `#e2e8f0` | Panel borders |
 | `--ag-text` | `#0f172a` | Body text |
@@ -38,7 +40,7 @@ Host apps may use their own design system; AutoGuide widget should be themeable 
 
 | Component | Location | Notes |
 |-----------|----------|-------|
-| HelpWidget | `plugins/react/src/AutoGuideWidget.tsx` | FAB + slide-over panel |
+| HelpWidget | `plugins/react/src/AutoGuideBar.tsx` + `AutoGuideWidget.tsx` | Bottom dock + help panel |
 | InspectorOverlay | `plugins/react/src/InspectorOverlay.tsx` | Highlight + fact panel |
 | ReviewBadge | `plugins/react/src/ReviewBadge.tsx` | Dev-only confidence indicator |
 | FlowStepList | `plugins/react/src/FlowStepList.tsx` | Numbered steps |
@@ -46,8 +48,8 @@ Host apps may use their own design system; AutoGuide widget should be themeable 
 
 ## Layout
 
-- Widget FAB: bottom-right, 56px, z-index 9999
-- Panel width: 380px desktop, full-width mobile
+- Dock bar: brand label top-center, icon buttons with labels below
+- Panels: centered above bar, 380px desktop, full-width mobile
 - Inspector highlight: 2px `--ag-primary` outline
 
 ## States (required)

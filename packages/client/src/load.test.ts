@@ -68,6 +68,37 @@ describe('loadArtifactBundle', () => {
     expect(bundle.recommendations).toEqual([]);
   });
 
+  it('treats non-JSON optional responses as empty arrays', async () => {
+    const fetchImpl = vi.fn(async (url: string | URL) => {
+      const path = String(url).split('/').pop() ?? '';
+      if (path === 'review-history.json') {
+        return new Response('<!doctype html><html></html>', {
+          status: 200,
+          headers: { 'Content-Type': 'text/html' },
+        });
+      }
+      const files: Record<string, unknown> = {
+        'facts.json': sampleFacts,
+        'pages.json': samplePages,
+        'flows.json': sampleFlows,
+        'tours.json': sampleTours,
+      };
+      const body = files[path];
+      if (body === undefined) {
+        return new Response(null, { status: 404 });
+      }
+      return new Response(JSON.stringify(body), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }) as typeof fetch;
+
+    const bundle = await loadArtifactBundle({ baseUrl: '/autoguide', fetchImpl });
+
+    expect(bundle.tours).toEqual(sampleTours);
+    expect(bundle.reviewHistory).toEqual([]);
+  });
+
   it('throws German error when required artifact is missing', async () => {
     const fetchImpl = mockFetch({
       'facts.json': sampleFacts,

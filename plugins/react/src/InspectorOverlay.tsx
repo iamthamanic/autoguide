@@ -1,16 +1,21 @@
 /**
- * @iamthamanic/autoguide-react — Inspector overlay for dev-mode element inspection.
+ * @iamthamanic/autoguide-react — Inspector overlay (no trigger; controlled by AutoGuideBar).
  */
 
 import { useEffect, useState, type MouseEvent } from 'react';
 import { scanDom } from '@iamthamanic/autoguide-runtime';
 import type { RuntimeElement } from '@iamthamanic/autoguide-runtime';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
+import { agPanelAboveBarStyle } from './bar-styles.js';
 import { useAutoGuide } from './context.js';
 
-export function InspectorOverlay() {
+export interface InspectorOverlayProps {
+  active: boolean;
+  onActiveChange: (active: boolean) => void;
+}
+
+export function InspectorOverlay({ active, onActiveChange }: InspectorOverlayProps) {
   const { mode } = useAutoGuide();
-  const [active, setActive] = useState(false);
   const [selected, setSelected] = useState<RuntimeElement | null>(null);
   const [announcement, setAnnouncement] = useState('');
 
@@ -25,22 +30,16 @@ export function InspectorOverlay() {
         return;
       }
       if (active) {
-        setActive(false);
+        onActiveChange(false);
         setAnnouncement('Inspector beendet.');
       }
     };
 
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
-  }, [active, mode, selected]);
+  }, [active, mode, onActiveChange, selected]);
 
   if (mode !== 'development') return null;
-
-  const onInspectClick = () => {
-    setActive((value) => !value);
-    setSelected(null);
-    setAnnouncement(active ? 'Inspector beendet.' : 'Inspector aktiv. Element auswählen.');
-  };
 
   const onMouseOver = (event: MouseEvent) => {
     if (!active) return;
@@ -57,7 +56,7 @@ export function InspectorOverlay() {
     const snapshot = scanDom(document, window.location.pathname);
     const match = snapshot.elements.find((el) => target.matches(el.selector));
     setSelected(match ?? null);
-    setActive(false);
+    onActiveChange(false);
     setAnnouncement(
       match
         ? `Ausgewählt: ${match.label ?? match.selector}`
@@ -70,25 +69,6 @@ export function InspectorOverlay() {
       <div className="sr-only" aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden' }}>
         {announcement}
       </div>
-      <button
-        type="button"
-        onClick={onInspectClick}
-        aria-pressed={active}
-        style={{
-          position: 'fixed',
-          right: 24,
-          bottom: 88,
-          zIndex: 9999,
-          padding: '8px 12px',
-          borderRadius: 'var(--ag-radius)',
-          border: 'none',
-          background: active ? '#1d4ed8' : 'var(--ag-text-muted)',
-          color: '#fff',
-          cursor: 'pointer',
-        }}
-      >
-        Inspector
-      </button>
       {active ? (
         <div
           role="presentation"
@@ -98,21 +78,7 @@ export function InspectorOverlay() {
         />
       ) : null}
       {selected ? (
-        <div
-          style={{
-            position: 'fixed',
-            right: 24,
-            bottom: 140,
-            width: 320,
-            background: 'var(--ag-surface)',
-            border: '1px solid var(--ag-border)',
-            borderRadius: 'var(--ag-radius)',
-            padding: 12,
-            zIndex: 9999,
-            color: 'var(--ag-text)',
-            boxShadow: 'var(--ag-shadow)',
-          }}
-        >
+        <div style={{ ...agPanelAboveBarStyle(320), maxHeight: 'min(50vh, 360px)', overflow: 'auto' }}>
           <strong>Element</strong>
           <p style={{ margin: '8px 0 0', fontSize: 14 }}>{selected.label ?? selected.selector}</p>
           <p style={{ margin: '4px 0 0', color: 'var(--ag-text-muted)', fontSize: 12 }}>{selected.selector}</p>

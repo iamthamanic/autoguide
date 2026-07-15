@@ -406,6 +406,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-07-15** — Dock unten mittig (Hilfe, Tour); Dev-Tools Inspect + Review im ⚙-Menü (`chore/npm-scope-iamthamanic`)
 - **2026-07-15** — README + docs/AGENT_INTEGRATION.md: KI-Agent Playbook für Host-App-Integration
 - **2026-07-15** — README: detailed German integration guide for host apps (`chore/npm-scope-iamthamanic`)
 - **2026-07-15** — npm packages renamed to `@iamthamanic/autoguide-*` scope; publish script added (`chore/npm-scope-iamthamanic`)

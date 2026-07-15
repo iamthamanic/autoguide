@@ -25,7 +25,20 @@ async function fetchJson<T>(
       `AutoGuide: Artefakt nicht geladen (${response.status}): ${url}`,
     );
   }
-  return (await response.json()) as T;
+
+  const contentType = response.headers.get('content-type') ?? '';
+  if (optional && !contentType.includes('json')) {
+    return [] as T;
+  }
+
+  try {
+    return (await response.json()) as T;
+  } catch {
+    if (optional) {
+      return [] as T;
+    }
+    throw new Error(`AutoGuide: Ungültiges JSON: ${url}`);
+  }
 }
 
 async function tryLoadManifest(

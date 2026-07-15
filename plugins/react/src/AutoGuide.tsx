@@ -14,10 +14,8 @@ import type {
   VisibilityMode,
 } from '@iamthamanic/autoguide-core';
 import { loadArtifactBundle } from '@iamthamanic/autoguide-client';
+import { AutoGuideBar } from './AutoGuideBar.js';
 import { AutoGuideProvider } from './AutoGuideProvider.js';
-import { AutoGuideWidget } from './AutoGuideWidget.js';
-import { InspectorOverlay } from './InspectorOverlay.js';
-import { TourRunner } from './TourRunner.js';
 
 export interface AutoGuideFeatures {
   widget?: boolean;
@@ -96,9 +94,11 @@ export function AutoGuide({
     [state.tours],
   );
 
-  const showWidget = features.widget !== false;
-  const showInspector = features.inspector === true;
-  const showTours = features.tours === true;
+  const showBar =
+    features.widget !== false ||
+    features.inspector === true ||
+    features.tours === true ||
+    mode === 'development';
 
   return (
     <AutoGuideProvider
@@ -116,9 +116,7 @@ export function AutoGuide({
       onRetry={() => void load()}
     >
       {children}
-      {showWidget ? <AutoGuideWidget /> : null}
-      {showInspector ? <InspectorOverlay /> : null}
-      {showTours && primaryTour ? <TourRunner tourId={primaryTour.id} /> : null}
+      {showBar ? <AutoGuideBar features={features} tourId={primaryTour?.id} /> : null}
     </AutoGuideProvider>
   );
 }
