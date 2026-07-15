@@ -1,5 +1,5 @@
 /**
- * @autoguide/ai — cloud consent persistence for opt-in enrichment.
+ * @iamthamanic/autoguide-ai — cloud consent persistence for opt-in enrichment.
  */
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';

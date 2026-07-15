@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — knowledge graph merge and conflict detection.
+ * @iamthamanic/autoguide-core — knowledge graph merge and conflict detection.
  */
 
 import type { Fact } from '../types/fact.js';

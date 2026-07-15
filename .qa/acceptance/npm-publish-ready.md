@@ -3,7 +3,7 @@
 <!-- seeded by ecc-runner from issue #116 on 2026-07-14 — @implement may refine -->
 
 ## Intent
-Make `@autoguide/react`, `@autoguide/client`, `@autoguide/vite`, and `@autoguide/cli` publish-ready on npm (config + docs; actual publish is human-gated).
+Make `@iamthamanic/autoguide-react`, `@iamthamanic/autoguide-client`, `@iamthamanic/autoguide-vite`, and `@iamthamanic/autoguide-cli` publish-ready on npm (config + docs; actual publish is human-gated).
 
 ## Happy Path
 - [ ] - [ ] Package.json publish fields correct

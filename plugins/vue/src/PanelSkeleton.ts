@@ -1,5 +1,5 @@
 /**
- * @autoguide/vue — loading skeleton for Help Widget panel.
+ * @iamthamanic/autoguide-vue — loading skeleton for Help Widget panel.
  */
 
 import { defineComponent, h } from 'vue';

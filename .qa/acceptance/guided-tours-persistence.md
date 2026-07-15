@@ -7,7 +7,7 @@ Close guided tours v1 gap: `tours.json` is written during `autoguide scan`, and 
 
 ## Preconditions
 - Scan produces `flows.json` with at least one flow
-- `generateToursFromFlows` and `validateTours` exist in `@autoguide/core`
+- `generateToursFromFlows` and `validateTours` exist in `@iamthamanic/autoguide-core`
 
 ## Happy Path
 - [ ] `autoguide scan` invokes `generateToursFromFlows` and writes `.autoguide/tours.json`

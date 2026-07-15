@@ -1,9 +1,9 @@
 <script lang="ts">
   /**
-   * @autoguide/svelte — Inspector overlay for dev-mode element inspection.
+   * @iamthamanic/autoguide-svelte — Inspector overlay for dev-mode element inspection.
    */
-  import { scanDom } from '@autoguide/runtime';
-  import type { RuntimeElement } from '@autoguide/runtime';
+  import { scanDom } from '@iamthamanic/autoguide-runtime';
+  import type { RuntimeElement } from '@iamthamanic/autoguide-runtime';
   import { useAutoGuide } from './context.js';
 
   const ctx = useAutoGuide();

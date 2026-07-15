@@ -1,5 +1,5 @@
 /**
- * @autoguide/ui — shared panel state types for widget shells.
+ * @iamthamanic/autoguide-ui — shared panel state types for widget shells.
  */
 
 export type WidgetPanelState = 'loading' | 'empty' | 'error' | 'ready';

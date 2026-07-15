@@ -1,5 +1,5 @@
 /**
- * @autoguide/runtime — DOM capture types (snapshot v2).
+ * @iamthamanic/autoguide-runtime — DOM capture types (snapshot v2).
  */
 
 export interface RuntimeElement {

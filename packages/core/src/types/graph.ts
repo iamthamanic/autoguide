@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — knowledge graph entity and relationship types.
+ * @iamthamanic/autoguide-core — knowledge graph entity and relationship types.
  * Location: packages/core/src/types/graph.ts
  */
 

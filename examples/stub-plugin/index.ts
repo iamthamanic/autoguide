@@ -2,7 +2,7 @@
  * Example stub plugin for third-party scanner integration demos.
  */
 
-import type { AutoGuidePlugin, PluginScanContext, PluginScanResult } from '@autoguide/core';
+import type { AutoGuidePlugin, PluginScanContext, PluginScanResult } from '@iamthamanic/autoguide-core';
 
 function buildStubFact(now: string) {
   return {

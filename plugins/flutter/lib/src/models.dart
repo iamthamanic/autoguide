@@ -1,4 +1,4 @@
-/// AutoGuide domain models (parity with @autoguide/core v0.1).
+/// AutoGuide domain models (parity with @iamthamanic/autoguide-core v0.1).
 class Fact {
   const Fact({
     required this.id,

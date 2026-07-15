@@ -63,7 +63,7 @@ Build a reusable open-source **Documentation Intelligence Engine** that turns th
 
 **In scope for first vertical slice batch:**
 
-- pnpm monorepo, `@autoguide/core` types, config loader, storage writer
+- pnpm monorepo, `@iamthamanic/autoguide-core` types, config loader, storage writer
 - CLI: `init`, `doctor`, `scan` skeleton
 - JSON schemas + `.autoguide/` output
 - React provider + Help Widget placeholder
@@ -81,7 +81,7 @@ Build a reusable open-source **Documentation Intelligence Engine** that turns th
 
 | Area | Status |
 |------|--------|
-| Monorepo + `@autoguide/core` | ✅ `pnpm run verify` on main |
+| Monorepo + `@iamthamanic/autoguide-core` | ✅ `pnpm run verify` on main |
 | CLI | ✅ init, doctor, scan, review, generate, export, validate, publish |
 | CI validation | ✅ `autoguide validate` + `.github/workflows/validate-docs.yml` |
 | hr-workflows integration | ✅ 3 flows, German Markdown/HTML export (`hr-workflows.integration.test.ts`) |
@@ -95,7 +95,7 @@ Build a reusable open-source **Documentation Intelligence Engine** that turns th
 | Recommendations | ✅ engine + doctor + review links |
 | Guided tours | ✅ model, `generate tours`, example `TourRunner` |
 | Export | ✅ Markdown, HTML, PDF |
-| React SDK | ✅ Widget, Inspector, DocElement, `@autoguide/ui` tokens |
+| React SDK | ✅ Widget, Inspector, DocElement, `@iamthamanic/autoguide-ui` tokens |
 | Public API docs | ✅ `docs/api/` |
 
 **Still deferred (accurate as of Phase 3 sync):**
@@ -122,7 +122,7 @@ See [SPEC_FULL.md](./SPEC_FULL.md) for complete PRD/TRD:
 - local-first, open-source-first
 - deterministic-before-AI
 - plugin-based, reviewable, version-aware
-- `@autoguide/core` must not import React, Vue, DOM, or Node-specific APIs without abstraction
+- `@iamthamanic/autoguide-core` must not import React, Vue, DOM, or Node-specific APIs without abstraction
 
 ## Integration scenarios (in-repo)
 

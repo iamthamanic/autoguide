@@ -3,7 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { render, fireEvent } from '@testing-library/svelte';
 import { describe, expect, it, vi } from 'vitest';
-import type { Fact } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
 import AutoGuideWidget from './AutoGuideWidget.svelte';
 import FlowStepList from './FlowStepList.svelte';
 import ReviewBadge from './ReviewBadge.svelte';
@@ -36,7 +36,7 @@ const sampleFacts: Fact[] = [
   },
 ];
 
-describe('@autoguide/svelte', () => {
+describe('@iamthamanic/autoguide-svelte', () => {
   const distDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'dist');
 
   it('emits compiled adapter artifacts', () => {

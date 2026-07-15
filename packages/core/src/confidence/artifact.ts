@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — machine-readable confidence.json builder (v2).
+ * @iamthamanic/autoguide-core — machine-readable confidence.json builder (v2).
  */
 
 import type { Fact, Provenance, ProvenanceSource } from '../types/fact.js';

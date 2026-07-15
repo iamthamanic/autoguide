@@ -1,6 +1,6 @@
 /**
- * @autoguide/angular — public exports.
- * API parity with @autoguide/react: AutoGuideProvider, AutoGuideWidget,
+ * @iamthamanic/autoguide-angular — public exports.
+ * API parity with @iamthamanic/autoguide-react: AutoGuideProvider, AutoGuideWidget,
  * InspectorOverlay, useAutoGuide (Angular service inject).
  */
 

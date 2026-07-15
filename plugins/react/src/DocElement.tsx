@@ -1,5 +1,5 @@
 /**
- * @autoguide/react — DocElement wrapper for explicit documentation metadata.
+ * @iamthamanic/autoguide-react — DocElement wrapper for explicit documentation metadata.
  * Location: plugins/react/src/DocElement.tsx
  */
 

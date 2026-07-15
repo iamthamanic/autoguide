@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — filter facts for development vs published visibility.
+ * @iamthamanic/autoguide-core — filter facts for development vs published visibility.
  */
 
 import type { Fact } from '../types/fact.js';

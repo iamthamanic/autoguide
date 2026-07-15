@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — review queue and manual override handling.
+ * @iamthamanic/autoguide-core — review queue and manual override handling.
  */
 
 import type { Fact, ReviewStatus } from '../types/fact.js';

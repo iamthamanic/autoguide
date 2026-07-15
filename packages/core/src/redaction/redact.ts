@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — central redaction for artifacts, exports, and AI payloads.
+ * @iamthamanic/autoguide-core — central redaction for artifacts, exports, and AI payloads.
  */
 
 import { DEFAULT_REDACTION_RULES, SENSITIVE_KEY_PATTERN } from './patterns.js';

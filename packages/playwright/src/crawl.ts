@@ -1,5 +1,5 @@
 /**
- * @autoguide/playwright — safe crawl fallback for routes without test coverage.
+ * @iamthamanic/autoguide-playwright — safe crawl fallback for routes without test coverage.
  */
 
 import type { CrawlOptions, CrawlResult, PlaywrightTestEvidence } from './types.js';

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * @autoguide/cli — entry point.
+ * @iamthamanic/autoguide-cli — entry point.
  */
 
 import { Command } from 'commander';

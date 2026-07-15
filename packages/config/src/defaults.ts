@@ -1,5 +1,5 @@
 /**
- * @autoguide/config — default configuration values.
+ * @iamthamanic/autoguide-config — default configuration values.
  */
 
 import type { AutoGuideConfig } from './types.js';

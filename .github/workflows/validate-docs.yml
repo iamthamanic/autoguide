@@ -19,7 +19,7 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @autoguide/cli... build
+      - run: pnpm --filter @iamthamanic/autoguide-cli... build
 
       - name: Scan hr-workflows integration
         working-directory: integrations/hr-workflows

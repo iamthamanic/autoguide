@@ -11,10 +11,10 @@ AutoGuide in 5 Minuten in eine bestehende React + Vite App einbinden.
 ## Schritt 1 — Installieren
 
 ```bash
-npm install @autoguide/react @autoguide/vite @autoguide/cli
+npm install @iamthamanic/autoguide-react @iamthamanic/autoguide-vite @iamthamanic/autoguide-cli
 ```
 
-> **Hinweis:** Die Packages sind aktuell `private` und noch nicht auf npm. Bis zum ersten Release das Repo klonen und als Workspace einbinden:
+> **Hinweis:** Pakete werden unter dem Scope `@iamthamanic/autoguide-*` auf npm veröffentlicht. Bis zum ersten Release das Repo klonen und als Workspace einbinden:
 >
 > ```bash
 > git clone https://github.com/iamthamanic/autoguide.git ../autoguide
@@ -30,7 +30,7 @@ npm install @autoguide/react @autoguide/vite @autoguide/cli
 // vite.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import autoguide from '@autoguide/vite';
+import autoguide from '@iamthamanic/autoguide-vite';
 
 export default defineConfig({
   plugins: [react(), autoguide()],
@@ -60,7 +60,7 @@ Danach liegt `.autoguide/` mit `facts.json`, `pages.json`, `flows.json`, `tours.
 // src/main.tsx
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AutoGuide } from '@autoguide/react';
+import { AutoGuide } from '@iamthamanic/autoguide-react';
 import App from './App';
 
 createRoot(document.getElementById('root')!).render(
@@ -117,7 +117,7 @@ Kopiert `facts.json`, `pages.json`, `flows.json`, `tours.json`, `recommendations
 ## `DocElement` — Elemente annotieren
 
 ```tsx
-import { DocElement } from '@autoguide/react';
+import { DocElement } from '@iamthamanic/autoguide-react';
 
 <DocElement id="action.save" title="Speichern" description="Speichert den aktuellen Datensatz.">
   <button>Speichern</button>

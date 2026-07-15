@@ -26,7 +26,7 @@ const slices = [
     sections: {
       Intent: 'Bootstrap the AutoGuide monorepo with pnpm workspaces, root TypeScript strict config, Vitest placeholder, and CI-ready scripts.',
       'User Journey': '1. Developer clones repo\n2. Runs `pnpm install` and `pnpm typecheck`\n3. Monorepo structure is ready for packages',
-      Problem: 'Empty repo has no build foundation for @autoguide packages.',
+      Problem: 'Empty repo has no build foundation for @iamthamanic packages.',
       Solution: 'Add pnpm-workspace.yaml, tsconfig.base.json, root package.json scripts (build, typecheck, test, checks), packages/plugins/examples dirs.',
       Runtime: '| Axis | This slice |\n|------|------------|\n| Local | yes |\n| Cloud | skip |\n| Tauri | skip |',
       'Edge Cases': '- Empty workspace packages should not break typecheck\n- Node 20+ engine constraint documented',
@@ -35,14 +35,14 @@ const slices = [
     },
   },
   {
-    title: 'Define core types and fact model in @autoguide/core',
+    title: 'Define core types and fact model in @iamthamanic/autoguide-core',
     featureSlug: 'core-types-fact-model',
     priority: 'P0',
     labels: ['P0'],
     dependsOn: ['Initialize pnpm monorepo and shared TypeScript config'],
     sections: {
       Intent: 'Create framework-agnostic core types: Fact, Feature, Page, Flow, Provenance, Confidence, ReviewStatus.',
-      'User Journey': '1. Developer imports types from @autoguide/core\n2. Types validate fact shape with provenance metadata',
+      'User Journey': '1. Developer imports types from @iamthamanic/autoguide-core\n2. Types validate fact shape with provenance metadata',
       Problem: 'No shared vocabulary for knowledge artifacts across scanners and UI.',
       Solution: 'packages/core with exported types, zod or JSON-schema-aligned interfaces, no React/DOM imports.',
       Runtime: '| Axis | This slice |\n|------|------------|\n| Local | yes |',
@@ -73,7 +73,7 @@ const slices = [
     featureSlug: 'storage-json-sqlite',
     priority: 'P0',
     labels: ['P0'],
-    dependsOn: ['Define core types and fact model in @autoguide/core', 'Implement config schema and loader'],
+    dependsOn: ['Define core types and fact model in @iamthamanic/autoguide-core', 'Implement config schema and loader'],
     sections: {
       Intent: 'Persist knowledge to .autoguide/ as JSON (SoT) with SQLite index for search.',
       'User Journey': '1. Scan completes\n2. features.json, pages.json, flows.json written atomically\n3. SQLite index updated for queries',
@@ -90,7 +90,7 @@ const slices = [
     featureSlug: 'json-schemas',
     priority: 'P0',
     labels: ['P0'],
-    dependsOn: ['Define core types and fact model in @autoguide/core'],
+    dependsOn: ['Define core types and fact model in @iamthamanic/autoguide-core'],
     sections: {
       Intent: 'Publish JSON schemas for features, pages, flows, confidence, provenance artifacts.',
       'User Journey': '1. CLI generates output\n2. Output validates against committed schemas',
@@ -124,9 +124,9 @@ const slices = [
     featureSlug: 'react-adapter-skeleton',
     priority: 'P0',
     labels: ['P0'],
-    dependsOn: ['Define core types and fact model in @autoguide/core', 'Implement JSON storage writer and SQLite index skeleton'],
+    dependsOn: ['Define core types and fact model in @iamthamanic/autoguide-core', 'Implement JSON storage writer and SQLite index skeleton'],
     sections: {
-      Intent: 'Ship @autoguide/react with AutoGuideProvider, AutoGuideWidget placeholder, context, hooks.',
+      Intent: 'Ship @iamthamanic/autoguide-react with AutoGuideProvider, AutoGuideWidget placeholder, context, hooks.',
       'User Journey': '1. Dev wraps app in AutoGuideProvider\n2. Help widget FAB renders without throwing when docs missing',
       Problem: 'Host apps need embeddable SDK entry point.',
       Solution: 'plugins/react: Provider, Widget shell, load docs from bundle/URL, dev mode badge.',
@@ -209,7 +209,7 @@ const slices = [
     featureSlug: 'source-scanner-routes',
     priority: 'P1',
     labels: ['P1'],
-    dependsOn: ['Define core types and fact model in @autoguide/core', 'Implement JSON storage writer and SQLite index skeleton'],
+    dependsOn: ['Define core types and fact model in @iamthamanic/autoguide-core', 'Implement JSON storage writer and SQLite index skeleton'],
     sections: {
       Intent: 'Static analysis: walk TSX files, detect routes (react-router etc.), extract page candidates.',
       'User Journey': '1. CLI scan includes source pass\n2. pages.json populated from route definitions',
@@ -362,7 +362,7 @@ const slices = [
     featureSlug: 'ai-ollama-provider',
     priority: 'P1',
     labels: ['P1'],
-    dependsOn: ['Define core types and fact model in @autoguide/core'],
+    dependsOn: ['Define core types and fact model in @iamthamanic/autoguide-core'],
     sections: {
       Intent: 'AIProvider interface + Ollama-compatible local implementation (default).',
       'User Journey': '1. Dev runs scan with Ollama local\n2. AI proposes descriptions marked ai_proposal',
@@ -552,7 +552,7 @@ const slices = [
     dependsOn: ['Create React adapter provider and widget placeholder', 'Implement development and published visibility modes'],
     sections: {
       Intent: 'Vue 3 adapter with parity to React MVP API.',
-      'User Journey': '1. Vue dev installs @autoguide/vue\n2. Same Provider/Widget/Inspector behavior',
+      'User Journey': '1. Vue dev installs @iamthamanic/autoguide-vue\n2. Same Provider/Widget/Inspector behavior',
       Problem: 'Full spec requires Vue support.',
       Solution: 'plugins/vue mirroring React adapter surface.',
       Runtime: '| Axis | This slice |\n|------|------------|\n| Local | yes |',
@@ -569,7 +569,7 @@ const slices = [
     dependsOn: ['Create React adapter provider and widget placeholder', 'Implement development and published visibility modes'],
     sections: {
       Intent: 'Angular adapter with parity to React MVP API.',
-      'User Journey': '1. Angular dev installs @autoguide/angular\n2. Module/standalone component integration',
+      'User Journey': '1. Angular dev installs @iamthamanic/autoguide-angular\n2. Module/standalone component integration',
       Problem: 'Full spec requires Angular support.',
       Solution: 'plugins/angular with NgModule or standalone bootstrap.',
       Runtime: '| Axis | This slice |\n|------|------------|\n| Local | yes |',
@@ -586,7 +586,7 @@ const slices = [
     dependsOn: ['Create React adapter provider and widget placeholder', 'Implement development and published visibility modes'],
     sections: {
       Intent: 'Svelte adapter with parity to React MVP API.',
-      'User Journey': '1. Svelte dev installs @autoguide/svelte\n2. Store-based context + widget',
+      'User Journey': '1. Svelte dev installs @iamthamanic/autoguide-svelte\n2. Store-based context + widget',
       Problem: 'Full spec requires Svelte support.',
       Solution: 'plugins/svelte with Svelte 5 runes or stores per project standard.',
       Runtime: '| Axis | This slice |\n|------|------------|\n| Local | yes |',
@@ -617,7 +617,7 @@ const slices = [
     featureSlug: 'plugin-registry',
     priority: 'P2',
     labels: ['P2'],
-    dependsOn: ['Define core types and fact model in @autoguide/core'],
+    dependsOn: ['Define core types and fact model in @iamthamanic/autoguide-core'],
     sections: {
       Intent: 'Plugin lifecycle and registry for scanners, adapters, AI providers.',
       'User Journey': '1. Third party registers custom scanner plugin\n2. CLI scan loads plugins from config',
@@ -719,7 +719,7 @@ const slices = [
     featureSlug: 'adapter-flutter',
     priority: 'P2',
     labels: ['P2'],
-    dependsOn: ['Define core types and fact model in @autoguide/core'],
+    dependsOn: ['Define core types and fact model in @iamthamanic/autoguide-core'],
     sections: {
       Intent: 'Flutter adapter per SPEC_FULL future goals.',
       'User Journey': '1. Flutter app integrates autoguide package\n2. Widget overlay on Material/Cupertino app',

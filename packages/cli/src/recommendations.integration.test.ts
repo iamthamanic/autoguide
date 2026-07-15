@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — doctor + recommendations integration tests.
+ * @iamthamanic/autoguide-cli — doctor + recommendations integration tests.
  */
 
 import { cp, mkdtemp, readFile, rm } from 'node:fs/promises';

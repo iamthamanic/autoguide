@@ -1,12 +1,12 @@
 /**
- * @autoguide/cli — publish command (switch to published mode).
+ * @iamthamanic/autoguide-cli — publish command (switch to published mode).
  */
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { isDestructiveActionKey, minimumConfidenceForKey } from '@autoguide/core';
-import { loadConfigFromObject } from '@autoguide/config';
-import type { AutoGuideConfigInput } from '@autoguide/config';
+import { isDestructiveActionKey, minimumConfidenceForKey } from '@iamthamanic/autoguide-core';
+import { loadConfigFromObject } from '@iamthamanic/autoguide-config';
+import type { AutoGuideConfigInput } from '@iamthamanic/autoguide-config';
 import { loadArtifacts, resolveOutputDir } from '../lib/artifacts.js';
 
 export async function runPublish(cwd: string): Promise<number> {

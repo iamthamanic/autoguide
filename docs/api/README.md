@@ -10,9 +10,9 @@ pnpm run docs:api
 
 | Package | Doc |
 |---------|-----|
-| `@autoguide/core` | [core.md](./core.md) |
-| `@autoguide/cli` | [cli.md](./cli.md) |
-| `@autoguide/react` | [react.md](./react.md) |
+| `@iamthamanic/autoguide-core` | [core.md](./core.md) |
+| `@iamthamanic/autoguide-cli` | [cli.md](./cli.md) |
+| `@iamthamanic/autoguide-react` | [react.md](./react.md) |
 
 ## Boundaries
 

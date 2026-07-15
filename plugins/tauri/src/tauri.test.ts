@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildTauriAutoguideConfig } from './paths.js';
 import { isTauriRuntime } from './runtime.js';
 
-describe('@autoguide/tauri', () => {
+describe('@iamthamanic/autoguide-tauri', () => {
   it('detects non-tauri node context', () => {
     expect(isTauriRuntime()).toBe(false);
   });

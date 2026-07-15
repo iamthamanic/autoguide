@@ -1,5 +1,5 @@
 /**
- * @autoguide/playwright — import Playwright JSON report as behavior evidence.
+ * @iamthamanic/autoguide-playwright — import Playwright JSON report as behavior evidence.
  */
 
 import { readFile } from 'node:fs/promises';

@@ -3,7 +3,7 @@
 <!-- seeded by ecc-runner from issue #114 on 2026-07-14 — @implement may refine -->
 
 ## Intent
-Replace manual fixture imports in `examples/react-vite` with `<AutoGuide />` + `@autoguide/vite` plugin — reference integration for copy-paste.
+Replace manual fixture imports in `examples/react-vite` with `<AutoGuide />` + `@iamthamanic/autoguide-vite` plugin — reference integration for copy-paste.
 
 ## Happy Path
 - [ ] - [ ] Example runs with `<AutoGuide />` only at root

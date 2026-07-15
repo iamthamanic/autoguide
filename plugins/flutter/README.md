@@ -1,4 +1,4 @@
-# @autoguide/flutter (`autoguide_flutter`)
+# @iamthamanic/autoguide-flutter (`autoguide_flutter`)
 
 Flutter adapter for AutoGuide Help Center widget overlay.
 
@@ -6,7 +6,7 @@ Flutter adapter for AutoGuide Help Center widget overlay.
 
 ```
 ┌─────────────────────┐     ┌──────────────────────────┐
-│  Flutter App        │     │  @autoguide/core (Node)  │
+│  Flutter App        │     │  @iamthamanic/autoguide-core (Node)  │
 │  AutoGuideScope     │     │  scan / merge / validate │
 │  AutoGuideWidget    │     │  (future FFI / channel)  │
 └─────────┬───────────┘     └────────────┬─────────────┘
@@ -23,7 +23,7 @@ Flutter adapter for AutoGuide Help Center widget overlay.
 | Artifacts | `AssetCoreBridge` loads bundled JSON | File bridge + CLI scan on CI |
 | Scanner | Not in Flutter (use `autoguide scan` in host repo) | Platform channel stub |
 
-API parity with `@autoguide/react`:
+API parity with `@iamthamanic/autoguide-react`:
 
 | React | Flutter |
 |-------|---------|

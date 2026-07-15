@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — mark facts stale when source routes/components change.
+ * @iamthamanic/autoguide-core — mark facts stale when source routes/components change.
  */
 
 import type { Fact } from '../types/fact.js';

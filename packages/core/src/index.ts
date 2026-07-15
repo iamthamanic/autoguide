@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — public package exports.
+ * @iamthamanic/autoguide-core — public package exports.
  * Framework-agnostic types and validators for AutoGuide.
  */
 

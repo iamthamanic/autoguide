@@ -1,5 +1,5 @@
 /**
- * @autoguide/ai — shared HTTP chat completion helper.
+ * @iamthamanic/autoguide-ai — shared HTTP chat completion helper.
  */
 
 import { buildEnrichmentPrompt } from './prompt.js';

@@ -1,6 +1,6 @@
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { AutoGuide, DocElement } from '@autoguide/react';
+import { AutoGuide, DocElement } from '@iamthamanic/autoguide-react';
 
 function App() {
   const [page, setPage] = useState<'home' | 'settings'>('home');
@@ -40,9 +40,10 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AutoGuide
       appId="example-react-vite"
-      mode="published"
+      mode="development"
       userRole="Admin"
       bundleBase="/autoguide"
+      features={{ widget: true, inspector: true, tours: true }}
     >
       <App />
     </AutoGuide>

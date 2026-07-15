@@ -1,8 +1,8 @@
 /**
- * @autoguide/playwright — self-contained DOM scan for page.evaluate (no external refs).
+ * @iamthamanic/autoguide-playwright — self-contained DOM scan for page.evaluate (no external refs).
  */
 
-import type { RuntimeSnapshot } from '@autoguide/runtime';
+import type { RuntimeSnapshot } from '@iamthamanic/autoguide-runtime';
 
 /** Serializable for Playwright — helpers as const arrows so tsc keeps them in the function body. */
 export function browserScanDom(route: string): RuntimeSnapshot {

@@ -1,5 +1,5 @@
 /**
- * @autoguide/react — root provider for host applications.
+ * @iamthamanic/autoguide-react — root provider for host applications.
  */
 
 import type { ReactNode } from 'react';
@@ -12,7 +12,7 @@ import type {
   ReviewItem,
   VisibilityMode,
   Tour,
-} from '@autoguide/core';
+} from '@iamthamanic/autoguide-core';
 import { applyReviewDecision } from './apply-review.js';
 import { AutoGuideContext, type DocElementRegistration } from './context.js';
 import type { ReviewDecisionPayload } from './review-types.js';

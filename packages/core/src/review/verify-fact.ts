@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — re-verify developer edits against scan evidence.
+ * @iamthamanic/autoguide-core — re-verify developer edits against scan evidence.
  */
 
 import type { Fact } from '../types/fact.js';

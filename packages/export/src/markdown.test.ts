@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { exportKnowledgeMarkdown } from './markdown.js';
-import type { PageRecord, FlowRecord } from '@autoguide/core';
+import type { PageRecord, FlowRecord } from '@iamthamanic/autoguide-core';
 
-describe('@autoguide/export', () => {
+describe('@iamthamanic/autoguide-export', () => {
   it('exports german markdown for pages and flows', () => {
     const pages: PageRecord[] = [
       {

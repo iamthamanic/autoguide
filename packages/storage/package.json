@@ -1,7 +1,11 @@
 {
-  "name": "@autoguide/storage",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@iamthamanic/autoguide-storage",
+  "version": "0.1.1",
+  "private": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "JSON persistence and SQLite index for AutoGuide",
   "exports": {
@@ -12,14 +16,16 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*",
+    "@iamthamanic/autoguide-core": "workspace:*",
     "better-sqlite3": "^11.10.0"
   },
   "devDependencies": {

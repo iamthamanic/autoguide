@@ -1,11 +1,11 @@
-# @autoguide/tauri
+# @iamthamanic/autoguide-tauri
 
 Tauri 2 bridge for AutoGuide in desktop webviews (e.g. scriptony-multihost).
 
 ## Install
 
 ```bash
-pnpm add @autoguide/tauri @autoguide/react @tauri-apps/api
+pnpm add @iamthamanic/autoguide-tauri @iamthamanic/autoguide-react @tauri-apps/api
 ```
 
 ## Setup (scriptony-multihost / Tauri 2)
@@ -13,8 +13,8 @@ pnpm add @autoguide/tauri @autoguide/react @tauri-apps/api
 1. In your Tauri frontend entry, build config with app-data paths:
 
 ```ts
-import { buildTauriAutoguideConfig } from '@autoguide/tauri';
-import { AutoGuideProvider, AutoGuideWidget } from '@autoguide/react';
+import { buildTauriAutoguideConfig } from '@iamthamanic/autoguide-tauri';
+import { AutoGuideProvider, AutoGuideWidget } from '@iamthamanic/autoguide-react';
 
 const config = await buildTauriAutoguideConfig('scriptony-multihost');
 // Persist config.outputDir → use for CLI scan --output or copy autoguide.config.json
@@ -32,7 +32,7 @@ const config = await buildTauriAutoguideConfig('scriptony-multihost');
 3. Runtime DOM scan in webview:
 
 ```ts
-import { createWebviewBridge } from '@autoguide/tauri';
+import { createWebviewBridge } from '@iamthamanic/autoguide-tauri';
 
 const bridge = createWebviewBridge();
 if (bridge.isTauri) {
@@ -43,4 +43,4 @@ if (bridge.isTauri) {
 ## Notes
 
 - `.autoguide/` is stored under the Tauri app data directory per `appId`.
-- Core remains DOM-free; scanning uses `@autoguide/runtime` in the webview only.
+- Core remains DOM-free; scanning uses `@iamthamanic/autoguide-runtime` in the webview only.

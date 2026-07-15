@@ -31,7 +31,7 @@ Developers review uncertain facts in-app during development, not only via CLI â€
 
 ## Assumptions
 - Browser persistence requires host `onReviewDecision` (e.g. dev API); in-memory demo sufficient for acceptance
-- Review UI scoped to `@autoguide/react` first; other adapters deferred
+- Review UI scoped to `@iamthamanic/autoguide-react` first; other adapters deferred
 
 ## Implementation Notes
 - `plugins/react/src/ReviewPanel.tsx` â€” dev-only FAB + panel with queue badge, German copy, ESC/focus trap

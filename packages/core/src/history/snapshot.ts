@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — build scan snapshots for change detection.
+ * @iamthamanic/autoguide-core — build scan snapshots for change detection.
  */
 
 import type { ScanSnapshot } from './types.js';

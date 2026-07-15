@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import autoguide from '@autoguide/vite';
+import autoguide from '@iamthamanic/autoguide-vite';
 
 export default defineConfig({
   plugins: [react(), autoguide()],

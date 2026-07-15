@@ -1,9 +1,9 @@
 /**
- * @autoguide/svelte — Svelte context for AutoGuide runtime.
+ * @iamthamanic/autoguide-svelte — Svelte context for AutoGuide runtime.
  */
 
 import { getContext } from 'svelte';
-import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@iamthamanic/autoguide-core';
 
 export const AUTO_GUIDE_KEY = Symbol('autoguide');
 

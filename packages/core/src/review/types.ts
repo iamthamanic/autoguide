@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — review action types for the verification loop.
+ * @iamthamanic/autoguide-core — review action types for the verification loop.
  */
 
 export type ReviewAction =

@@ -10,7 +10,7 @@ Roadmap: Clean Test Basis (Stufe A) — `.qa/design/clean-test-basis.md` Issue 1
 ## Preconditions
 - `autoguide.config.json` exists (`autoguide init`)
 - Minimal matrix: `--noAi` scans used in CI integration tests
-- `KnowledgeGraph.mergeFacts` and `buildEntityGraph` / `linkRecordsToGraph` in `@autoguide/core`
+- `KnowledgeGraph.mergeFacts` and `buildEntityGraph` / `linkRecordsToGraph` in `@iamthamanic/autoguide-core`
 
 ## Happy Path
 - [ ] Given extra facts from source/runtime/plugins, after `runScan`, one `KnowledgeGraph` instance accumulated merges (initial, AI additions only, plugin transforms) without resetting the store

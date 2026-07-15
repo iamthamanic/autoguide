@@ -13,10 +13,10 @@
         "P0"
       ],
       "dependsOn": [],
-      "body": "## Intent\nBootstrap the AutoGuide monorepo with pnpm workspaces, root TypeScript strict config, Vitest placeholder, and CI-ready scripts.\n\n## User Journey\n1. Developer clones repo\n2. Runs `pnpm install` and `pnpm typecheck`\n3. Monorepo structure is ready for packages\n\n## Problem\nEmpty repo has no build foundation for @autoguide packages.\n\n## Solution\nAdd pnpm-workspace.yaml, tsconfig.base.json, root package.json scripts (build, typecheck, test, checks), packages/plugins/examples dirs.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n| Cloud | skip |\n| Tauri | skip |\n\n## Edge Cases\n- Empty workspace packages should not break typecheck\n- Node 20+ engine constraint documented\n\n## Acceptance\n- [ ] `pnpm install` succeeds\n- [ ] `pnpm typecheck` runs (passes or no-op with no packages)\n- [ ] Workspace globs include packages/*, plugins/*, examples/*\n- [ ] tsconfig.base.json has strict: true\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+      "body": "## Intent\nBootstrap the AutoGuide monorepo with pnpm workspaces, root TypeScript strict config, Vitest placeholder, and CI-ready scripts.\n\n## User Journey\n1. Developer clones repo\n2. Runs `pnpm install` and `pnpm typecheck`\n3. Monorepo structure is ready for packages\n\n## Problem\nEmpty repo has no build foundation for @iamthamanic packages.\n\n## Solution\nAdd pnpm-workspace.yaml, tsconfig.base.json, root package.json scripts (build, typecheck, test, checks), packages/plugins/examples dirs.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n| Cloud | skip |\n| Tauri | skip |\n\n## Edge Cases\n- Empty workspace packages should not break typecheck\n- Node 20+ engine constraint documented\n\n## Acceptance\n- [ ] `pnpm install` succeeds\n- [ ] `pnpm typecheck` runs (passes or no-op with no packages)\n- [ ] Workspace globs include packages/*, plugins/*, examples/*\n- [ ] tsconfig.base.json has strict: true\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
     {
-      "title": "Define core types and fact model in @autoguide/core",
+      "title": "Define core types and fact model in @iamthamanic/autoguide-core",
       "featureSlug": "core-types-fact-model",
       "priority": "P0",
       "labels": [
@@ -25,7 +25,7 @@
       "dependsOn": [
         "Initialize pnpm monorepo and shared TypeScript config"
       ],
-      "body": "## Intent\nCreate framework-agnostic core types: Fact, Feature, Page, Flow, Provenance, Confidence, ReviewStatus.\n\n## User Journey\n1. Developer imports types from @autoguide/core\n2. Types validate fact shape with provenance metadata\n\n## Problem\nNo shared vocabulary for knowledge artifacts across scanners and UI.\n\n## Solution\npackages/core with exported types, zod or JSON-schema-aligned interfaces, no React/DOM imports.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Fact IDs stable across rescans\n- ai_proposal vs manual_override distinguished\n\n## Acceptance\n- [ ] packages/core builds standalone\n- [ ] No React/DOM/Node-specific imports in core\n- [ ] Fact type includes provenance, confidence, review_status\n- [ ] Unit tests for type guards/validators\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+      "body": "## Intent\nCreate framework-agnostic core types: Fact, Feature, Page, Flow, Provenance, Confidence, ReviewStatus.\n\n## User Journey\n1. Developer imports types from @iamthamanic/autoguide-core\n2. Types validate fact shape with provenance metadata\n\n## Problem\nNo shared vocabulary for knowledge artifacts across scanners and UI.\n\n## Solution\npackages/core with exported types, zod or JSON-schema-aligned interfaces, no React/DOM imports.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Fact IDs stable across rescans\n- ai_proposal vs manual_override distinguished\n\n## Acceptance\n- [ ] packages/core builds standalone\n- [ ] No React/DOM/Node-specific imports in core\n- [ ] Fact type includes provenance, confidence, review_status\n- [ ] Unit tests for type guards/validators\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
     {
       "title": "Implement config schema and loader",
@@ -47,7 +47,7 @@
         "P0"
       ],
       "dependsOn": [
-        "Define core types and fact model in @autoguide/core",
+        "Define core types and fact model in @iamthamanic/autoguide-core",
         "Implement config schema and loader"
       ],
       "body": "## Intent\nPersist knowledge to .autoguide/ as JSON (SoT) with SQLite index for search.\n\n## User Journey\n1. Scan completes\n2. features.json, pages.json, flows.json written atomically\n3. SQLite index updated for queries\n\n## Problem\nKnowledge needs durable local storage without cloud dependency.\n\n## Solution\npackages/storage: atomic JSON writes, SQLite schema skeleton per SPEC_FULL, storage abstraction interface.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Partial write failure rolls back\n- Missing .autoguide dir created on init\n\n## Acceptance\n- [ ] JSON files validate against schemas\n- [ ] Atomic write helper tested\n- [ ] SQLite tables created idempotently\n- [ ] No secrets in stored artifacts\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
@@ -60,7 +60,7 @@
         "P0"
       ],
       "dependsOn": [
-        "Define core types and fact model in @autoguide/core"
+        "Define core types and fact model in @iamthamanic/autoguide-core"
       ],
       "body": "## Intent\nPublish JSON schemas for features, pages, flows, confidence, provenance artifacts.\n\n## User Journey\n1. CLI generates output\n2. Output validates against committed schemas\n\n## Problem\nWithout schemas, scanner outputs drift and break consumers.\n\n## Solution\npackages/core/schemas/*.json + validation helper used by CLI and tests.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Schema version field for future migrations\n\n## Acceptance\n- [ ] Schemas cover MVP artifacts from SPEC_FULL\n- [ ] Validation function returns structured errors\n- [ ] CI can validate sample fixtures\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
@@ -85,10 +85,10 @@
         "P0"
       ],
       "dependsOn": [
-        "Define core types and fact model in @autoguide/core",
+        "Define core types and fact model in @iamthamanic/autoguide-core",
         "Implement JSON storage writer and SQLite index skeleton"
       ],
-      "body": "## Intent\nShip @autoguide/react with AutoGuideProvider, AutoGuideWidget placeholder, context, hooks.\n\n## User Journey\n1. Dev wraps app in AutoGuideProvider\n2. Help widget FAB renders without throwing when docs missing\n\n## Problem\nHost apps need embeddable SDK entry point.\n\n## Solution\nplugins/react: Provider, Widget shell, load docs from bundle/URL, dev mode badge.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- No throw if .autoguide missing\n- Works Vite React without Next.js\n\n## Acceptance\n- [ ] AutoGuideProvider exports documented API\n- [ ] Widget renders FAB + empty state in German\n- [ ] React Testing Library smoke test\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+      "body": "## Intent\nShip @iamthamanic/autoguide-react with AutoGuideProvider, AutoGuideWidget placeholder, context, hooks.\n\n## User Journey\n1. Dev wraps app in AutoGuideProvider\n2. Help widget FAB renders without throwing when docs missing\n\n## Problem\nHost apps need embeddable SDK entry point.\n\n## Solution\nplugins/react: Provider, Widget shell, load docs from bundle/URL, dev mode badge.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- No throw if .autoguide missing\n- Works Vite React without Next.js\n\n## Acceptance\n- [ ] AutoGuideProvider exports documented API\n- [ ] Widget renders FAB + empty state in German\n- [ ] React Testing Library smoke test\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
     {
       "title": "Create example React Vite reference app",
@@ -146,7 +146,7 @@
         "P1"
       ],
       "dependsOn": [
-        "Define core types and fact model in @autoguide/core",
+        "Define core types and fact model in @iamthamanic/autoguide-core",
         "Implement JSON storage writer and SQLite index skeleton"
       ],
       "body": "## Intent\nStatic analysis: walk TSX files, detect routes (react-router etc.), extract page candidates.\n\n## User Journey\n1. CLI scan includes source pass\n2. pages.json populated from route definitions\n\n## Problem\nRuntime alone misses routes not visited.\n\n## Solution\npackages/cli source scanner with TS parser, route scanner plugin for React Router.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Lazy routes detected from import graph\n- Monorepo frontend path configurable\n\n## Acceptance\n- [ ] Detects routes in example app and browo-hr structure\n- [ ] Outputs page candidates with file provenance\n- [ ] No execution of user code\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
@@ -259,7 +259,7 @@
         "P1"
       ],
       "dependsOn": [
-        "Define core types and fact model in @autoguide/core"
+        "Define core types and fact model in @iamthamanic/autoguide-core"
       ],
       "body": "## Intent\nAIProvider interface + Ollama-compatible local implementation (default).\n\n## User Journey\n1. Dev runs scan with Ollama local\n2. AI proposes descriptions marked ai_proposal\n\n## Problem\nSemantic enrichment needed for readable docs beyond labels.\n\n## Solution\npackages/core or packages/ai: AIProvider, Ollama adapter, prompt templates with evidence-only rule.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Ollama unavailable: scan continues without AI\n- Structured JSON output validated\n\n## Acceptance\n- [ ] AIProvider interface per spec\n- [ ] Ollama adapter works with localhost:11434\n- [ ] Output marked ai_proposal with confidence cap\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
@@ -404,7 +404,7 @@
         "Create React adapter provider and widget placeholder",
         "Implement development and published visibility modes"
       ],
-      "body": "## Intent\nVue 3 adapter with parity to React MVP API.\n\n## User Journey\n1. Vue dev installs @autoguide/vue\n2. Same Provider/Widget/Inspector behavior\n\n## Problem\nFull spec requires Vue support.\n\n## Solution\nplugins/vue mirroring React adapter surface.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Composition API plugin install\n- SSR deferred\n\n## Acceptance\n- [ ] Vue 3 example app works\n- [ ] API parity documented vs React\n- [ ] No core framework imports\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+      "body": "## Intent\nVue 3 adapter with parity to React MVP API.\n\n## User Journey\n1. Vue dev installs @iamthamanic/autoguide-vue\n2. Same Provider/Widget/Inspector behavior\n\n## Problem\nFull spec requires Vue support.\n\n## Solution\nplugins/vue mirroring React adapter surface.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Composition API plugin install\n- SSR deferred\n\n## Acceptance\n- [ ] Vue 3 example app works\n- [ ] API parity documented vs React\n- [ ] No core framework imports\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
     {
       "title": "Implement Angular adapter",
@@ -417,7 +417,7 @@
         "Create React adapter provider and widget placeholder",
         "Implement development and published visibility modes"
       ],
-      "body": "## Intent\nAngular adapter with parity to React MVP API.\n\n## User Journey\n1. Angular dev installs @autoguide/angular\n2. Module/standalone component integration\n\n## Problem\nFull spec requires Angular support.\n\n## Solution\nplugins/angular with NgModule or standalone bootstrap.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Zone.js change detection compatibility\n\n## Acceptance\n- [ ] Minimal Angular example runs widget\n- [ ] API parity checklist completed\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+      "body": "## Intent\nAngular adapter with parity to React MVP API.\n\n## User Journey\n1. Angular dev installs @iamthamanic/autoguide-angular\n2. Module/standalone component integration\n\n## Problem\nFull spec requires Angular support.\n\n## Solution\nplugins/angular with NgModule or standalone bootstrap.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Zone.js change detection compatibility\n\n## Acceptance\n- [ ] Minimal Angular example runs widget\n- [ ] API parity checklist completed\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
     {
       "title": "Implement Svelte adapter",
@@ -430,7 +430,7 @@
         "Create React adapter provider and widget placeholder",
         "Implement development and published visibility modes"
       ],
-      "body": "## Intent\nSvelte adapter with parity to React MVP API.\n\n## User Journey\n1. Svelte dev installs @autoguide/svelte\n2. Store-based context + widget\n\n## Problem\nFull spec requires Svelte support.\n\n## Solution\nplugins/svelte with Svelte 5 runes or stores per project standard.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- SvelteKit route detection separate issue\n\n## Acceptance\n- [ ] Svelte example app runs widget\n- [ ] API parity checklist completed\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
+      "body": "## Intent\nSvelte adapter with parity to React MVP API.\n\n## User Journey\n1. Svelte dev installs @iamthamanic/autoguide-svelte\n2. Store-based context + widget\n\n## Problem\nFull spec requires Svelte support.\n\n## Solution\nplugins/svelte with Svelte 5 runes or stores per project standard.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- SvelteKit route detection separate issue\n\n## Acceptance\n- [ ] Svelte example app runs widget\n- [ ] API parity checklist completed\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
     {
       "title": "Implement Tauri adapter",
@@ -453,7 +453,7 @@
         "P2"
       ],
       "dependsOn": [
-        "Define core types and fact model in @autoguide/core"
+        "Define core types and fact model in @iamthamanic/autoguide-core"
       ],
       "body": "## Intent\nPlugin lifecycle and registry for scanners, adapters, AI providers.\n\n## User Journey\n1. Third party registers custom scanner plugin\n2. CLI scan loads plugins from config\n\n## Problem\nExtensibility required from day one per architecture decision.\n\n## Solution\nPlugin interface, registry in core, discovery from autoguide.config plugins array.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Local | yes |\n\n## Edge Cases\n- Invalid plugin fails doctor check\n- Version compatibility field\n\n## Acceptance\n- [ ] Plugin interface documented\n- [ ] Built-in plugins register via same API\n- [ ] Sample stub plugin in examples/\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     },
@@ -530,7 +530,7 @@
         "P2"
       ],
       "dependsOn": [
-        "Define core types and fact model in @autoguide/core"
+        "Define core types and fact model in @iamthamanic/autoguide-core"
       ],
       "body": "## Intent\nFlutter adapter per SPEC_FULL future goals.\n\n## User Journey\n1. Flutter app integrates autoguide package\n2. Widget overlay on Material/Cupertino app\n\n## Problem\nFull spec (c) includes Flutter.\n\n## Solution\nplugins/flutter Dart package bridging to core via platform channel or FFI stub.\n\n## Runtime\n| Axis | This slice |\n|------|------------|\n| Tauri | skip |\n| Flutter | yes |\n\n## Edge Cases\n- MVP API parity definition documented\n- May stub scanner for v1\n\n## Acceptance\n- [ ] Flutter example documents integration path\n- [ ] Widget renders in example app\n- [ ] Architecture doc for core bridge\n\n## Design\nEpic: `.qa/design/autoguide-platform.md`"
     }

@@ -1,12 +1,12 @@
 /**
- * @autoguide/react — AutoGuide drop-in component tests.
+ * @iamthamanic/autoguide-react — AutoGuide drop-in component tests.
  */
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { AutoGuide } from './AutoGuide.js';
 
-vi.mock('@autoguide/client', () => ({
+vi.mock('@iamthamanic/autoguide-client', () => ({
   loadArtifactBundle: vi.fn(async () => ({
     baseUrl: '/autoguide',
     facts: [],
@@ -39,8 +39,43 @@ describe('AutoGuide root component', () => {
     });
   });
 
+  it('shows tour button after bundle load when tours feature is enabled', async () => {
+    const { loadArtifactBundle } = await import('@iamthamanic/autoguide-client');
+    vi.mocked(loadArtifactBundle).mockResolvedValueOnce({
+      baseUrl: '/autoguide',
+      facts: [],
+      pages: [],
+      flows: [],
+      tours: [
+        {
+          id: 'tour-1',
+          title: 'Demo Tour',
+          description: 'Test',
+          roleIds: [],
+          status: 'published',
+          steps: [{ id: 's1', title: 'Step', body: 'Body', action: 'observe' }],
+        },
+      ],
+      reviews: [],
+      reviewHistory: [],
+      recommendations: [],
+    });
+
+    render(
+      <AutoGuide
+        appId="demo-app"
+        mode="development"
+        features={{ widget: true, inspector: true, tours: true }}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Tour starten: Demo Tour')).toBeTruthy();
+    });
+  });
+
   it('shows German error when load fails', async () => {
-    const { loadArtifactBundle } = await import('@autoguide/client');
+    const { loadArtifactBundle } = await import('@iamthamanic/autoguide-client');
     vi.mocked(loadArtifactBundle).mockRejectedValueOnce(new Error('Netzwerkfehler'));
 
     render(<AutoGuide appId="demo-app" />);

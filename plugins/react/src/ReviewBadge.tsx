@@ -1,9 +1,9 @@
 /**
- * @autoguide/react — dev-only confidence and provenance badge for facts.
+ * @iamthamanic/autoguide-react — dev-only confidence and provenance badge for facts.
  */
 
-import type { Fact } from '@autoguide/core';
-import { getReviewBadgeState } from '@autoguide/ui';
+import type { Fact } from '@iamthamanic/autoguide-core';
+import { getReviewBadgeState } from '@iamthamanic/autoguide-ui';
 
 export interface ReviewBadgeProps {
   fact: Fact;

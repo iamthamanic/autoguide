@@ -1,5 +1,5 @@
 /**
- * @autoguide/config — defineAutoGuideConfig helper for autoguide.config.ts files.
+ * @iamthamanic/autoguide-config — defineAutoGuideConfig helper for autoguide.config.ts files.
  */
 
 import { DEFAULT_CONFIG } from './defaults.js';

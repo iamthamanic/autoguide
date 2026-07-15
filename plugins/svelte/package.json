@@ -1,5 +1,5 @@
 {
-  "name": "@autoguide/svelte",
+  "name": "@iamthamanic/autoguide-svelte",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -20,9 +20,9 @@
     "test": "pnpm run build && vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/core": "workspace:*",
-    "@autoguide/runtime": "workspace:*",
-    "@autoguide/ui": "workspace:*"
+    "@iamthamanic/autoguide-core": "workspace:*",
+    "@iamthamanic/autoguide-runtime": "workspace:*",
+    "@iamthamanic/autoguide-ui": "workspace:*"
   },
   "peerDependencies": {
     "svelte": "^5.0.0"

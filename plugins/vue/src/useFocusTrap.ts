@@ -1,9 +1,9 @@
 /**
- * @autoguide/vue — focus trap and ESC handler for floating panels.
+ * @iamthamanic/autoguide-vue — focus trap and ESC handler for floating panels.
  */
 
 import { onUnmounted, watch, type Ref } from 'vue';
-import { bindFocusTrap } from '@autoguide/ui';
+import { bindFocusTrap } from '@iamthamanic/autoguide-ui';
 
 export function useFocusTrap(
   containerRef: Ref<HTMLElement | null>,

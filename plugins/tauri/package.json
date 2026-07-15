@@ -1,5 +1,5 @@
 {
-  "name": "@autoguide/tauri",
+  "name": "@iamthamanic/autoguide-tauri",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,9 +19,9 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
-    "@autoguide/config": "workspace:*",
-    "@autoguide/core": "workspace:*",
-    "@autoguide/runtime": "workspace:*"
+    "@iamthamanic/autoguide-config": "workspace:*",
+    "@iamthamanic/autoguide-core": "workspace:*",
+    "@iamthamanic/autoguide-runtime": "workspace:*"
   },
   "peerDependencies": {
     "@tauri-apps/api": "^2.0.0"

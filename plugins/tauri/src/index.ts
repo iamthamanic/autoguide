@@ -1,5 +1,5 @@
 /**
- * @autoguide/tauri — public exports for Tauri 2 desktop hosts.
+ * @iamthamanic/autoguide-tauri — public exports for Tauri 2 desktop hosts.
  */
 
 export { isTauriRuntime } from './runtime.js';

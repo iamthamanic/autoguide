@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — entity graph store with relationship queries.
+ * @iamthamanic/autoguide-core — entity graph store with relationship queries.
  */
 
 import type {

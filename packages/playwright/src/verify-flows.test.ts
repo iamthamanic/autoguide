@@ -4,7 +4,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import type { FlowRecord } from '@autoguide/core';
+import type { FlowRecord } from '@iamthamanic/autoguide-core';
 import { verifyFlows } from './verify-flows.js';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '../../..');

@@ -1,12 +1,12 @@
 /**
- * @autoguide/cli — load artifacts from .autoguide directory.
+ * @iamthamanic/autoguide-cli — load artifacts from .autoguide directory.
  */
 
 import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { Fact, FlowRecord, PageRecord, Recommendation, ReviewActionRecord, ReviewItem } from '@autoguide/core';
-import { StorageWriter } from '@autoguide/storage';
+import type { Fact, FlowRecord, PageRecord, Recommendation, ReviewActionRecord, ReviewItem } from '@iamthamanic/autoguide-core';
+import { StorageWriter } from '@iamthamanic/autoguide-storage';
 
 export interface ArtifactBundle {
   outputDir: string;

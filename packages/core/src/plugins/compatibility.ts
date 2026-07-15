@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — plugin ↔ AutoGuide version compatibility.
+ * @iamthamanic/autoguide-core — plugin ↔ AutoGuide version compatibility.
  */
 
 import { AUTOGUIDE_VERSION } from './version.js';

@@ -1,7 +1,11 @@
 {
-  "name": "@autoguide/core",
-  "version": "0.1.0",
-  "private": true,
+  "name": "@iamthamanic/autoguide-core",
+  "version": "0.1.1",
+  "private": false,
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "description": "Framework-agnostic core types, fact model, and knowledge graph primitives",
   "exports": {

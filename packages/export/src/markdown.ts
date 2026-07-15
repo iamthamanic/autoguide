@@ -1,16 +1,16 @@
 /**
- * @autoguide/export — Markdown documentation export.
+ * @iamthamanic/autoguide-export — Markdown documentation export.
  */
 
-import { filterFactsForMode, filterByRole, filterFactsByRole, redactString } from '@autoguide/core';
-import type { FlowRecord, PageRecord } from '@autoguide/core';
+import { filterFactsForMode, filterByRole, filterFactsByRole, redactString } from '@iamthamanic/autoguide-core';
+import type { FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
 import type { ExportRenderOptions } from './types.js';
 
 export type MarkdownExportOptions = ExportRenderOptions;
 
 export function exportPageMarkdown(
   page: PageRecord,
-  facts: import('@autoguide/core').Fact[],
+  facts: import('@iamthamanic/autoguide-core').Fact[],
   options: MarkdownExportOptions,
 ): string {
   const visible = filterFactsByRole(filterFactsForMode(facts, options.mode), options.userRole);
@@ -57,7 +57,7 @@ export function exportFlowMarkdown(
 export function exportKnowledgeMarkdown(
   pages: PageRecord[],
   flows: FlowRecord[],
-  facts: import('@autoguide/core').Fact[],
+  facts: import('@iamthamanic/autoguide-core').Fact[],
   options: MarkdownExportOptions,
 ): string {
   const rolePages = filterByRole(pages, options.userRole);

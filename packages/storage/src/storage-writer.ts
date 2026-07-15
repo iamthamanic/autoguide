@@ -1,5 +1,5 @@
 /**
- * @autoguide/storage — high-level storage API for .autoguide/ artifacts.
+ * @iamthamanic/autoguide-storage — high-level storage API for .autoguide/ artifacts.
  */
 
 import { join } from 'node:path';

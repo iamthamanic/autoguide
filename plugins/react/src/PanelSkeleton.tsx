@@ -1,5 +1,5 @@
 /**
- * @autoguide/react — loading skeleton for Help Widget panel.
+ * @iamthamanic/autoguide-react — loading skeleton for Help Widget panel.
  */
 
 export function PanelSkeleton() {

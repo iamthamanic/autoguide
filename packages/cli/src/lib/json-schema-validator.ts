@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — JSON Schema validation for .autoguide artifacts.
+ * @iamthamanic/autoguide-cli — JSON Schema validation for .autoguide artifacts.
  */
 
 import { readFileSync, readdirSync } from 'node:fs';

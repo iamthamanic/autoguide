@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — application entity records (pages, features, flows).
+ * @iamthamanic/autoguide-core — application entity records (pages, features, flows).
  * Location: packages/core/src/types/records.ts
  */
 

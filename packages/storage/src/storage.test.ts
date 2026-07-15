@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { StorageWriter } from './index.js';
 
-describe('@autoguide/storage', () => {
+describe('@iamthamanic/autoguide-storage', () => {
   it('initializes .autoguide json artifacts atomically', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'autoguide-'));
     const storage = new StorageWriter(dir);

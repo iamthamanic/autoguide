@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — deterministic recommendation rules from scan artifacts.
+ * @iamthamanic/autoguide-core — deterministic recommendation rules from scan artifacts.
  * Location: packages/core/src/recommendations/engine.ts
  */
 

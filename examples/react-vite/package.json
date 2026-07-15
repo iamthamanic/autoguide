@@ -1,5 +1,5 @@
 {
-  "name": "@autoguide/example-react-vite",
+  "name": "@iamthamanic/autoguide-example-react-vite",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,8 +11,8 @@
     "test": "echo 'example app — e2e via verify-ui later'"
   },
   "dependencies": {
-    "@autoguide/react": "workspace:*",
-    "@autoguide/vite": "workspace:*",
+    "@iamthamanic/autoguide-react": "workspace:*",
+    "@iamthamanic/autoguide-vite": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

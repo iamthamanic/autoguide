@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — version history integration on rescan.
+ * @iamthamanic/autoguide-cli — version history integration on rescan.
  */
 
 import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { describe, expect, it } from 'vitest';
-import type { Fact } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
 import { runScan } from './commands/scan.js';
 
 const execFileAsync = promisify(execFile);

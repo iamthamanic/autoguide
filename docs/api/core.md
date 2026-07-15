@@ -1,4 +1,4 @@
-# @autoguide/core
+# @iamthamanic/autoguide-core
 
 Framework-agnostic types, fact model, knowledge graph, review queue, plugins, and scan helpers.
 No React/DOM imports — safe for Node CLI and browser bundles.

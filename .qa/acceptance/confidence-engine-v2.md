@@ -6,7 +6,7 @@
 Upgrade confidence scoring from single-source max weight to multi-signal correlation with conflict resolution, destructive flow-step thresholds, and feature-level stale detection.
 
 ## Preconditions
-- Facts carry `provenance[]` with `source` from `@autoguide/core` types
+- Facts carry `provenance[]` with `source` from `@iamthamanic/autoguide-core` types
 - Scan pipeline merges facts via `KnowledgeGraph.mergeFacts`
 
 ## Happy Path

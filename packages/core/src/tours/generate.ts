@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — generate guided tours from verified flows.
+ * @iamthamanic/autoguide-core — generate guided tours from verified flows.
  */
 
 import type { FlowRecord } from '../types/records.js';

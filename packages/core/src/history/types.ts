@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — scan snapshot and history log types.
+ * @iamthamanic/autoguide-core — scan snapshot and history log types.
  */
 
 export interface ScanSnapshot {

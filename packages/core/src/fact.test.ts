@@ -26,7 +26,7 @@ const sampleFact: Fact = {
   updatedAt: '2026-07-07T00:00:00.000Z',
 };
 
-describe('@autoguide/core fact model', () => {
+describe('@iamthamanic/autoguide-core fact model', () => {
   it('validates a well-formed fact', () => {
     expect(isFact(sampleFact)).toBe(true);
   });

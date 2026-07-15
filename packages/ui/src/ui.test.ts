@@ -3,7 +3,7 @@ import { agTokenCssVars, AG_DESIGN_TOKENS } from './tokens.js';
 import { getReviewBadgeState } from './review-badge.js';
 import { listOrderedFlowSteps } from './flow-steps.js';
 import { resolveWidgetPanelStatus } from './widget-state.js';
-import type { Fact, FlowRecord } from '@autoguide/core';
+import type { Fact, FlowRecord } from '@iamthamanic/autoguide-core';
 
 const fact: Fact = {
   id: 'f1',
@@ -18,14 +18,14 @@ const fact: Fact = {
   updatedAt: '2026-01-01T00:00:00.000Z',
 };
 
-describe('@autoguide/ui tokens', () => {
+describe('@iamthamanic/autoguide-ui tokens', () => {
   it('exposes css variable map', () => {
     const vars = agTokenCssVars();
     expect(vars['--ag-primary']).toBe(AG_DESIGN_TOKENS.primary);
   });
 });
 
-describe('@autoguide/ui review badge', () => {
+describe('@iamthamanic/autoguide-ui review badge', () => {
   it('hides in published mode', () => {
     expect(getReviewBadgeState(fact, 'published').visible).toBe(false);
   });
@@ -37,7 +37,7 @@ describe('@autoguide/ui review badge', () => {
   });
 });
 
-describe('@autoguide/ui flow steps', () => {
+describe('@iamthamanic/autoguide-ui flow steps', () => {
   it('orders steps by order field', () => {
     const flow: FlowRecord = {
       id: 'flow-1',
@@ -53,7 +53,7 @@ describe('@autoguide/ui flow steps', () => {
   });
 });
 
-describe('@autoguide/ui widget state', () => {
+describe('@iamthamanic/autoguide-ui widget state', () => {
   it('resolves loading before error and empty', () => {
     expect(resolveWidgetPanelStatus({ loading: true, hasContent: false }).state).toBe('loading');
     expect(resolveWidgetPanelStatus({ error: 'x', hasContent: true }).state).toBe('error');

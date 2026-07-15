@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — conflict resolution by evidence hierarchy.
+ * @iamthamanic/autoguide-core — conflict resolution by evidence hierarchy.
  */
 
 import type { Fact, FactConflict, FactConflictResolutionSource } from '../types/fact.js';

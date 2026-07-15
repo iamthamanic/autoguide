@@ -1,8 +1,8 @@
 /**
- * @autoguide/cli — build validated artifact records for scan output.
+ * @iamthamanic/autoguide-cli — build validated artifact records for scan output.
  */
 
-import type { Fact, FeatureRecord, FlowRecord, PageRecord } from '@autoguide/core';
+import type { Fact, FeatureRecord, FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
 
 export function toPageRecords(
   pages: Array<{ id: string; route: string; title: string }>,

@@ -1,8 +1,8 @@
 /**
- * @autoguide/playwright — capture runtime DOM snapshots via headless browser.
+ * @iamthamanic/autoguide-playwright — capture runtime DOM snapshots via headless browser.
  */
 
-import type { RuntimeSnapshot } from '@autoguide/runtime';
+import type { RuntimeSnapshot } from '@iamthamanic/autoguide-runtime';
 import { browserScanDom } from './browser-scan-dom.js';
 import { isSafeAction } from './crawl.js';
 

@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — sync command: copy publish-ready artifacts to a static target.
+ * @iamthamanic/autoguide-cli — sync command: copy publish-ready artifacts to a static target.
  */
 
 import { cp, mkdir, rm, readdir } from 'node:fs/promises';

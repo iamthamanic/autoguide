@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — guided tour types.
+ * @iamthamanic/autoguide-core — guided tour types.
  * Location: packages/core/src/tours/types.ts
  */
 

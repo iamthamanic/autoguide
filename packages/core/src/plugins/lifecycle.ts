@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — plugin setup / scan / transform lifecycle with isolated failures.
+ * @iamthamanic/autoguide-core — plugin setup / scan / transform lifecycle with isolated failures.
  */
 
 import type { Fact } from '../types/fact.js';

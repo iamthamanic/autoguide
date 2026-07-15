@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — resolve Help Center content for current route and role.
+ * @iamthamanic/autoguide-core — resolve Help Center content for current route and role.
  */
 
 import type { Fact, VisibilityMode } from '../types/fact.js';
@@ -38,12 +38,13 @@ export function resolveHelpContext(
   const pageTitle = pageVisible ? page?.title : undefined;
 
   const pageFlows = roleFlows.filter((flow) => {
-    if (!page || !pageVisible) return flow.pageIds.length === 0;
-    return flow.pageIds.includes(page.id) || flow.pageIds.length === 0;
+    const pageIds = flow.pageIds ?? [];
+    if (!page || !pageVisible) return pageIds.length === 0;
+    return pageIds.includes(page.id) || pageIds.length === 0;
   });
 
   const actions = roleFacts.filter((fact) => {
-    if (pageVisible && page && page.factIds.includes(fact.id)) return true;
+    if (pageVisible && page && (page.factIds ?? []).includes(fact.id)) return true;
     return fact.key === 'action' || fact.key === 'description';
   });
 

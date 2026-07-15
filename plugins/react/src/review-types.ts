@@ -1,5 +1,5 @@
 /**
- * @autoguide/react — shared types for review UI.
+ * @iamthamanic/autoguide-react — shared types for review UI.
  */
 
 import type {
@@ -7,7 +7,7 @@ import type {
   Recommendation,
   ReviewActionRecord,
   ReviewItem,
-} from '@autoguide/core';
+} from '@iamthamanic/autoguide-core';
 
 export interface ReviewDecisionPayload {
   fact: Fact;

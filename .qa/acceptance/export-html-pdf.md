@@ -26,6 +26,6 @@ HTML and PDF export for onboarding packets.
 | 1 | `01-happy-path.png` |
 
 ## Implementation Notes
-- `@autoguide/export`: `exportKnowledgeHtml`, `exportKnowledgePdf` (Playwright optional)
+- `@iamthamanic/autoguide-export`: `exportKnowledgeHtml`, `exportKnowledgePdf` (Playwright optional)
 - CLI: `autoguide export --format html|pdf`
-- CI: Chromium install via `@autoguide/export` filter
+- CI: Chromium install via `@iamthamanic/autoguide-export` filter

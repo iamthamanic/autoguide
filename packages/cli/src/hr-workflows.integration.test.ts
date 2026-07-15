@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — hr-workflows integration scenario test (issue #41).
+ * @iamthamanic/autoguide-cli — hr-workflows integration scenario test (issue #41).
  */
 
 import { cp, mkdtemp, readFile, rm } from 'node:fs/promises';
@@ -7,8 +7,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { filterByRole, filterFactsForMode } from '@autoguide/core';
-import { exportKnowledgeMarkdown } from '@autoguide/export';
+import { filterByRole, filterFactsForMode } from '@iamthamanic/autoguide-core';
+import { exportKnowledgeMarkdown } from '@iamthamanic/autoguide-export';
 import { runScan } from './commands/scan.js';
 import { runExport } from './commands/export.js';
 import { loadArtifacts } from './lib/artifacts.js';

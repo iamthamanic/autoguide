@@ -1,4 +1,4 @@
-# @autoguide/cli
+# @iamthamanic/autoguide-cli
 
 Command-line interface for init, scan, review, export, validate, and publish.
 Binary: `autoguide` (see `packages/cli/src/index.ts`).

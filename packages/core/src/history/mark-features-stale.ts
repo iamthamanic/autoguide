@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — mark features stale when linked artifacts change.
+ * @iamthamanic/autoguide-core — mark features stale when linked artifacts change.
  */
 
 import type { FeatureRecord, PageRecord } from '../types/records.js';

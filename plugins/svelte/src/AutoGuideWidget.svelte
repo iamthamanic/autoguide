@@ -1,9 +1,9 @@
 <script lang="ts">
   /**
-   * @autoguide/svelte — Help Widget with context resolution and search.
+   * @iamthamanic/autoguide-svelte — Help Widget with context resolution and search.
    */
-  import { resolveHelpContext, searchKnowledge } from '@autoguide/core';
-  import { agTokenCssVars, bindFocusTrap } from '@autoguide/ui';
+  import { resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+  import { agTokenCssVars, bindFocusTrap } from '@iamthamanic/autoguide-ui';
   import FlowStepList from './FlowStepList.svelte';
   import PanelSkeleton from './PanelSkeleton.svelte';
   import ReviewBadge from './ReviewBadge.svelte';

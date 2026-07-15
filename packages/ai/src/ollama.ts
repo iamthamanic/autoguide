@@ -1,8 +1,8 @@
 /**
- * @autoguide/ai — Ollama local provider (default).
+ * @iamthamanic/autoguide-ai — Ollama local provider (default).
  */
 
-import type { AutoGuideConfig } from '@autoguide/config';
+import type { AutoGuideConfig } from '@iamthamanic/autoguide-config';
 import type { AiEnrichmentInput, AiProvider, AiProposalDraft } from './types.js';
 import { requestStructuredProposals } from './http-client.js';
 

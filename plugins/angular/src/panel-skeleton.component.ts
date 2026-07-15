@@ -1,5 +1,5 @@
 /**
- * @autoguide/angular — loading skeleton for Help Widget panel.
+ * @iamthamanic/autoguide-angular — loading skeleton for Help Widget panel.
  */
 
 import { Component } from '@angular/core';

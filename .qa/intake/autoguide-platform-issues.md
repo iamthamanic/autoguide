@@ -7,17 +7,17 @@ Epic design: [.qa/design/autoguide-platform.md](../design/autoguide-platform.md)
 | # | Priority | Title | Depends on |
 |---|----------|-------|------------|
 | 1 | P0 | Initialize pnpm monorepo and shared TypeScript config | — |
-| 2 | P0 | Define core types and fact model in @autoguide/core | Initialize pnpm monorepo and shared TypeScript config |
+| 2 | P0 | Define core types and fact model in @iamthamanic/autoguide-core | Initialize pnpm monorepo and shared TypeScript config |
 | 3 | P0 | Implement config schema and loader | Initialize pnpm monorepo and shared TypeScript config |
-| 4 | P0 | Implement JSON storage writer and SQLite index skeleton | Define core types and fact model in @autoguide/core; Implement config schema and loader |
-| 5 | P0 | Define JSON schemas for knowledge artifacts | Define core types and fact model in @autoguide/core |
+| 4 | P0 | Implement JSON storage writer and SQLite index skeleton | Define core types and fact model in @iamthamanic/autoguide-core; Implement config schema and loader |
+| 5 | P0 | Define JSON schemas for knowledge artifacts | Define core types and fact model in @iamthamanic/autoguide-core |
 | 6 | P0 | Implement CLI init and doctor commands | Implement config schema and loader; Implement JSON storage writer and SQLite index skeleton |
-| 7 | P0 | Create React adapter provider and widget placeholder | Define core types and fact model in @autoguide/core; Implement JSON storage writer and SQLite index skeleton |
+| 7 | P0 | Create React adapter provider and widget placeholder | Define core types and fact model in @iamthamanic/autoguide-core; Implement JSON storage writer and SQLite index skeleton |
 | 8 | P0 | Create example React Vite reference app | Create React adapter provider and widget placeholder |
 | 9 | P0 | Implement runtime DOM traversal and accessibility extraction | Create React adapter provider and widget placeholder |
 | 10 | P0 | Implement runtime snapshot serializer and selector generator | Implement runtime DOM traversal and accessibility extraction |
 | 11 | P0 | Implement Inspector overlay and element fact panel | Implement runtime snapshot serializer and selector generator |
-| 12 | P1 | Implement source scanner TSX parser and route detection | Define core types and fact model in @autoguide/core; Implement JSON storage writer and SQLite index skeleton |
+| 12 | P1 | Implement source scanner TSX parser and route detection | Define core types and fact model in @iamthamanic/autoguide-core; Implement JSON storage writer and SQLite index skeleton |
 | 13 | P1 | Implement component handler extraction and data-doc parsing | Implement source scanner TSX parser and route detection |
 | 14 | P1 | Merge source and runtime facts into knowledge graph | Implement runtime snapshot serializer and selector generator; Implement component handler extraction and data-doc parsing |
 | 15 | P0 | Implement confidence scoring engine | Merge source and runtime facts into knowledge graph |
@@ -26,7 +26,7 @@ Epic design: [.qa/design/autoguide-platform.md](../design/autoguide-platform.md)
 | 18 | P1 | Implement Playwright trace import from existing tests | Implement JSON storage writer and SQLite index skeleton; Implement CLI init and doctor commands |
 | 19 | P1 | Implement AutoGuide crawl fallback for uncovered routes | Implement Playwright trace import from existing tests |
 | 20 | P1 | Implement flow candidate generation from traces | Implement Playwright trace import from existing tests; Implement AutoGuide crawl fallback for uncovered routes |
-| 21 | P1 | Implement AI provider interface and Ollama adapter | Define core types and fact model in @autoguide/core |
+| 21 | P1 | Implement AI provider interface and Ollama adapter | Define core types and fact model in @iamthamanic/autoguide-core |
 | 22 | P1 | Implement OpenAI-compatible cloud provider with API key and URL | Implement AI provider interface and Ollama adapter |
 | 23 | P1 | Implement AI output validation and ai_proposal marking | Implement OpenAI-compatible cloud provider with API key and URL; Implement review queue and manual override persistence |
 | 24 | P0 | Implement CLI scan command full pipeline | Merge source and runtime facts into knowledge graph; Implement confidence scoring engine; Implement CLI init and doctor commands |
@@ -41,13 +41,13 @@ Epic design: [.qa/design/autoguide-platform.md](../design/autoguide-platform.md)
 | 33 | P2 | Implement Angular adapter | Create React adapter provider and widget placeholder; Implement development and published visibility modes |
 | 34 | P2 | Implement Svelte adapter | Create React adapter provider and widget placeholder; Implement development and published visibility modes |
 | 35 | P2 | Implement Tauri adapter | Create React adapter provider and widget placeholder; Implement development and published visibility modes |
-| 36 | P2 | Implement plugin API and registry | Define core types and fact model in @autoguide/core |
+| 36 | P2 | Implement plugin API and registry | Define core types and fact model in @iamthamanic/autoguide-core |
 | 37 | P2 | Implement HTML and PDF export | Implement Markdown documentation export |
 | 38 | P2 | Implement role-based documentation filtering | Implement review queue and manual override persistence; Implement Help Center with context resolution |
 | 39 | P2 | Implement version-aware change history | Implement development and published visibility modes; Implement JSON storage writer and SQLite index skeleton |
 | 40 | P2 | Implement CI documentation validation command | Implement CLI scan command full pipeline; Define JSON schemas for knowledge artifacts |
 | 41 | P0 | Validate browo-hr integration with three complete flows | Implement Markdown documentation export; Implement CLI publish command; Implement CLI scan command full pipeline |
-| 42 | P2 | Implement Flutter adapter | Define core types and fact model in @autoguide/core |
+| 42 | P2 | Implement Flutter adapter | Define core types and fact model in @iamthamanic/autoguide-core |
 
 ---
 
@@ -68,7 +68,7 @@ Bootstrap the AutoGuide monorepo with pnpm workspaces, root TypeScript strict co
 3. Monorepo structure is ready for packages
 
 ## Problem
-Empty repo has no build foundation for @autoguide packages.
+Empty repo has no build foundation for @iamthamanic packages.
 
 ## Solution
 Add pnpm-workspace.yaml, tsconfig.base.json, root package.json scripts (build, typecheck, test, checks), packages/plugins/examples dirs.
@@ -95,7 +95,7 @@ Epic: `.qa/design/autoguide-platform.md`
 
 ---
 
-### 2. Define core types and fact model in @autoguide/core
+### 2. Define core types and fact model in @iamthamanic/autoguide-core
 
 - **Priority:** P0
 - **Feature slug:** `core-types-fact-model`
@@ -106,7 +106,7 @@ Epic: `.qa/design/autoguide-platform.md`
 Create framework-agnostic core types: Fact, Feature, Page, Flow, Provenance, Confidence, ReviewStatus.
 
 ## User Journey
-1. Developer imports types from @autoguide/core
+1. Developer imports types from @iamthamanic/autoguide-core
 2. Types validate fact shape with provenance metadata
 
 ## Problem
@@ -180,7 +180,7 @@ Epic: `.qa/design/autoguide-platform.md`
 - **Priority:** P0
 - **Feature slug:** `storage-json-sqlite`
 - **Labels:** P0
-- **Depends on:** Define core types and fact model in @autoguide/core, Implement config schema and loader
+- **Depends on:** Define core types and fact model in @iamthamanic/autoguide-core, Implement config schema and loader
 
 ## Intent
 Persist knowledge to .autoguide/ as JSON (SoT) with SQLite index for search.
@@ -221,7 +221,7 @@ Epic: `.qa/design/autoguide-platform.md`
 - **Priority:** P0
 - **Feature slug:** `json-schemas`
 - **Labels:** P0
-- **Depends on:** Define core types and fact model in @autoguide/core
+- **Depends on:** Define core types and fact model in @iamthamanic/autoguide-core
 
 ## Intent
 Publish JSON schemas for features, pages, flows, confidence, provenance artifacts.
@@ -299,10 +299,10 @@ Epic: `.qa/design/autoguide-platform.md`
 - **Priority:** P0
 - **Feature slug:** `react-adapter-skeleton`
 - **Labels:** P0
-- **Depends on:** Define core types and fact model in @autoguide/core, Implement JSON storage writer and SQLite index skeleton
+- **Depends on:** Define core types and fact model in @iamthamanic/autoguide-core, Implement JSON storage writer and SQLite index skeleton
 
 ## Intent
-Ship @autoguide/react with AutoGuideProvider, AutoGuideWidget placeholder, context, hooks.
+Ship @iamthamanic/autoguide-react with AutoGuideProvider, AutoGuideWidget placeholder, context, hooks.
 
 ## User Journey
 1. Dev wraps app in AutoGuideProvider
@@ -495,7 +495,7 @@ Epic: `.qa/design/autoguide-platform.md`
 - **Priority:** P1
 - **Feature slug:** `source-scanner-routes`
 - **Labels:** P1
-- **Depends on:** Define core types and fact model in @autoguide/core, Implement JSON storage writer and SQLite index skeleton
+- **Depends on:** Define core types and fact model in @iamthamanic/autoguide-core, Implement JSON storage writer and SQLite index skeleton
 
 ## Intent
 Static analysis: walk TSX files, detect routes (react-router etc.), extract page candidates.
@@ -846,7 +846,7 @@ Epic: `.qa/design/autoguide-platform.md`
 - **Priority:** P1
 - **Feature slug:** `ai-ollama-provider`
 - **Labels:** P1
-- **Depends on:** Define core types and fact model in @autoguide/core
+- **Depends on:** Define core types and fact model in @iamthamanic/autoguide-core
 
 ## Intent
 AIProvider interface + Ollama-compatible local implementation (default).
@@ -1282,7 +1282,7 @@ Epic: `.qa/design/autoguide-platform.md`
 Vue 3 adapter with parity to React MVP API.
 
 ## User Journey
-1. Vue dev installs @autoguide/vue
+1. Vue dev installs @iamthamanic/autoguide-vue
 2. Same Provider/Widget/Inspector behavior
 
 ## Problem
@@ -1321,7 +1321,7 @@ Epic: `.qa/design/autoguide-platform.md`
 Angular adapter with parity to React MVP API.
 
 ## User Journey
-1. Angular dev installs @autoguide/angular
+1. Angular dev installs @iamthamanic/autoguide-angular
 2. Module/standalone component integration
 
 ## Problem
@@ -1358,7 +1358,7 @@ Epic: `.qa/design/autoguide-platform.md`
 Svelte adapter with parity to React MVP API.
 
 ## User Journey
-1. Svelte dev installs @autoguide/svelte
+1. Svelte dev installs @iamthamanic/autoguide-svelte
 2. Store-based context + widget
 
 ## Problem
@@ -1428,7 +1428,7 @@ Epic: `.qa/design/autoguide-platform.md`
 - **Priority:** P2
 - **Feature slug:** `plugin-registry`
 - **Labels:** P2
-- **Depends on:** Define core types and fact model in @autoguide/core
+- **Depends on:** Define core types and fact model in @iamthamanic/autoguide-core
 
 ## Intent
 Plugin lifecycle and registry for scanners, adapters, AI providers.
@@ -1662,7 +1662,7 @@ Epic: `.qa/design/autoguide-platform.md`
 - **Priority:** P2
 - **Feature slug:** `adapter-flutter`
 - **Labels:** P2
-- **Depends on:** Define core types and fact model in @autoguide/core
+- **Depends on:** Define core types and fact model in @iamthamanic/autoguide-core
 
 ## Intent
 Flutter adapter per SPEC_FULL future goals.

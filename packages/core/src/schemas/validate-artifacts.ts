@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — validate JSON artifact shapes (type guards for runtime/scan).
+ * @iamthamanic/autoguide-core — validate JSON artifact shapes (type guards for runtime/scan).
  */
 
 import { isFact } from '../validators/fact.js';

@@ -5,7 +5,7 @@ import {
   validateAiProposals,
 } from './validate-output.js';
 import { hasCloudConsentFromEnv, CLOUD_CONSENT_MESSAGE } from './consent.js';
-import type { Fact } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
 
 const baseFact: Fact = {
   id: 'f1',
@@ -20,7 +20,7 @@ const baseFact: Fact = {
   updatedAt: '2026-01-01T00:00:00.000Z',
 };
 
-describe('@autoguide/ai', () => {
+describe('@iamthamanic/autoguide-ai', () => {
   it('rejects invalid AI JSON shape', () => {
     const result = validateAiProposals({ proposals: [{ entityId: 1 }] });
     expect(result.errors.length).toBeGreaterThan(0);

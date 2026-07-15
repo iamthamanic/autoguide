@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Fact, FlowRecord, PageRecord } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
 import { exportKnowledgeHtml } from './html.js';
 import { exportKnowledgeMarkdown } from './markdown.js';
 

@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — scan command (full pipeline orchestrator).
+ * @iamthamanic/autoguide-cli — scan command (full pipeline orchestrator).
  */
 
 import { readFile } from 'node:fs/promises';
@@ -32,16 +32,16 @@ import {
   type HistoryLog,
   type ReviewActionRecord,
   type PluginLifecycleWarning,
-} from '@autoguide/core';
+} from '@iamthamanic/autoguide-core';
 import { getGitChangedFiles, getGitHead } from '../lib/git-changes.js';
-import type { Fact, FlowRecord } from '@autoguide/core';
-import { loadConfigFromObject } from '@autoguide/config';
-import type { AutoGuideConfigInput } from '@autoguide/config';
+import type { Fact, FlowRecord } from '@iamthamanic/autoguide-core';
+import { loadConfigFromObject } from '@iamthamanic/autoguide-config';
+import type { AutoGuideConfigInput } from '@iamthamanic/autoguide-config';
 import {
   createAiProvider,
   mergeAiProposals,
   recordCloudConsent,
-} from '@autoguide/ai';
+} from '@iamthamanic/autoguide-ai';
 import {
   importPlaywrightReport,
   mergePlaywrightEvidence,
@@ -51,9 +51,9 @@ import {
   captureRuntimeSnapshots,
   mergeRuntimeSnapshots,
   type PlaywrightTestEvidence,
-} from '@autoguide/playwright';
-import { scanSourceProject, mergeScanResults } from '@autoguide/scanner';
-import { StorageWriter } from '@autoguide/storage';
+} from '@iamthamanic/autoguide-playwright';
+import { scanSourceProject, mergeScanResults } from '@iamthamanic/autoguide-scanner';
+import { StorageWriter } from '@iamthamanic/autoguide-storage';
 import { attachFlowDefaults, buildFeatureRecords, toPageRecords } from '../scan/artifacts.js';
 import { loadScanRegistry } from '../plugins.js';
 import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js';

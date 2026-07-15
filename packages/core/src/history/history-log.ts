@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — append entries to scan history log.
+ * @iamthamanic/autoguide-core — append entries to scan history log.
  */
 
 import type { ChangeDetectionResult, HistoryEntry, HistoryLog } from './types.js';

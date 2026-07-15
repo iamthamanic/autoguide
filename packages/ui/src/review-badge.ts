@@ -1,8 +1,8 @@
 /**
- * @autoguide/ui — headless ReviewBadge state (shared across adapters).
+ * @iamthamanic/autoguide-ui — headless ReviewBadge state (shared across adapters).
  */
 
-import type { Fact, VisibilityMode } from '@autoguide/core';
+import type { Fact, VisibilityMode } from '@iamthamanic/autoguide-core';
 import type { AgCssVar } from './tokens.js';
 
 export interface ReviewBadgeState {

@@ -1,10 +1,10 @@
 /**
- * @autoguide/export — HTML documentation export.
+ * @iamthamanic/autoguide-export — HTML documentation export.
  */
 
-import type { Fact } from '@autoguide/core';
-import { filterFactsForMode, filterByRole, filterFactsByRole, redactString } from '@autoguide/core';
-import type { FlowRecord, PageRecord } from '@autoguide/core';
+import type { Fact } from '@iamthamanic/autoguide-core';
+import { filterFactsForMode, filterByRole, filterFactsByRole, redactString } from '@iamthamanic/autoguide-core';
+import type { FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
 import type { ExportRenderOptions } from './types.js';
 
 function escapeHtml(value: string): string {

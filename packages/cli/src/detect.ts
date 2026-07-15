@@ -1,5 +1,5 @@
 /**
- * @autoguide/cli — project framework detection.
+ * @iamthamanic/autoguide-cli — project framework detection.
  */
 
 import { existsSync, readFileSync } from 'node:fs';

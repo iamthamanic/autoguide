@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — detect route/component changes between scans.
+ * @iamthamanic/autoguide-core — detect route/component changes between scans.
  */
 
 import type { ChangeDetectionResult, ScanSnapshot } from './types.js';

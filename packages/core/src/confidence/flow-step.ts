@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — confidence thresholds for flow steps.
+ * @iamthamanic/autoguide-core — confidence thresholds for flow steps.
  */
 
 import type { FlowStep } from '../types/records.js';

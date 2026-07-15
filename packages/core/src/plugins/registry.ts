@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — plugin registry for scanners, adapters, and AI hooks.
+ * @iamthamanic/autoguide-core — plugin registry for scanners, adapters, and AI hooks.
  */
 
 import type { Fact } from '../types/fact.js';
@@ -22,7 +22,7 @@ export interface PluginDescriptor {
   id: string;
   version: string;
   kind: PluginKind;
-  /** Semver range compatible with @autoguide/core, e.g. ^0.1.0 */
+  /** Semver range compatible with @iamthamanic/autoguide-core, e.g. ^0.1.0 */
   autoguideVersion: string;
   capabilities: PluginCapability[];
   description?: string;

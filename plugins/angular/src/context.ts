@@ -1,9 +1,9 @@
 /**
- * @autoguide/angular — injectable context for AutoGuide runtime.
+ * @iamthamanic/autoguide-angular — injectable context for AutoGuide runtime.
  */
 
 import { Injectable } from '@angular/core';
-import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@iamthamanic/autoguide-core';
 
 @Injectable()
 export class AutoGuideContextService {

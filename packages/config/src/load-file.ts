@@ -1,5 +1,5 @@
 /**
- * @autoguide/config — load autoguide.config.json from disk.
+ * @iamthamanic/autoguide-config — load autoguide.config.json from disk.
  */
 
 import { readFile } from 'node:fs/promises';

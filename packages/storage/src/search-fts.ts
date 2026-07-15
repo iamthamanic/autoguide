@@ -1,9 +1,9 @@
 /**
- * @autoguide/storage — helpers for building FTS rows from knowledge records.
+ * @iamthamanic/autoguide-storage — helpers for building FTS rows from knowledge records.
  */
 
-import type { FlowRecord, PageRecord } from '@autoguide/core';
-import { redactString } from '@autoguide/core';
+import type { FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
+import { redactString } from '@iamthamanic/autoguide-core';
 
 export interface SearchFtsRow {
   docId: string;

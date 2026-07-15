@@ -1,8 +1,8 @@
 /**
- * @autoguide/config — configuration types.
+ * @iamthamanic/autoguide-config — configuration types.
  */
 
-import type { VisibilityMode } from '@autoguide/core';
+import type { VisibilityMode } from '@iamthamanic/autoguide-core';
 
 export type AiProviderKind = 'ollama' | 'openai-compatible' | 'none';
 

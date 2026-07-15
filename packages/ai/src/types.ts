@@ -1,5 +1,5 @@
 /**
- * @autoguide/ai — provider contracts and proposal types.
+ * @iamthamanic/autoguide-ai — provider contracts and proposal types.
  */
 
 export interface AiEnrichmentInput {

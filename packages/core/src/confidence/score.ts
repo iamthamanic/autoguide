@@ -1,5 +1,5 @@
 /**
- * @autoguide/core — confidence scoring from evidence hierarchy (v2).
+ * @iamthamanic/autoguide-core — confidence scoring from evidence hierarchy (v2).
  */
 
 import type { Provenance, ProvenanceSource } from '../types/fact.js';

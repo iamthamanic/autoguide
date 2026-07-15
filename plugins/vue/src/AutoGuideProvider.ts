@@ -1,9 +1,9 @@
 /**
- * @autoguide/vue — root provider for host applications.
+ * @iamthamanic/autoguide-vue — root provider for host applications.
  */
 
 import { defineComponent, provide, type PropType } from 'vue';
-import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@autoguide/core';
+import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@iamthamanic/autoguide-core';
 import { AUTO_GUIDE_KEY } from './context.js';
 
 export const AutoGuideProvider = defineComponent({

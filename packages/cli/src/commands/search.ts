@@ -1,10 +1,10 @@
 /**
- * @autoguide/cli — search knowledge index (SQLite FTS with JSON fallback).
+ * @iamthamanic/autoguide-cli — search knowledge index (SQLite FTS with JSON fallback).
  */
 
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { searchWithFallback } from '@autoguide/storage';
+import { searchWithFallback } from '@iamthamanic/autoguide-storage';
 
 export interface SearchCommandOptions {
   role?: string;

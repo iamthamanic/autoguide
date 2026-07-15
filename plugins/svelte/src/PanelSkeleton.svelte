@@ -1,6 +1,6 @@
 <script lang="ts">
   /**
-   * @autoguide/svelte — loading skeleton for Help Widget panel.
+   * @iamthamanic/autoguide-svelte — loading skeleton for Help Widget panel.
    */
 </script>
 

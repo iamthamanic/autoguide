@@ -1,9 +1,9 @@
 <script lang="ts">
   /**
-   * @autoguide/svelte — root provider for host applications.
+   * @iamthamanic/autoguide-svelte — root provider for host applications.
    */
   import { setContext } from 'svelte';
-  import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@autoguide/core';
+  import type { Fact, FlowRecord, PageRecord, VisibilityMode } from '@iamthamanic/autoguide-core';
   import { AUTO_GUIDE_KEY } from './context.js';
 
   export let appId: string;
