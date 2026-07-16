@@ -29,6 +29,8 @@ export interface AutoGuideProps {
   mode?: VisibilityMode;
   userRole?: string;
   features?: AutoGuideFeatures;
+  /** Dev-only POST target for scan button; default `/__autoguide/scan`, `false` to hide. */
+  devScanUrl?: string | false;
   children?: ReactNode;
 }
 
@@ -60,6 +62,7 @@ export function AutoGuide({
   mode = 'published',
   userRole,
   features = { widget: true },
+  devScanUrl = '/__autoguide/scan',
   children,
 }: AutoGuideProps) {
   const [state, setState] = useState<LoadedState>(emptyState);
@@ -114,6 +117,7 @@ export function AutoGuide({
       loading={state.loading}
       error={state.error}
       onRetry={() => void load()}
+      devScanUrl={devScanUrl}
     >
       {children}
       {showBar ? <AutoGuideBar features={features} tourId={primaryTour?.id} /> : null}

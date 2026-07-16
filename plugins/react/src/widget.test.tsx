@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { Fact, Tour } from '@iamthamanic/autoguide-core';
 import { AutoGuideBar } from './AutoGuideBar.js';
@@ -66,6 +66,34 @@ describe('@iamthamanic/autoguide-react', () => {
     fireEvent.click(screen.getByRole('menuitem', { name: 'Review-Warteschlange öffnen' }));
     expect(screen.getByRole('dialog', { name: 'Review-Warteschlange' })).toBeTruthy();
     expect(screen.getByText(/Keine offenen Reviews/)).toBeTruthy();
+  });
+
+  it('shows scan in dev settings menu and triggers dev scan endpoint', async () => {
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      json: async () => ({ ok: true, message: 'Scan abgeschlossen.' }),
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+    const onRetry = vi.fn();
+
+    render(
+      <AutoGuideProvider appId="demo" mode="development" onRetry={onRetry}>
+        <AutoGuideBar features={{ widget: true }} />
+      </AutoGuideProvider>,
+    );
+
+    fireEvent.click(screen.getByLabelText('Entwickler-Menü'));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('menuitem', { name: 'Dokumentation neu scannen' }));
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/__autoguide/scan',
+      expect.objectContaining({ method: 'POST' }),
+    );
+    expect(onRetry).toHaveBeenCalled();
+
+    vi.unstubAllGlobals();
   });
 
   it('shows tour button when tours feature is enabled', () => {

@@ -2,7 +2,7 @@
  * @iamthamanic/autoguide-react — bottom-center dock: Hilfe + Tour; dev tools in settings menu.
  */
 
-import { CircleHelp, ClipboardList, Crosshair, Route, type LucideIcon } from 'lucide-react';
+import { CircleHelp, ClipboardList, Crosshair, Route, ScanSearch, type LucideIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import {
@@ -17,6 +17,7 @@ import { DockDevMenu } from './DockDevMenu.js';
 import { InspectorOverlay } from './InspectorOverlay.js';
 import { ReviewPanel, useReviewPendingCount } from './ReviewPanel.js';
 import { TourRunner, usePrimaryTour } from './TourRunner.js';
+import { triggerDevScan } from './triggerDevScan.js';
 import { useAutoGuide } from './context.js';
 
 const ICON_SIZE = 16;
@@ -37,12 +38,14 @@ export interface AutoGuideBarProps {
 }
 
 export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideBarProps) {
-  const { mode } = useAutoGuide();
+  const { mode, devScanUrl, onRetry } = useAutoGuide();
   const [helpOpen, setHelpOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [inspectorActive, setInspectorActive] = useState(false);
   const [tourActive, setTourActive] = useState(false);
   const [devMenuOpen, setDevMenuOpen] = useState(false);
+  const [scanMessage, setScanMessage] = useState<string | null>(null);
+  const [scanBusy, setScanBusy] = useState(false);
 
   const showWidget = features.widget !== false;
   const showInspector = features.inspector === true && mode === 'development';
@@ -50,9 +53,31 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
   const showTours = features.tours === true && primaryTour !== undefined;
   const reviewPending = useReviewPendingCount();
   const showReviewInMenu = mode === 'development';
+  const showScanInMenu = mode === 'development' && devScanUrl !== false && Boolean(devScanUrl);
+
+  const runDevScan = useCallback(async () => {
+    if (!devScanUrl || scanBusy) return;
+    setScanBusy(true);
+    setScanMessage('Scan läuft…');
+    const result = await triggerDevScan(devScanUrl);
+    setScanBusy(false);
+    setScanMessage(result.message);
+    if (result.ok && onRetry) onRetry();
+  }, [devScanUrl, onRetry, scanBusy]);
 
   const devMenuItems = useMemo(() => {
     const items: Parameters<typeof DockDevMenu>[0]['items'] = [];
+    if (showScanInMenu) {
+      items.push({
+        id: 'scan',
+        label: scanBusy ? 'Scan…' : 'Scan',
+        ariaLabel: 'Dokumentation neu scannen',
+        icon: ScanSearch,
+        onSelect: () => {
+          void runDevScan();
+        },
+      });
+    }
     if (showInspector) {
       items.push({
         id: 'inspect',
@@ -87,7 +112,7 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
       });
     }
     return items;
-  }, [inspectorActive, reviewOpen, reviewPending, showInspector, showReviewInMenu]);
+  }, [inspectorActive, reviewOpen, reviewPending, runDevScan, scanBusy, showInspector, showReviewInMenu, showScanInMenu]);
 
   const showDevMenu = mode === 'development' && devMenuItems.length > 0;
 
@@ -151,6 +176,11 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
       ) : null}
 
       <aside className="ag-dock" aria-label="AutoGuide" style={agDockShellStyle()}>
+        {scanMessage ? (
+          <p className="ag-dock-scan-toast" role="status" aria-live="polite">
+            {scanMessage}
+          </p>
+        ) : null}
         <div className="ag-dock-header">
           <span className="ag-dock-header__side" aria-hidden />
           <p className="ag-dock-header__brand">AutoGuide</p>

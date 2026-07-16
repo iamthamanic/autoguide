@@ -6,6 +6,7 @@ import { cpSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Plugin } from 'vite';
 import { readDocBundleManifest, resolveAutoGuideOutputDir } from './resolve.js';
+import { createDevScanMiddleware } from './dev-scan-middleware.js';
 
 export const VIRTUAL_AUTOGuide_MODULE_ID = 'virtual:autoguide';
 const RESOLVED_VIRTUAL_ID = '\0virtual:autoguide';
@@ -66,13 +67,22 @@ export function autoguide(options: AutoGuideVitePluginOptions = {}): Plugin {
       if (!copyPublic || !projectRoot) return;
       const outputDir = resolveAutoGuideOutputDir(projectRoot, options.configPath);
       const targetDir = join(projectRoot, 'public', publicSubdir);
-      copyJsonArtifacts(outputDir, targetDir);
+      const syncArtifacts = () => copyJsonArtifacts(outputDir, targetDir);
+
+      syncArtifacts();
       server.watcher.add(outputDir);
       server.watcher.on('change', (file) => {
         if (!file.startsWith(outputDir) || !file.endsWith('.json')) return;
         const name = file.slice(outputDir.length + 1);
         cpSync(file, join(targetDir, name));
       });
+
+      server.middlewares.use(
+        createDevScanMiddleware({
+          projectRoot,
+          onScanComplete: syncArtifacts,
+        }),
+      );
     },
   };
 }

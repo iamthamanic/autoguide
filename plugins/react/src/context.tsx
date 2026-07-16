@@ -37,6 +37,7 @@ export interface AutoGuideContextValue {
   loading?: boolean;
   error?: string | null;
   onRetry?: () => void;
+  devScanUrl?: string | false;
   applyReview: (factId: string, status: 'approved' | 'rejected', editedValue?: string) => void;
   onReviewDecision?: (payload: ReviewDecisionPayload) => void | Promise<void>;
 }

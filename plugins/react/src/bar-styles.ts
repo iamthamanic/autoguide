@@ -136,6 +136,27 @@ export const AG_DOCK_STYLES = `
   user-select: none;
   text-align: center;
 }
+.ag-dock-scan-toast {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 8px 12px;
+  max-width: min(280px, 90vw);
+  border-radius: 10px;
+  border: 1px solid var(--ag-border);
+  background: var(--ag-surface);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ag-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  z-index: 1;
+}
 .ag-dock-dev {
   position: relative;
   display: flex;

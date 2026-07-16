@@ -1,5 +1,5 @@
 /**
- * @iamthamanic/autoguide-react — dev-only settings dropdown on the dock (Inspect, Review, …).
+ * @iamthamanic/autoguide-react — dev-only settings dropdown on the dock (Scan, Inspect, Review, …).
  */
 
 import { ClipboardList, Crosshair, Settings, type LucideIcon } from 'lucide-react';

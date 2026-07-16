@@ -16,6 +16,7 @@ import type {
 import { applyReviewDecision } from './apply-review.js';
 import { AutoGuideContext, type DocElementRegistration } from './context.js';
 import type { ReviewDecisionPayload } from './review-types.js';
+import { useSpaRoute } from './useSpaRoute.js';
 
 export interface AutoGuideProviderProps {
   appId: string;
@@ -32,6 +33,7 @@ export interface AutoGuideProviderProps {
   error?: string | null;
   onRetry?: () => void;
   onReviewDecision?: (payload: ReviewDecisionPayload) => void | Promise<void>;
+  devScanUrl?: string | false;
   children: ReactNode;
 }
 
@@ -50,8 +52,10 @@ export function AutoGuideProvider({
   error = null,
   onRetry,
   onReviewDecision,
+  devScanUrl = '/__autoguide/scan',
   children,
 }: AutoGuideProviderProps) {
+  const liveRoute = useSpaRoute(route);
   const [docElements, setDocElements] = useState<DocElementRegistration[]>([]);
   const [localFacts, setLocalFacts] = useState(facts);
   const [localReviews, setLocalReviews] = useState(reviews);
@@ -109,7 +113,7 @@ export function AutoGuideProvider({
         appId,
         userRole,
         mode,
-        route,
+        route: liveRoute,
         facts: localFacts,
         pages,
         flows,
@@ -121,6 +125,7 @@ export function AutoGuideProvider({
         loading,
         error,
         onRetry,
+        devScanUrl,
         applyReview,
         onReviewDecision,
       }}

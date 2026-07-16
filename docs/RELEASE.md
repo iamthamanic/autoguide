@@ -49,6 +49,18 @@ Inspect each `.tgz` — confirm `package.json` has `private: false`, no `workspa
 
 ### 4. Publish
 
+Ensure you are logged in (`npm whoami` → `raccoova`). If publish fails with **404**, your npm token is usually expired — run `npm login` first.
+
+```bash
+# Interactive (OTP per package or session):
+./scripts/publish-npm.sh
+
+# Or pass 2FA once:
+NPM_OTP=123456 ./scripts/publish-npm.sh
+```
+
+Manual alternative:
+
 ```bash
 # Publish each package (human-gated, no CI automation)
 pnpm --filter @iamthamanic/autoguide-client publish --access public
