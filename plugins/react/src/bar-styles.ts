@@ -142,6 +142,38 @@ export const AG_DOCK_STYLES = `
   user-select: none;
   text-align: center;
 }
+.ag-dock-drag-handle {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 2px 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 8px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ag-text-muted);
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  text-align: center;
+  cursor: grab;
+  touch-action: none;
+  border-radius: 4px;
+}
+.ag-dock-drag-handle:active,
+.ag-dock-drag-handle[data-dragging="true"] {
+  cursor: grabbing;
+}
+.ag-dock-drag-handle:focus-visible {
+  outline: 2px solid var(--ag-primary);
+  outline-offset: 1px;
+}
+.ag-dock--dragging {
+  user-select: none;
+}
 .ag-dock-scan-toast {
   position: absolute;
   bottom: calc(100% + 10px);
@@ -268,6 +300,9 @@ export const AG_DOCK_STYLES = `
   .ag-dock,
   .ag-dock-menu {
     animation: none;
+  }
+  .ag-dock--dragging {
+    transition: none;
   }
   .ag-dock-btn,
   .ag-dock-btn__icon,

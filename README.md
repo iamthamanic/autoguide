@@ -214,6 +214,8 @@ Wenn die Host-App eine feste Bottom-Nav hat, Dock mit `dockBottomOffset` (px) an
 
 Gleiches Prop gibt es auf `AutoGuideProvider`. Default ist `0` (unverändertes Layout).
 
+Nutzer können das Dock am Label **AutoGuide** verschieben (Maus/Touch/Pfeiltasten). Die Position wird pro `appId` in `localStorage` gespeichert. **Doppelklick** auf das Label stellt die Standardposition (inkl. `dockBottomOffset`) wieder her.
+
 #### Modi
 
 | Modus | Wer sieht was |
