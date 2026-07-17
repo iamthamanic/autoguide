@@ -115,7 +115,16 @@ import { ReviewBadgeComponent } from './review-badge.component.js';
                   }
                 }
               </ul>
-            } @else if (helpContext.actions.length === 0 && helpContext.flows.length === 0) {
+            } @else if (
+              helpContext.actions.length === 0 &&
+              helpContext.flows.length === 0 &&
+              !(
+                ctx.mode === 'development' &&
+                helpContext.draftDigest &&
+                (helpContext.draftDigest.samples.length > 0 ||
+                  helpContext.draftDigest.pendingFactCount > 0)
+              )
+            ) {
               <div style="font-size: 14px">
                 <p style="margin: 0; color: var(--ag-text-muted)">Keine Dokumentation für diese Seite.</p>
                 @if (gapReasons.length > 0) {
@@ -127,6 +136,21 @@ import { ReviewBadgeComponent } from './review-badge.component.js';
                     }
                   </ul>
                 }
+              </div>
+            } @else if (
+              helpContext.actions.length === 0 &&
+              helpContext.flows.length === 0 &&
+              helpContext.draftDigest
+            ) {
+              <div style="font-size: 14px">
+                <p style="margin: 0; color: var(--ag-text-muted)">
+                  Entwürfe vorhanden — noch nicht freigegeben.
+                </p>
+                <p style="margin: 8px 0 0; font-size: 13px; color: var(--ag-text-muted)">
+                  {{ helpContext.draftDigest.pendingFactCount }} offene Fakten ·
+                  {{ helpContext.draftDigest.pageCount }} Seiten ·
+                  {{ helpContext.draftDigest.flowCount }} Abläufe
+                </p>
               </div>
             } @else {
               @if (helpContext.flows.length > 0) {

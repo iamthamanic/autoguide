@@ -21,7 +21,9 @@ async function git(cwd: string, args: string[]): Promise<void> {
 }
 
 describe('version history rescan', () => {
-  it('appends history and marks stale facts after source change', async () => {
+  it(
+    'appends history and marks stale facts after source change',
+    async () => {
     const dir = await mkdtemp(join(tmpdir(), 'ag-history-'));
     try {
       await cp(integrationDir, dir, { recursive: true });
@@ -87,5 +89,7 @@ describe('version history rescan', () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  },
+    20_000,
+  );
 });

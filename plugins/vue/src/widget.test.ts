@@ -84,7 +84,25 @@ describe('@iamthamanic/autoguide-vue', () => {
 
   it('shows uncertain facts only in published mode', async () => {
     const wrapper = mount(AutoGuideProvider, {
-      props: { appId: 'demo', mode: 'published', facts: sampleFacts },
+      props: {
+        appId: 'demo',
+        mode: 'published',
+        route: '/',
+        pages: [
+          {
+            id: 'p-home',
+            route: '/',
+            title: 'Home',
+            roleIds: [],
+            elementIds: [],
+            featureIds: [],
+            flowIds: [],
+            factIds: ['f1', 'f2'],
+            status: 'draft',
+          },
+        ],
+        facts: sampleFacts,
+      },
       slots: { default: () => h(AutoGuideWidget) },
     });
     await wrapper.find('[aria-label="Hilfe öffnen"]').trigger('click');

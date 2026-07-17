@@ -6,7 +6,8 @@ import type { Fact, VisibilityMode } from '../types/fact.js';
 import type { FlowRecord, PageRecord } from '../types/records.js';
 import type { ReviewItem } from '../review/review-queue.js';
 import { filterFactsForMode } from '../visibility/filter.js';
-import { normalizeRoute, resolveHelpContext } from './context-resolver.js';
+import { resolveHelpContext } from './context-resolver.js';
+import { normalizeRoute } from './route.js';
 
 export type HelpGapReasonId =
   | 'bundle'
@@ -15,7 +16,8 @@ export type HelpGapReasonId =
   | 'publish'
   | 'sync'
   | 'route'
-  | 'published_gate';
+  | 'published_gate'
+  | 'drafts';
 
 export interface HelpGapReason {
   id: HelpGapReasonId;
@@ -35,19 +37,29 @@ export interface ExplainHelpGapInput {
 const REASON_BUNDLE: HelpGapReason = {
   id: 'bundle',
   message:
-    'Doc-Bundle fehlt oder ist leer — `autoguide sync --target public/autoguide` ausführen und Dev-Server neu starten.',
+    'Doc-Bundle fehlt — `autoguide sync --target public/autoguide` und Dev-Server neu starten.',
 };
 
 const REASON_SCAN: HelpGapReason = {
   id: 'scan_flows',
-  message:
-    'Keine Flows vorhanden — `autoguide scan --auto` ausführen (Autonomy/Crawl). Optional, wenn Playwright-Tests existieren: `autoguide scan --playwright-import <report.json>`.',
+  message: 'Keine Abläufe — `autoguide scan --auto` ausführen.',
 };
 
-const REASON_REVIEW: HelpGapReason = {
+const REASON_SCAN_DEV: HelpGapReason = {
+  id: 'scan_flows',
+  message: 'Noch keine Abläufe für diese Seite — `autoguide scan --auto` ausführen.',
+};
+
+const REASON_REVIEW_PUBLISHED: HelpGapReason = {
   id: 'review',
   message:
     'Offene Reviews blockieren freigegebene Hilfe — `autoguide review` oder Review-Panel nutzen.',
+};
+
+const REASON_DRAFTS: HelpGapReason = {
+  id: 'drafts',
+  message:
+    'Dokumentation liegt als Entwurf vor — im Review-Panel prüfen; Help zeigt Entwürfe im development-Modus.',
 };
 
 const REASON_PUBLISH: HelpGapReason = {
@@ -58,30 +70,47 @@ const REASON_PUBLISH: HelpGapReason = {
 
 const REASON_SYNC: HelpGapReason = {
   id: 'sync',
-  message:
-    'Runtime-Artefakte fehlen möglicherweise — nach Scan/Review `autoguide sync` ausführen.',
+  message: 'Nach Scan Artefakte aktualisieren — `autoguide sync` oder Dev-Scan erneut.',
 };
 
 const REASON_ROUTE: HelpGapReason = {
   id: 'route',
-  message:
-    'Für diese Route sind keine verknüpften Flows/Facts hinterlegt — Scan und Seiten-Zuordnung prüfen.',
+  message: 'Für diese Route fehlen verknüpfte Inhalte — Scan und Seiten-Zuordnung prüfen.',
 };
 
 const REASON_PUBLISHED_GATE: HelpGapReason = {
   id: 'published_gate',
   message:
-    'Im published-Modus erscheinen nur freigegebene Inhalte (confidence ≥ 0,85). Für mehr Details development-Modus nutzen.',
+    'Im published-Modus erscheinen nur freigegebene Inhalte (confidence ≥ 0,85). Für Entwürfe development-Modus nutzen.',
 };
+
+function hasHelpContent(input: ExplainHelpGapInput): boolean {
+  const ctx = resolveHelpContext(
+    input.route,
+    input.pages,
+    input.flows,
+    input.facts,
+    input.mode,
+    input.userRole,
+  );
+  if (ctx.actions.length > 0 || ctx.flows.length > 0) return true;
+  if (
+    input.mode === 'development' &&
+    ctx.draftDigest &&
+    (ctx.draftDigest.samples.length > 0 || ctx.draftDigest.pendingFactCount > 0)
+  ) {
+    return true;
+  }
+  return false;
+}
 
 /**
  * Build actionable German reasons when Help has no content for the current route.
- * Returns [] when help context already has actions or flows.
+ * Returns [] when help context already has actions, flows, or a development draft digest.
  */
 export function explainHelpGap(input: ExplainHelpGapInput): HelpGapReason[] {
-  const { mode, route, pages, flows, facts, reviews = [], userRole } = input;
-  const ctx = resolveHelpContext(route, pages, flows, facts, mode, userRole);
-  if (ctx.actions.length > 0 || ctx.flows.length > 0) return [];
+  const { mode, route, pages, flows, facts, reviews = [] } = input;
+  if (hasHelpContent(input)) return [];
 
   const reasons: HelpGapReason[] = [];
   const seen = new Set<HelpGapReasonId>();
@@ -94,35 +123,35 @@ export function explainHelpGap(input: ExplainHelpGapInput): HelpGapReason[] {
   const bundleEmpty = pages.length === 0 && flows.length === 0 && facts.length === 0;
   if (bundleEmpty) {
     push(REASON_BUNDLE);
-    push(REASON_SCAN);
+    push(mode === 'development' ? REASON_SCAN_DEV : REASON_SCAN);
     push(REASON_SYNC);
     if (mode === 'published') push(REASON_PUBLISHED_GATE);
     return reasons;
   }
 
   if (flows.length === 0) {
-    push(REASON_SCAN);
+    push(mode === 'development' ? REASON_SCAN_DEV : REASON_SCAN);
   }
 
   const visibleFacts = filterFactsForMode(facts, mode);
-  const approvedOrVisible = visibleFacts.length;
   const pendingReviews = reviews.length;
   const hasUnapproved =
     facts.some((f) => f.reviewStatus === 'pending') || pendingReviews > 0;
 
   if (mode === 'published') {
-    if (facts.length > 0 && approvedOrVisible === 0) {
+    if (facts.length > 0 && visibleFacts.length === 0) {
       push(REASON_PUBLISH);
-      push(REASON_REVIEW);
+      push(REASON_REVIEW_PUBLISHED);
     }
     push(REASON_PUBLISHED_GATE);
   } else if (hasUnapproved) {
-    push(REASON_REVIEW);
+    // Soft tip — never claim reviews blank Help in development
+    push(REASON_DRAFTS);
   }
 
   const normalized = normalizeRoute(route);
   const page = pages.find((item) => normalizeRoute(item.route) === normalized);
-  if (!page || (flows.length > 0 && ctx.flows.length === 0 && ctx.actions.length === 0)) {
+  if (!page) {
     push(REASON_ROUTE);
   }
 

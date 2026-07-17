@@ -30,6 +30,8 @@ import {
   buildConfidenceArtifact,
   evaluateSufficiency,
   formatSufficiencySummary,
+  linkFactsToPages,
+  normalizeRoute,
   type ScanSnapshot,
   type HistoryLog,
   type ReviewActionRecord,
@@ -63,6 +65,10 @@ import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js
 import { AUTO_SCAN_NEXT_STEPS, flowSeedingWarning } from '../lib/flow-seeding-hint.js';
 import { mergePreservedFlows } from '../lib/merge-preserved-flows.js';
 
+function routeWasChanged(changedRoutes: string[], pageRoute: string): boolean {
+  const normalized = normalizeRoute(pageRoute);
+  return changedRoutes.some((route) => normalizeRoute(route) === normalized);
+}
 export interface ScanOptions {
   sourceDir?: string;
   playwrightReport?: string;
@@ -344,11 +350,6 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   pluginWarnings.push(...transformed.warnings);
   mergeResult = { ...mergeResult, facts: transformed.graph.listFacts() };
 
-  let pageRecords = toPageRecords(merged.pages).map((page) =>
-    changeDetection.changedRoutes.includes(page.route)
-      ? { ...page, status: 'stale' as const }
-      : page,
-  );
   const rescanMerge = mergeRescanFacts(
     previousFacts,
     mergeResult.facts,
@@ -356,6 +357,15 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     gitHead,
   );
   const facts: Fact[] = rescanMerge.facts.map(applyFactConfidencePolicies);
+
+  let pageRecords = linkFactsToPages(
+    toPageRecords(merged.pages).map((page) =>
+      routeWasChanged(changeDetection.changedRoutes, page.route)
+        ? { ...page, status: 'stale' as const }
+        : page,
+    ),
+    facts,
+  );
 
   historyLog = appendHistoryEntry(
     historyLog,

@@ -33,4 +33,6 @@ export interface LoadArtifactBundleOptions {
   baseUrl: string;
   manifest?: DocBundleManifest;
   fetchImpl?: typeof fetch;
+  /** Cache-bust query for reloads after Dev-Scan / sync. */
+  cacheBust?: string | number;
 }

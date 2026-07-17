@@ -6,9 +6,12 @@ import type { Fact, FlowRecord, PageRecord, Recommendation, ReviewActionRecord, 
 import { RUNTIME_ARTIFACT_FILES } from './artifacts.js';
 import type { ClientArtifactBundle, DocBundleManifest, LoadArtifactBundleOptions } from './types.js';
 
-function joinArtifactUrl(baseUrl: string, fileName: string): string {
+function joinArtifactUrl(baseUrl: string, fileName: string, cacheBust?: string | number): string {
   const normalized = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-  return `${normalized}${fileName}`;
+  const url = `${normalized}${fileName}`;
+  if (cacheBust === undefined || cacheBust === '') return url;
+  const sep = url.includes('?') ? '&' : '?';
+  return `${url}${sep}v=${encodeURIComponent(String(cacheBust))}`;
 }
 
 async function fetchJson<T>(
@@ -44,10 +47,11 @@ async function fetchJson<T>(
 async function tryLoadManifest(
   baseUrl: string,
   fetchImpl: typeof fetch,
+  cacheBust?: string | number,
 ): Promise<DocBundleManifest | undefined> {
   try {
     return await fetchJson<DocBundleManifest>(
-      joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.docBundle),
+      joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.docBundle, cacheBust),
       fetchImpl,
       true,
     );
@@ -65,42 +69,44 @@ export async function loadArtifactBundle(
   }
 
   const baseUrl = options.baseUrl.replace(/\/$/, '');
-  await (options.manifest ?? tryLoadManifest(baseUrl, fetchImpl));
+  const bust = options.cacheBust;
+  await (options.manifest ??
+    tryLoadManifest(baseUrl, fetchImpl, bust));
 
   const [facts, pages, flows, tours, recommendations, reviews, reviewHistory] =
     await Promise.all([
       fetchJson<Fact[]>(
-        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.facts),
+        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.facts, bust),
         fetchImpl,
         false,
       ),
       fetchJson<PageRecord[]>(
-        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.pages),
+        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.pages, bust),
         fetchImpl,
         false,
       ),
       fetchJson<FlowRecord[]>(
-        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.flows),
+        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.flows, bust),
         fetchImpl,
         false,
       ),
       fetchJson<Tour[]>(
-        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.tours),
+        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.tours, bust),
         fetchImpl,
         true,
       ),
       fetchJson<Recommendation[]>(
-        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.recommendations),
+        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.recommendations, bust),
         fetchImpl,
         true,
       ),
       fetchJson<ReviewItem[]>(
-        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.reviews),
+        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.reviews, bust),
         fetchImpl,
         true,
       ),
       fetchJson<ReviewActionRecord[]>(
-        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.reviewHistory),
+        joinArtifactUrl(baseUrl, RUNTIME_ARTIFACT_FILES.reviewHistory, bust),
         fetchImpl,
         true,
       ),

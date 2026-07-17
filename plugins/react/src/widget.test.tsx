@@ -216,7 +216,25 @@ describe('@iamthamanic/autoguide-react', () => {
 
   it('shows uncertain facts only in published mode', () => {
     render(
-      <AutoGuideProvider appId="demo" mode="published" facts={sampleFacts}>
+      <AutoGuideProvider
+        appId="demo"
+        mode="published"
+        route="/"
+        pages={[
+          {
+            id: 'p-home',
+            route: '/',
+            title: 'Home',
+            roleIds: [],
+            elementIds: [],
+            featureIds: [],
+            flowIds: [],
+            factIds: ['f1', 'f2'],
+            status: 'draft',
+          },
+        ]}
+        facts={sampleFacts}
+      >
         <AutoGuideBar features={{ widget: true }} />
       </AutoGuideProvider>,
     );
@@ -234,8 +252,70 @@ describe('@iamthamanic/autoguide-react', () => {
     fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
     expect(screen.getByText('Keine Dokumentation für diese Seite.')).toBeTruthy();
     expect(screen.getByText(/Doc-Bundle fehlt/)).toBeTruthy();
-    expect(screen.getByText(/playwright-import/)).toBeTruthy();
-    expect(screen.getAllByText(/autoguide sync/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText(/scan --auto/)).toBeTruthy();
+    expect(screen.queryByText(/playwright-import/)).toBeNull();
+  });
+
+  it('shows draft digest in development when reviews are open', () => {
+    render(
+      <AutoGuideProvider
+        appId="demo"
+        mode="development"
+        route="/dashboard"
+        pages={[
+          {
+            id: 'p-dash',
+            route: '/dashboard',
+            title: 'Dashboard',
+            roleIds: [],
+            elementIds: [],
+            featureIds: [],
+            flowIds: [],
+            factIds: [],
+            status: 'draft',
+          },
+        ]}
+        flows={[]}
+        facts={[
+          {
+            id: 'f-pending',
+            entityId: 'el',
+            key: 'label',
+            value: 'Willkommen',
+            status: 'needs_review',
+            reviewStatus: 'pending',
+            confidence: 0.7,
+            provenance: [
+              {
+                source: 'runtime_dom',
+                route: '/dashboard',
+                confidence: 0.7,
+                observedAt: '2026-07-17T00:00:00.000Z',
+              },
+            ],
+            createdAt: '2026-07-17T00:00:00.000Z',
+            updatedAt: '2026-07-17T00:00:00.000Z',
+          },
+        ]}
+        reviews={[
+          {
+            factId: 'f-pending',
+            entityId: 'el',
+            key: 'label',
+            value: 'Willkommen',
+            confidence: 0.7,
+            reason: 'pending',
+            priority: 0,
+          },
+        ]}
+      >
+        <AutoGuideBar features={{ widget: true }} />
+      </AutoGuideProvider>,
+    );
+    fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
+    expect(screen.getByText(/Willkommen/)).toBeTruthy();
+    expect(screen.queryByText(/blockieren freigegebene Hilfe/)).toBeNull();
+    expect(screen.queryByText('Keine Dokumentation für diese Seite.')).toBeNull();
   });
 
   it('shows published flows when approved content exists', () => {
