@@ -33,6 +33,8 @@ The crawl performs safe interactions (links/buttons) beyond a single `goto`, res
 
 Subsequent scans **merge** ordered flows into existing `.autoguide/flows.json` (by title) instead of wiping them when the current pass produces no crawl/import flows. To intentionally clear flows, delete `.autoguide/flows.json` (or the whole output dir) before scanning.
 
+Pass `--storage-state path/to/storageState.json` (or `scan.storageStatePath`) so crawl and runtime use an authenticated Playwright session for protected routes.
+
 ### Scan `--auto` (orchestrator)
 
 `autoguide scan --auto` (or `scan.auto: true` in config) runs: source → optional playwright import if configured/present → sufficiency gate → on `escalate`/`blocked`: own crawl (runtime only if already enabled) → re-evaluate. Prefer the explicit flag to avoid surprising crawl cost. Host JSON reporter is never required.

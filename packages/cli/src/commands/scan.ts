@@ -260,9 +260,13 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
       routes: crawlRoutes,
       safeMode: config.scan.safeMode,
       screenshots: false,
+      storageStatePath: options.storageState ?? config.scan.storageStatePath,
     });
     playwrightTests = [...playwrightTests, ...crawl.traces];
     visitedRoutes = [...visitedRoutes, ...crawl.visitedRoutes];
+    if (crawl.warnings?.length) {
+      autoNotes.push(...crawl.warnings);
+    }
   }
 
   if (playwrightTests.length > 0) {
