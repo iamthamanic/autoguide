@@ -2,12 +2,13 @@
  * @iamthamanic/autoguide-react — Inspector overlay (no trigger; controlled by AutoGuideBar).
  */
 
-import { useEffect, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { scanDom } from '@iamthamanic/autoguide-runtime';
 import type { RuntimeElement } from '@iamthamanic/autoguide-runtime';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { agPanelAboveBarStyle } from './bar-styles.js';
 import { useAutoGuide } from './context.js';
+import { resolveInspectTarget } from './resolveInspectTarget.js';
 
 export interface InspectorOverlayProps {
   active: boolean;
@@ -18,6 +19,8 @@ export function InspectorOverlay({ active, onActiveChange }: InspectorOverlayPro
   const { mode } = useAutoGuide();
   const [selected, setSelected] = useState<RuntimeElement | null>(null);
   const [announcement, setAnnouncement] = useState('');
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const lastOutlineRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (mode !== 'development') return;
@@ -39,22 +42,56 @@ export function InspectorOverlay({ active, onActiveChange }: InspectorOverlayPro
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [active, mode, onActiveChange, selected]);
 
+  useEffect(() => {
+    if (active) return;
+    if (lastOutlineRef.current) {
+      lastOutlineRef.current.style.outline = '';
+      lastOutlineRef.current = null;
+    }
+  }, [active]);
+
   if (mode !== 'development') return null;
+
+  const clearOutline = () => {
+    if (lastOutlineRef.current) {
+      lastOutlineRef.current.style.outline = '';
+      lastOutlineRef.current = null;
+    }
+  };
+
+  const hostFromEvent = (event: MouseEvent): HTMLElement | null => {
+    const overlay = overlayRef.current;
+    if (!overlay) return null;
+    const stack = document.elementsFromPoint(event.clientX, event.clientY);
+    return resolveInspectTarget(stack, overlay);
+  };
 
   const onMouseOver = (event: MouseEvent) => {
     if (!active) return;
     event.stopPropagation();
-    const target = event.target as HTMLElement;
+    const target = hostFromEvent(event);
+    if (!target || target === lastOutlineRef.current) return;
+    clearOutline();
     target.style.outline = '2px solid var(--ag-primary)';
+    lastOutlineRef.current = target;
   };
 
   const onClickCapture = (event: MouseEvent) => {
     if (!active) return;
     event.preventDefault();
     event.stopPropagation();
-    const target = event.target as HTMLElement;
+    clearOutline();
+    const target = hostFromEvent(event);
     const snapshot = scanDom(document, window.location.pathname);
-    const match = snapshot.elements.find((el) => target.matches(el.selector));
+    const match = target
+      ? snapshot.elements.find((el) => {
+          try {
+            return target.matches(el.selector);
+          } catch {
+            return false;
+          }
+        })
+      : undefined;
     setSelected(match ?? null);
     onActiveChange(false);
     setAnnouncement(
@@ -71,6 +108,8 @@ export function InspectorOverlay({ active, onActiveChange }: InspectorOverlayPro
       </div>
       {active ? (
         <div
+          ref={overlayRef}
+          data-ag-inspect-overlay=""
           role="presentation"
           onMouseOver={onMouseOver}
           onClickCapture={onClickCapture}
