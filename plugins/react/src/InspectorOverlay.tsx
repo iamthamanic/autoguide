@@ -8,7 +8,7 @@ import type { RuntimeElement } from '@iamthamanic/autoguide-runtime';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { agPanelAboveBarStyle } from './bar-styles.js';
 import { useAutoGuide } from './context.js';
-import { resolveInspectTarget } from './resolveInspectTarget.js';
+import { resolveInspectTarget, fallbackInspectElement } from './resolveInspectTarget.js';
 
 export interface InspectorOverlayProps {
   active: boolean;
@@ -92,12 +92,14 @@ export function InspectorOverlay({ active, onActiveChange }: InspectorOverlayPro
           }
         })
       : undefined;
-    setSelected(match ?? null);
+    const selectedElement =
+      match ?? (target ? fallbackInspectElement(target, window.location.pathname) : null);
+    setSelected(selectedElement);
     onActiveChange(false);
     setAnnouncement(
-      match
-        ? `Ausgewählt: ${match.label ?? match.selector}`
-        : 'Kein dokumentiertes Element gefunden.',
+      selectedElement
+        ? `Ausgewählt: ${selectedElement.label ?? selectedElement.selector}`
+        : 'Kein Element unter dem Zeiger gefunden.',
     );
   };
 
@@ -113,7 +115,7 @@ export function InspectorOverlay({ active, onActiveChange }: InspectorOverlayPro
           role="presentation"
           onMouseOver={onMouseOver}
           onClickCapture={onClickCapture}
-          style={{ position: 'fixed', inset: 0, zIndex: 9998, cursor: 'crosshair' }}
+          style={{ position: 'fixed', inset: 0, zIndex: 9998, cursor: 'crosshair', pointerEvents: 'auto' }}
         />
       ) : null}
       {selected ? (
