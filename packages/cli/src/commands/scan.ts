@@ -61,6 +61,7 @@ import { attachFlowDefaults, buildFeatureRecords, toPageRecords } from '../scan/
 import { loadScanRegistry } from '../plugins.js';
 import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js';
 import { AUTO_SCAN_NEXT_STEPS, flowSeedingWarning } from '../lib/flow-seeding-hint.js';
+import { mergePreservedFlows } from '../lib/merge-preserved-flows.js';
 
 export interface ScanOptions {
   sourceDir?: string;
@@ -164,6 +165,8 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   const historyPath = join(outputDir, 'history.json');
   const factsPath = join(outputDir, 'facts.json');
   const reviewHistoryPath = join(outputDir, 'review-history.json');
+  const flowsPath = join(outputDir, 'flows.json');
+  let previousFlows: FlowRecord[] = [];
 
   if (existsSync(snapshotPath)) {
     previousSnapshot = JSON.parse(await readFile(snapshotPath, 'utf8')) as ScanSnapshot;
@@ -176,6 +179,14 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   }
   if (existsSync(historyPath)) {
     historyLog = JSON.parse(await readFile(historyPath, 'utf8')) as HistoryLog;
+  }
+  if (existsSync(flowsPath)) {
+    try {
+      const raw = JSON.parse(await readFile(flowsPath, 'utf8')) as unknown;
+      if (Array.isArray(raw)) previousFlows = raw as FlowRecord[];
+    } catch {
+      previousFlows = [];
+    }
   }
 
   const changeDetection = detectChanges(previousSnapshot, currentSnapshot, gitChangedFiles);
@@ -222,7 +233,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
           )
         : [];
     const midSufficiency = evaluateSufficiency({
-      flows: provisionalFlows,
+      flows: mergePreservedFlows(provisionalFlows, previousFlows),
       facts: merged.facts,
       pages: toPageRecords(merged.pages),
     });
@@ -259,6 +270,9 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     flowRecords = attachFlowDefaults(importResult.flows);
     extraFacts = [...merged.facts, ...testsToFacts(playwrightTests)];
   }
+
+  // Preserve crawl/playwright ordered flows across source-only / runtime rescans.
+  flowRecords = mergePreservedFlows(flowRecords, previousFlows);
 
   const runtimeEnabled = options.runtime ?? config.scan.runtime ?? false;
   if (runtimeEnabled) {
