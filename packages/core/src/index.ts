@@ -49,3 +49,5 @@ export * from './history/history-log.js';
 export * from './redaction/types.js';
 export * from './redaction/patterns.js';
 export * from './redaction/redact.js';
+export * from './sufficiency/types.js';
+export * from './sufficiency/evaluate.js';

@@ -28,10 +28,13 @@ import {
   runPluginCleanup,
   applyFactConfidencePolicies,
   buildConfidenceArtifact,
+  evaluateSufficiency,
+  formatSufficiencySummary,
   type ScanSnapshot,
   type HistoryLog,
   type ReviewActionRecord,
   type PluginLifecycleWarning,
+  type SufficiencyReport,
 } from '@iamthamanic/autoguide-core';
 import { getGitChangedFiles, getGitHead } from '../lib/git-changes.js';
 import type { Fact, FlowRecord } from '@iamthamanic/autoguide-core';
@@ -78,6 +81,7 @@ export interface ScanResult {
   errors: string[];
   warnings: string[];
   outputDir: string;
+  sufficiency?: SufficiencyReport;
 }
 
 function formatPluginWarnings(warnings: PluginLifecycleWarning[]): string[] {
@@ -355,8 +359,20 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   const tourValidationErrors = validateTours(tours).map((error) => `tours.json: ${error}`);
   validationErrors.push(...tourValidationErrors);
 
+  const sufficiency = evaluateSufficiency({
+    flows: flowRecords,
+    facts,
+    pages: pageRecords,
+  });
+
   if (validationErrors.length > 0) {
-    return { ok: false, errors: validationErrors, warnings: formatPluginWarnings(pluginWarnings), outputDir };
+    return {
+      ok: false,
+      errors: validationErrors,
+      warnings: formatPluginWarnings(pluginWarnings),
+      outputDir,
+      sufficiency,
+    };
   }
 
   const storage = new StorageWriter(outputDir);
@@ -369,6 +385,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     await storage.writeJson(storage.paths.reviewHistoryJson, reviewHistory);
     await storage.writeJson(storage.paths.recommendationsJson, recommendations);
     await storage.writeJson(storage.paths.toursJson, tours);
+    await storage.writeJson(storage.paths.sufficiencyJson, sufficiency);
     await storage.writeJson(storage.paths.historyJson, historyLog);
     await storage.writeJson(storage.paths.scanSnapshotJson, currentSnapshot);
     await storage.writeJson(storage.paths.graphJson, entityGraph.toData());
@@ -425,8 +442,10 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
       ...formatPluginWarnings(pluginWarnings),
       ...runtimeWarnings,
       ...playwrightPathWarnings,
+      formatSufficiencySummary(sufficiency),
       ...(seedingHint ? [seedingHint] : []),
     ],
     outputDir,
+    sufficiency,
   };
 }

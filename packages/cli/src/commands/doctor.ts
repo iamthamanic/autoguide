@@ -8,14 +8,25 @@ import { readFile } from 'node:fs/promises';
 import {
   type Recommendation,
   type ReviewItem,
+  type SufficiencyReport,
   sortRecommendationsByPriority,
   formatRecommendationReviewHint,
+  formatSufficiencySummary,
 } from '@iamthamanic/autoguide-core';
 import { loadScanRegistry } from '../plugins.js';
 import {
   FLOW_SEEDING_HINT,
   countOrderedFlows,
 } from '../lib/flow-seeding-hint.js';
+
+function isSufficiencyReport(value: unknown): value is SufficiencyReport {
+  if (typeof value !== 'object' || value === null) return false;
+  const v = value as Record<string, unknown>;
+  return (
+    (v.status === 'sufficient' || v.status === 'escalate' || v.status === 'blocked') &&
+    Array.isArray(v.reasons)
+  );
+}
 
 export interface DoctorResult {
   ok: boolean;
@@ -109,6 +120,23 @@ export async function runDoctor(cwd: string): Promise<DoctorResult> {
       }
     } catch {
       messages.push('recommendations.json konnte nicht gelesen werden.');
+    }
+  }
+
+  const sufficiencyPath = join(outputDir, 'sufficiency.json');
+  if (existsSync(sufficiencyPath)) {
+    try {
+      const raw = JSON.parse(await readFile(sufficiencyPath, 'utf8')) as unknown;
+      if (isSufficiencyReport(raw)) {
+        messages.push(formatSufficiencySummary(raw));
+        for (const reason of raw.reasons) {
+          messages.push(`- ${reason.messageDe}`);
+        }
+      } else {
+        messages.push('sufficiency.json hat ein unerwartetes Format.');
+      }
+    } catch {
+      messages.push('sufficiency.json konnte nicht gelesen werden.');
     }
   }
 

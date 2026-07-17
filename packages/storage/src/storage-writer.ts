@@ -21,6 +21,7 @@ export interface StoragePaths {
   scanSnapshotJson: string;
   graphJson: string;
   toursJson: string;
+  sufficiencyJson: string;
   docBundleJson: string;
 }
 
@@ -40,6 +41,7 @@ export function resolveStoragePaths(outputDir: string): StoragePaths {
     scanSnapshotJson: join(outputDir, 'scan-snapshot.json'),
     graphJson: join(outputDir, 'graph.json'),
     toursJson: join(outputDir, 'tours.json'),
+    sufficiencyJson: join(outputDir, 'sufficiency.json'),
     docBundleJson: join(outputDir, 'doc-bundle.json'),
   };
 }
