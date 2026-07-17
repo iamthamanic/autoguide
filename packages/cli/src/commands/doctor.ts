@@ -12,6 +12,7 @@ import {
   formatRecommendationReviewHint,
 } from '@iamthamanic/autoguide-core';
 import { loadScanRegistry } from '../plugins.js';
+import { FLOW_SEEDING_HINT } from '../lib/flow-seeding-hint.js';
 
 export interface DoctorResult {
   ok: boolean;
@@ -106,6 +107,30 @@ export async function runDoctor(cwd: string): Promise<DoctorResult> {
     } catch {
       messages.push('recommendations.json konnte nicht gelesen werden.');
     }
+  }
+
+  const flowsPath = join(outputDir, 'flows.json');
+  if (existsSync(flowsPath)) {
+    try {
+      const raw = JSON.parse(await readFile(flowsPath, 'utf8')) as unknown;
+      const flows = Array.isArray(raw) ? raw : [];
+      if (flows.length === 0) {
+        messages.push(FLOW_SEEDING_HINT);
+      } else {
+        const ordered = flows.filter(
+          (flow) =>
+            typeof flow === 'object' &&
+            flow !== null &&
+            Array.isArray((flow as { steps?: unknown }).steps) &&
+            ((flow as { steps: unknown[] }).steps.length ?? 0) >= 1,
+        );
+        messages.push(`Flows: ${flows.length} (${ordered.length} mit Schritten)`);
+      }
+    } catch {
+      messages.push('flows.json konnte nicht gelesen werden.');
+    }
+  } else if (existsSync(outputDir)) {
+    messages.push(FLOW_SEEDING_HINT);
   }
 
   if (ok) {
