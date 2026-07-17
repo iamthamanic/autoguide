@@ -122,7 +122,11 @@ Für Produktion ohne Vite-Plugin oder für statisches Hosting:
 npx autoguide sync --target public/autoguide --clean
 ```
 
-Kopiert `facts.json`, `pages.json`, `flows.json`, `tours.json`, `recommendations.json`, `doc-bundle.json` in das Zielverzeichnis.
+Kopiert die Runtime-Artefakte nach dem Zielverzeichnis:
+
+- `facts.json`, `pages.json`, `flows.json`, `tours.json`
+- `recommendations.json`, `reviews.json`, `review-history.json`
+- `doc-bundle.json`
 
 ## Modi
 

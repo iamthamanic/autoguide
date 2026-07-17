@@ -52,20 +52,22 @@ describe('loadArtifactBundle', () => {
     expect(bundle.tours).toEqual(sampleTours);
   });
 
-  it('returns empty arrays for missing optional files', async () => {
+  it('loads pending reviews for the Review panel', async () => {
     const fetchImpl = mockFetch({
       'facts.json': sampleFacts,
       'pages.json': samplePages,
       'flows.json': sampleFlows,
+      'reviews.json': [{ factId: 'f1', reason: 'Unsicher', createdAt: '2026-01-01T00:00:00.000Z' }],
+      'review-history.json': [],
     });
 
     const bundle = await loadArtifactBundle({
-      baseUrl: 'https://example.com/autoguide/',
+      baseUrl: '/autoguide',
       fetchImpl,
     });
 
-    expect(bundle.tours).toEqual([]);
-    expect(bundle.recommendations).toEqual([]);
+    expect(bundle.reviews).toHaveLength(1);
+    expect(bundle.reviews[0]?.factId).toBe('f1');
   });
 
   it('treats non-JSON optional responses as empty arrays', async () => {
