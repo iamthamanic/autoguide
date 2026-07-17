@@ -64,6 +64,8 @@ export interface ScanOptions {
   baseUrl?: string;
   runtime?: boolean;
   runtimeUrl?: string;
+  /** Playwright storageState JSON for authenticated runtime capture. */
+  storageState?: string;
   crawl?: boolean;
   noAi?: boolean;
   cloudConsent?: boolean;
@@ -213,6 +215,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
       baseUrl: runtimeBaseUrl,
       routes: routesForRuntime,
       safeMode: config.scan.safeMode,
+      storageStatePath: options.storageState ?? config.scan.storageStatePath,
     });
     runtimeWarnings.push(...capture.warnings);
     runtimeSnapshot = mergeRuntimeSnapshots(capture.snapshots);

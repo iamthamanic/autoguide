@@ -2,6 +2,8 @@
  * @iamthamanic/autoguide-playwright — capture runtime DOM snapshots via headless browser.
  */
 
+import { access } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import type { RuntimeSnapshot } from '@iamthamanic/autoguide-runtime';
 import { browserScanDom } from './browser-scan-dom.js';
 import { isSafeAction } from './crawl.js';
@@ -10,6 +12,11 @@ export interface CaptureRuntimeOptions {
   baseUrl: string;
   routes: string[];
   safeMode?: boolean;
+  /**
+   * Absolute or relative path to a Playwright storageState JSON file
+   * (cookies + origins) so protected routes are scanned as a logged-in user.
+   */
+  storageStatePath?: string;
 }
 
 export interface CaptureRuntimeResult {
@@ -64,8 +71,22 @@ export async function captureRuntimeSnapshots(
     return { snapshots, visitedRoutes, skippedRoutes: routes, warnings };
   }
 
+  let storageState: string | undefined;
+  if (options.storageStatePath?.trim()) {
+    const resolved = resolve(options.storageStatePath.trim());
+    try {
+      await access(resolved);
+      storageState = resolved;
+    } catch {
+      warnings.push(
+        `storageState nicht gefunden (${resolved}) — Runtime-Scan ohne Session fortgesetzt.`,
+      );
+    }
+  }
+
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const context = await browser.newContext(storageState ? { storageState } : undefined);
+  const page = await context.newPage();
 
   try {
     for (const route of routes) {
@@ -85,6 +106,7 @@ export async function captureRuntimeSnapshots(
       }
     }
   } finally {
+    await context.close();
     await browser.close();
   }
 

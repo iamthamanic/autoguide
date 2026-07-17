@@ -94,6 +94,7 @@ npx autoguide scan
 # Optional: laufende App scannen (Dev-Server muss erreichbar sein)
 npx autoguide scan --runtime
 npx autoguide scan --runtime-url http://localhost:5173
+npx autoguide scan --runtime --storage-state .autoguide/auth.json
 
 # Facts prüfen und freigeben (interaktiv)
 npx autoguide review
@@ -260,6 +261,26 @@ npx autoguide sync --target dist/autoguide --clean
 | Vite-Warnung: kein Artefakt-Ordner | `autoguide scan` im Projekt-Root ausführen |
 | Leeres Hilfe-Panel | `userRole` prüfen — Rollenfilter kann Facts ausblenden |
 | Runtime-Scan schlägt fehl | App unter `baseUrl` erreichbar? `--runtime-url` setzen |
+| Runtime sieht nur `/login` | Session speichern und `--storage-state` / `scan.storageStatePath` setzen (siehe unten) |
+
+#### Authentifizierter Runtime-Scan
+
+Geschützte Routen brauchen eine Playwright-Session (Cookies / localStorage):
+
+1. Einmalig einloggen und State speichern:
+   ```bash
+   npx playwright codegen http://localhost:5173 --save-storage=.autoguide/auth.json
+   ```
+2. Scan mit Session:
+   ```bash
+   npx autoguide scan --runtime --storage-state .autoguide/auth.json
+   ```
+   Oder in `autoguide.config.json`:
+   ```json
+   { "scan": { "runtime": true, "storageStatePath": ".autoguide/auth.json" } }
+   ```
+
+Keine Credentials in Git committen — `auth.json` lokal halten / gitignoren.
 
 ### Weitere Ressourcen
 
@@ -361,6 +382,7 @@ After `autoguide init` and `autoguide scan` in a host project:
 ```bash
 npx autoguide scan --runtime          # optional: capture live DOM at baseUrl (needs running app + Playwright)
 npx autoguide scan --runtime-url http://localhost:3000  # override URL for runtime capture only
+npx autoguide scan --runtime --storage-state .autoguide/auth.json  # authenticated session
 npx autoguide generate tours            # tours.json from flows (no re-scan)
 npx autoguide generate recommendations  # refresh recommendations.json from facts
 npx autoguide generate bundle           # tours + recommendations + doc-bundle.json (with runtime artifact list)

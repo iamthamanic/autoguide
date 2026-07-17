@@ -17,6 +17,11 @@ export interface ScanConfig {
   playwrightImportPath?: string;
   /** When true, `autoguide scan` captures runtime DOM at baseUrl (overridable with --no-runtime). */
   runtime?: boolean;
+  /**
+   * Playwright storageState JSON path (cookies/localStorage) for authenticated runtime scans.
+   * Create via `npx playwright codegen --save-storage=.autoguide/auth.json` after login.
+   */
+  storageStatePath?: string;
 }
 
 export interface RedactionConfig {
