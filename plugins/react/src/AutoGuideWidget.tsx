@@ -3,7 +3,7 @@
  */
 
 import { useMemo, useRef, useState } from 'react';
-import { resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+import { explainHelpGap, resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { agPanelAboveBarStyle } from './bar-styles.js';
 import { FlowStepList } from './FlowStepList.js';
@@ -18,8 +18,19 @@ export interface AutoGuideWidgetProps {
 }
 
 export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
-  const { mode, facts, pages, flows, route, userRole, loading, error, onRetry, dockBottomOffset = 0 } =
-    useAutoGuide();
+  const {
+    mode,
+    facts,
+    pages,
+    flows,
+    reviews,
+    route,
+    userRole,
+    loading,
+    error,
+    onRetry,
+    dockBottomOffset = 0,
+  } = useAutoGuide();
   const panelRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
 
@@ -28,6 +39,20 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
   const helpContext = useMemo(
     () => resolveHelpContext(route, pages, flows, facts, mode, userRole),
     [route, pages, flows, facts, mode, userRole],
+  );
+
+  const gapReasons = useMemo(
+    () =>
+      explainHelpGap({
+        mode,
+        route,
+        pages,
+        flows,
+        facts,
+        reviews,
+        userRole,
+      }),
+    [mode, route, pages, flows, facts, reviews, userRole],
   );
 
   const searchHits = useMemo(
@@ -134,11 +159,20 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
                 <p style={{ margin: 0, color: 'var(--ag-text-muted)' }}>
                   Keine Dokumentation für diese Seite.
                 </p>
-                {mode === 'development' ? (
-                  <p style={{ margin: '8px 0 0', color: 'var(--ag-text-muted)', fontSize: 12 }}>
-                    Offene Reviews über die Review-Schaltfläche prüfen oder{' '}
-                    <code>autoguide review list</code> in der CLI nutzen.
-                  </p>
+                {gapReasons.length > 0 ? (
+                  <ul
+                    style={{
+                      margin: '10px 0 0',
+                      paddingLeft: 18,
+                      color: 'var(--ag-text-muted)',
+                      fontSize: 13,
+                      lineHeight: 1.45,
+                    }}
+                  >
+                    {gapReasons.map((reason) => (
+                      <li key={reason.id}>{reason.message}</li>
+                    ))}
+                  </ul>
                 ) : null}
               </div>
             ) : (

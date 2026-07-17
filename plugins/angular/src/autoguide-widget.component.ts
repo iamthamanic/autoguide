@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+import { resolveHelpContext, searchKnowledge, explainHelpGap } from '@iamthamanic/autoguide-core';
 import { agTokenCssVars, bindFocusTrap } from '@iamthamanic/autoguide-ui';
 import { AutoGuideContextService } from './context.js';
 import { FlowStepListComponent } from './flow-step-list.component.js';
@@ -118,10 +118,14 @@ import { ReviewBadgeComponent } from './review-badge.component.js';
             } @else if (helpContext.actions.length === 0 && helpContext.flows.length === 0) {
               <div style="font-size: 14px">
                 <p style="margin: 0; color: var(--ag-text-muted)">Keine Dokumentation für diese Seite.</p>
-                @if (ctx.mode === 'development') {
-                  <p style="margin: 8px 0 0; color: var(--ag-text-muted); font-size: 12px">
-                    Mit <code>autoguide review list</code> unsichere Einträge prüfen.
-                  </p>
+                @if (gapReasons.length > 0) {
+                  <ul
+                    style="margin: 10px 0 0; padding-left: 18px; color: var(--ag-text-muted); font-size: 13px; line-height: 1.45"
+                  >
+                    @for (reason of gapReasons; track reason.id) {
+                      <li>{{ reason.message }}</li>
+                    }
+                  </ul>
                 }
               </div>
             } @else {
@@ -202,6 +206,17 @@ export class AutoGuideWidgetComponent implements OnDestroy {
       this.ctx.mode,
       this.ctx.userRole,
     );
+  }
+
+  get gapReasons() {
+    return explainHelpGap({
+      mode: this.ctx.mode,
+      route: this.ctx.route,
+      pages: this.ctx.pages,
+      flows: this.ctx.flows,
+      facts: this.ctx.facts,
+      userRole: this.ctx.userRole,
+    });
   }
 
   get searchHits() {

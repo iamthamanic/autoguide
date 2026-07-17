@@ -3,7 +3,7 @@
  */
 
 import { computed, defineComponent, h, ref } from 'vue';
-import { resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+import { explainHelpGap, resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { FlowStepList } from './FlowStepList.js';
 import { PanelSkeleton } from './PanelSkeleton.js';
@@ -25,6 +25,17 @@ export const AutoGuideWidget = defineComponent({
 
     const helpContext = computed(() =>
       resolveHelpContext(route, pages, flows, facts, mode, userRole),
+    );
+
+    const gapReasons = computed(() =>
+      explainHelpGap({
+        mode,
+        route,
+        pages,
+        flows,
+        facts,
+        userRole,
+      }),
     );
 
     const searchHits = computed(() => searchKnowledge(query.value, pages, flows, userRole));
@@ -184,21 +195,21 @@ export const AutoGuideWidget = defineComponent({
                                   { style: { margin: 0, color: 'var(--ag-text-muted)' } },
                                   'Keine Dokumentation für diese Seite.',
                                 ),
-                                mode === 'development'
+                                gapReasons.value.length > 0
                                   ? h(
-                                      'p',
+                                      'ul',
                                       {
                                         style: {
-                                          margin: '8px 0 0',
+                                          margin: '10px 0 0',
+                                          paddingLeft: '18px',
                                           color: 'var(--ag-text-muted)',
-                                          fontSize: '12px',
+                                          fontSize: '13px',
+                                          lineHeight: 1.45,
                                         },
                                       },
-                                      [
-                                        'Mit ',
-                                        h('code', 'autoguide review list'),
-                                        ' unsichere Einträge prüfen.',
-                                      ],
+                                      gapReasons.value.map((reason) =>
+                                        h('li', { key: reason.id }, reason.message),
+                                      ),
                                     )
                                   : null,
                               ])
