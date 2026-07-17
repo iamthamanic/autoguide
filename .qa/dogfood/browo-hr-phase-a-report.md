@@ -86,7 +86,7 @@ Phase A **partially succeeds**: a real host app can mount the dock, run a source
 
 ## Host integration notes (browo-hr)
 
-- Branch: `feature/autoguide-dogfood-phase-a`
+- Branch: `feature/autoguide-dogfood-phase-a` @ `587e0a2e`
 - Packages: published npm (not file: workspace) for react/vite/cli
 - Scripts: `autoguide:scan` prefers local monorepo CLI when present
 - Mode: `development` + inspector/tours features enabled for dogfood

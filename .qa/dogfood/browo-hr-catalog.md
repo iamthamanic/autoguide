@@ -151,8 +151,8 @@ Score each area (A/B/C/D1) then overall Phase A = weighted judgment (integration
 | Field | Value |
 |-------|-------|
 | Date | 2026-07-17 |
-| Autoguide commit / npm | npm `0.1.2`; local CLI fix on `issue/dogfood-cli-schema-path` @ `7c0875a` (+ uncommitted schema resolve until commit) |
-| browo-hr branch / commit | `feature/autoguide-dogfood-phase-a` (pre-commit base `24dd57cb`) |
+| Autoguide commit / npm | npm `0.1.2`; CLI fix + dogfood docs on `issue/dogfood-cli-schema-path` @ `bce28ab` |
+| browo-hr branch / commit | `feature/autoguide-dogfood-phase-a` @ `587e0a2e` |
 | Frontend URL | http://127.0.0.1:3006/login |
 | Backend | **BLOCKED** — Docker not running; port 3011 down |
 | Login blocker | `/api/auth/me` ECONNREFUSED; authenticated HR flows not exercised |
