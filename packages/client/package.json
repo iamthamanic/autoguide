@@ -1,6 +1,6 @@
 {
   "name": "@iamthamanic/autoguide-client",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": false,
   "type": "module",
   "description": "Browser-safe loader for AutoGuide knowledge artifacts",
