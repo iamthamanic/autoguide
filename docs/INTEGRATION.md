@@ -54,6 +54,23 @@ npx autoguide publish         # auf published-Modus schalten
 
 Danach liegt `.autoguide/` mit `facts.json`, `pages.json`, `flows.json`, `tours.json`, `doc-bundle.json`.
 
+### Flows aus Playwright seeden (empfohlen)
+
+Ohne Playwright-Import bleibt `flows.json` oft leer (nur Source-Scan). Kanonischer Pfad:
+
+```bash
+# In-Repo-Referenz (CI + Fixture):
+cd integrations/hr-workflows
+npx autoguide scan --no-ai --playwright-import fixtures/playwright-report.json
+# → ≥1 geordneter Flow in .autoguide/flows.json
+
+# Oder in jeder Host-App:
+npx autoguide scan --playwright-import path/to/playwright-report.json
+# bzw. autoguide.config.json → "scan": { "playwrightImportPath": "…" }
+```
+
+`autoguide doctor` zeigt einen deutschen Hinweis, wenn keine geordneten Flows vorhanden sind. Details: [integrations/hr-workflows/README.md](../integrations/hr-workflows/README.md), Beispiel-App: [examples/react-vite](../examples/react-vite).
+
 ## Schritt 4 — `<AutoGuide />` einbinden
 
 ```tsx

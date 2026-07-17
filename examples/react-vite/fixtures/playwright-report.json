@@ -1,0 +1,27 @@
+{
+  "suites": [
+    {
+      "title": "Example - Save Action (User)",
+      "file": "e2e/save-action.spec.ts",
+      "specs": [
+        {
+          "title": "Aktion speichern",
+          "tests": [
+            {
+              "title": "User speichert eine Aktion",
+              "results": [
+                {
+                  "steps": [
+                    { "title": "goto /", "category": "pw:api" },
+                    { "title": "click Speichern", "category": "pw:api" },
+                    { "title": "Erfolg prüfen", "category": "pw:api" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

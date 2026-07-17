@@ -134,7 +134,7 @@ npx autoguide scan --playwright-import path/to/playwright-report.json
 # bzw. autoguide.config.json → scan.playwrightImportPath
 ```
 
-Details: [integrations/hr-workflows/README.md](integrations/hr-workflows/README.md). Externe browo-hr-E2E sind optional (Dogfood), kein CI-Dependency.
+Details: [integrations/hr-workflows/README.md](integrations/hr-workflows/README.md), Beispiel: [examples/react-vite](examples/react-vite). Externe browo-hr-E2E sind optional (Dogfood), kein CI-Dependency.
 
 ### Schritt 4 — Vite-Plugin einbinden
 
