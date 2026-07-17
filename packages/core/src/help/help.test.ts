@@ -49,12 +49,39 @@ const facts: Fact[] = [
 describe('help context', () => {
   it('normalizes routes', () => {
     expect(normalizeRoute('/vacation/')).toBe('/vacation');
+    expect(normalizeRoute('vacation')).toBe('/vacation');
   });
 
   it('resolves page context for route', () => {
     const ctx = resolveHelpContext('/vacation', pages, flows, facts, 'published');
     expect(ctx.pageTitle).toBe('Urlaub');
     expect(ctx.flows[0]?.title).toBe('Urlaub beantragen');
+  });
+
+  it('matches pages without leading slash', () => {
+    const slashless: PageRecord[] = [{ ...pages[0]!, route: 'vacation' }];
+    const ctx = resolveHelpContext('/vacation', slashless, flows, facts, 'development');
+    expect(ctx.pageTitle).toBe('Urlaub');
+    expect(ctx.actions.map((a) => a.id)).toContain('f1');
+  });
+
+  it('does not dump unrelated global labels onto another route', () => {
+    const loginLabel: Fact = {
+      ...facts[0]!,
+      id: 'login-label',
+      key: 'label',
+      value: 'E-Mail',
+      reviewStatus: 'pending',
+    };
+    const ctx = resolveHelpContext('/dashboard', pages, [], [loginLabel], 'development');
+    expect(ctx.actions).toHaveLength(0);
+    expect(ctx.draftDigest?.pendingFactCount).toBe(1);
+    expect(ctx.draftDigest?.samples).toHaveLength(0);
+  });
+
+  it('shows global flows in development when route has none', () => {
+    const ctx = resolveHelpContext('/other', pages, flows, facts, 'development');
+    expect(ctx.flows.map((f) => f.title)).toContain('Urlaub beantragen');
   });
 
   it('filters flows and facts by userRole', () => {
@@ -115,19 +142,57 @@ describe('explainHelpGap', () => {
     expect(ids).toContain('scan_flows');
     expect(ids).toContain('sync');
     expect(reasons.every((r) => r.message.length > 10)).toBe(true);
+    expect(reasons.some((r) => /playwright-import/i.test(r.message))).toBe(false);
   });
 
   it('recommends scan --auto as primary path when flows are missing', () => {
     const reasons = explainHelpGap({
-      mode: 'development',
-      route: '/vacation',
-      pages,
+      mode: 'published',
+      route: '/other',
+      pages: [],
       flows: [],
-      facts: [],
+      facts: [
+        {
+          ...facts[0]!,
+          id: 'orphan',
+          reviewStatus: 'approved',
+          confidence: 0.95,
+        },
+      ],
     });
     const scan = reasons.find((r) => r.id === 'scan_flows');
     expect(scan?.message).toContain('autoguide scan --auto');
-    expect(scan?.message).toMatch(/playwright-import/i);
+  });
+
+  it('does not claim reviews blank help in development when drafts exist', () => {
+    const pending: Fact[] = [
+      {
+        ...facts[0]!,
+        id: 'f-pending',
+        reviewStatus: 'pending',
+        confidence: 0.5,
+        status: 'needs_review',
+      },
+    ];
+    const reasons = explainHelpGap({
+      mode: 'development',
+      route: '/dashboard',
+      pages: [{ ...pages[0]!, id: 'p-dash', route: '/dashboard', factIds: [] }],
+      flows: [],
+      facts: pending,
+      reviews: [
+        {
+          factId: 'f-pending',
+          entityId: 'x',
+          key: 'action',
+          value: 'x',
+          confidence: 0.5,
+          reason: 'low',
+          priority: 0,
+        },
+      ],
+    });
+    expect(reasons).toEqual([]);
   });
 
   it('explains published gate when facts exist but none are approved', () => {
@@ -152,13 +217,13 @@ describe('explainHelpGap', () => {
     );
   });
 
-  it('mentions scan when flows are missing', () => {
+  it('mentions scan when flows are missing in published empty route', () => {
     const reasons = explainHelpGap({
-      mode: 'development',
-      route: '/vacation',
-      pages,
+      mode: 'published',
+      route: '/other',
+      pages: [],
       flows: [],
-      facts: [],
+      facts: [{ ...facts[0]!, id: 'ok', reviewStatus: 'approved', confidence: 0.95 }],
     });
     expect(reasons.some((r) => r.id === 'scan_flows')).toBe(true);
   });

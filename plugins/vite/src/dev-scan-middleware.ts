@@ -28,7 +28,7 @@ function runCliScan(cwd: string, runtime: boolean): Promise<{ code: number; stde
       return;
     }
 
-    const args = ['scan', '--no-ai'];
+    const args = ['scan', '--no-ai', '--auto'];
     if (runtime) args.push('--runtime');
 
     const child = spawn(bin, args, { cwd, env: process.env });

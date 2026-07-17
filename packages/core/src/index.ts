@@ -32,6 +32,7 @@ export * from './plugins/version.js';
 export * from './plugins/compatibility.js';
 export * from './plugins/lifecycle.js';
 export * from './help/context-resolver.js';
+export * from './help/link-page-facts.js';
 export * from './help/search.js';
 export * from './help/empty-state.js';
 export * from './recommendations/types.js';

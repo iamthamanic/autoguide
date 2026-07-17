@@ -188,7 +188,13 @@ export const AutoGuideWidget = defineComponent({
                                   ),
                             )
                           : helpContext.value.actions.length === 0 &&
-                              helpContext.value.flows.length === 0
+                              helpContext.value.flows.length === 0 &&
+                              !(
+                                mode === 'development' &&
+                                helpContext.value.draftDigest &&
+                                (helpContext.value.draftDigest.samples.length > 0 ||
+                                  helpContext.value.draftDigest.pendingFactCount > 0)
+                              )
                             ? h('div', { style: { fontSize: '14px' } }, [
                                 h(
                                   'p',
@@ -213,6 +219,27 @@ export const AutoGuideWidget = defineComponent({
                                     )
                                   : null,
                               ])
+                            : helpContext.value.actions.length === 0 &&
+                                helpContext.value.flows.length === 0 &&
+                                helpContext.value.draftDigest
+                              ? h('div', { style: { fontSize: '14px' } }, [
+                                  h(
+                                    'p',
+                                    { style: { margin: 0, color: 'var(--ag-text-muted)' } },
+                                    'Entwürfe vorhanden — noch nicht freigegeben.',
+                                  ),
+                                  h(
+                                    'p',
+                                    {
+                                      style: {
+                                        margin: '8px 0 0',
+                                        fontSize: '13px',
+                                        color: 'var(--ag-text-muted)',
+                                      },
+                                    },
+                                    `${helpContext.value.draftDigest.pendingFactCount} offene Fakten · ${helpContext.value.draftDigest.pageCount} Seiten · ${helpContext.value.draftDigest.flowCount} Abläufe`,
+                                  ),
+                                ])
                             : [
                                 helpContext.value.flows.length > 0
                                   ? [

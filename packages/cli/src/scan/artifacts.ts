@@ -2,22 +2,40 @@
  * @iamthamanic/autoguide-cli — build validated artifact records for scan output.
  */
 
-import type { Fact, FeatureRecord, FlowRecord, PageRecord } from '@iamthamanic/autoguide-core';
+import {
+  linkFactsToPages,
+  normalizeRoute,
+  type Fact,
+  type FeatureRecord,
+  type FlowRecord,
+  type PageRecord,
+} from '@iamthamanic/autoguide-core';
 
 export function toPageRecords(
   pages: Array<{ id: string; route: string; title: string }>,
 ): PageRecord[] {
-  return pages.map((page) => ({
-    id: page.id,
-    route: page.route,
-    title: page.title,
-    roleIds: [],
-    elementIds: [],
-    featureIds: [],
-    flowIds: [],
-    factIds: [],
-    status: 'draft',
-  }));
+  return pages.map((page) => {
+    const route = normalizeRoute(page.route);
+    return {
+      id: page.id,
+      route,
+      title: page.title === page.route ? route : page.title,
+      roleIds: [],
+      elementIds: [],
+      featureIds: [],
+      flowIds: [],
+      factIds: [],
+      status: 'draft' as const,
+    };
+  });
+}
+
+/** Build page records and attach matching fact ids from provenance / file heuristics. */
+export function toLinkedPageRecords(
+  pages: Array<{ id: string; route: string; title: string }>,
+  facts: Fact[],
+): PageRecord[] {
+  return linkFactsToPages(toPageRecords(pages), facts);
 }
 
 export function buildFeatureRecords(facts: Fact[]): FeatureRecord[] {

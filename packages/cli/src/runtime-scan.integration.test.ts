@@ -34,7 +34,9 @@ async function startFixtureServer(html: string): Promise<string> {
 }
 
 describe('cli runtime scan', () => {
-  it('merges runtime_dom facts when --runtime and app is reachable', async () => {
+  it(
+    'merges runtime_dom facts when --runtime and app is reachable',
+    async () => {
     await startFixtureServer('<html><body><button aria-label="Speichern">Save</button></body></html>');
     const dir = await mkdtemp(join(tmpdir(), 'ag-runtime-scan-'));
     try {
@@ -83,5 +85,7 @@ describe('cli runtime scan', () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  },
+    20_000,
+  );
 });

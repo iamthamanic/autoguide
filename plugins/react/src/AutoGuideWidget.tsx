@@ -64,6 +64,14 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
 
   const closePanel = () => onOpenChange(false);
 
+  const hasRouteHelp = helpContext.actions.length > 0 || helpContext.flows.length > 0;
+  const draftDigest = helpContext.draftDigest;
+  const showDraftDigest =
+    mode === 'development' &&
+    !hasRouteHelp &&
+    draftDigest !== undefined &&
+    (draftDigest.samples.length > 0 || draftDigest.pendingFactCount > 0);
+
   return (
     <div style={agTokenCssVars()}>
       <div
@@ -154,28 +162,7 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
                   ))
                 )}
               </ul>
-            ) : helpContext.actions.length === 0 && helpContext.flows.length === 0 ? (
-              <div style={{ fontSize: 14 }}>
-                <p style={{ margin: 0, color: 'var(--ag-text-muted)' }}>
-                  Keine Dokumentation für diese Seite.
-                </p>
-                {gapReasons.length > 0 ? (
-                  <ul
-                    style={{
-                      margin: '10px 0 0',
-                      paddingLeft: 18,
-                      color: 'var(--ag-text-muted)',
-                      fontSize: 13,
-                      lineHeight: 1.45,
-                    }}
-                  >
-                    {gapReasons.map((reason) => (
-                      <li key={reason.id}>{reason.message}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </div>
-            ) : (
+            ) : hasRouteHelp ? (
               <>
                 {helpContext.flows.length > 0 ? (
                   <>
@@ -202,6 +189,56 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
                   </>
                 ) : null}
               </>
+            ) : showDraftDigest && draftDigest ? (
+              <div style={{ fontSize: 14 }}>
+                <p style={{ margin: 0, color: 'var(--ag-text-muted)' }}>
+                  Entwürfe vorhanden — noch nicht freigegeben.
+                </p>
+                <p style={{ margin: '8px 0 0', fontSize: 13, color: 'var(--ag-text-muted)' }}>
+                  {draftDigest.pendingFactCount} offene Fakten · {draftDigest.pageCount} Seiten ·{' '}
+                  {draftDigest.flowCount} Abläufe
+                </p>
+                {draftDigest.samples.length > 0 ? (
+                  <>
+                    <h3 style={{ margin: '12px 0 6px', fontSize: 14, fontWeight: 600 }}>
+                      Entwurf (Auswahl)
+                    </h3>
+                    <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14 }}>
+                      {draftDigest.samples.map((fact) => (
+                        <li key={fact.id}>
+                          <strong>{String(fact.key)}</strong>: {String(fact.value ?? '')}
+                          <ReviewBadge fact={fact} mode={mode} />
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p style={{ margin: '10px 0 0', fontSize: 13, color: 'var(--ag-text-muted)' }}>
+                    Im Review-Panel freigeben oder `autoguide scan --auto` für Abläufe.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div style={{ fontSize: 14 }}>
+                <p style={{ margin: 0, color: 'var(--ag-text-muted)' }}>
+                  Keine Dokumentation für diese Seite.
+                </p>
+                {gapReasons.length > 0 ? (
+                  <ul
+                    style={{
+                      margin: '10px 0 0',
+                      paddingLeft: 18,
+                      color: 'var(--ag-text-muted)',
+                      fontSize: 13,
+                      lineHeight: 1.45,
+                    }}
+                  >
+                    {gapReasons.map((reason) => (
+                      <li key={reason.id}>{reason.message}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
             )}
           </>
         )}

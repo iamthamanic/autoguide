@@ -73,7 +73,10 @@ export function AutoGuide({
   const load = useCallback(async () => {
     setState((prev) => ({ ...prev, loading: true, error: null }));
     try {
-      const bundle = await loadArtifactBundle({ baseUrl: bundleBase });
+      const bundle = await loadArtifactBundle({
+        baseUrl: bundleBase,
+        cacheBust: Date.now(),
+      });
       setState({
         loading: false,
         error: null,
