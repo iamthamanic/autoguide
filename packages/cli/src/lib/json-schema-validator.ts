@@ -23,10 +23,13 @@ export const ARTIFACT_SCHEMA_MAP: Record<string, ArtifactSchemaFile> = {
   'confidence.json': 'confidence.schema.json',
 };
 
-const SCHEMA_DIR = join(
-  dirname(fileURLToPath(import.meta.url)),
-  '../../../core/schemas',
-);
+/** Resolve schemas next to `@iamthamanic/autoguide-core` (npm + monorepo). */
+function resolveSchemaDir(): string {
+  const coreEntry = fileURLToPath(import.meta.resolve('@iamthamanic/autoguide-core'));
+  return join(dirname(coreEntry), '..', 'schemas');
+}
+
+const SCHEMA_DIR = resolveSchemaDir();
 
 let ajvInstance: Ajv2020 | null = null;
 const validators = new Map<string, ValidateFunction>();
