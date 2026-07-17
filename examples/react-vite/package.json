@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "echo 'example app — e2e via verify-ui later'"
+    "test": "echo 'example app — e2e via verify-ui later'",
+    "autoguide:auto": "autoguide scan --auto --no-ai --base-url http://localhost:5173"
   },
   "dependencies": {
     "@iamthamanic/autoguide-react": "workspace:*",
