@@ -47,6 +47,10 @@ program
   .option('--base-url <url>', 'Base URL for crawl fallback')
   .option('--runtime', 'Capture runtime DOM via Playwright at baseUrl')
   .option('--runtime-url <url>', 'Override base URL for runtime capture only')
+  .option(
+    '--storage-state <path>',
+    'Playwright storageState JSON (cookies/session) for authenticated runtime scan',
+  )
   .option('--crawl', 'Crawl uncovered routes with Playwright')
   .option('--verify-flows', 'Verify generated flows in a browser via Playwright')
   .option('--no-ai', 'Skip AI enrichment')
@@ -57,6 +61,7 @@ program
     baseUrl?: string;
     runtime?: boolean;
     runtimeUrl?: string;
+    storageState?: string;
     crawl?: boolean;
     verifyFlows?: boolean;
     noAi?: boolean;
@@ -68,6 +73,7 @@ program
       baseUrl: options.baseUrl,
       runtime: options.runtime,
       runtimeUrl: options.runtimeUrl,
+      storageState: options.storageState,
       crawl: options.crawl,
       verifyFlows: options.verifyFlows,
       noAi: options.noAi,
