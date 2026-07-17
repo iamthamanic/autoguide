@@ -2,7 +2,7 @@
  * @iamthamanic/autoguide-cli — JSON Schema validation for .autoguide artifacts.
  */
 
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv2020 from 'ajv/dist/2020.js';
@@ -23,10 +23,54 @@ export const ARTIFACT_SCHEMA_MAP: Record<string, ArtifactSchemaFile> = {
   'confidence.json': 'confidence.schema.json',
 };
 
-/** Resolve schemas next to `@iamthamanic/autoguide-core` (npm + monorepo). */
-function resolveSchemaDir(): string {
-  const coreEntry = fileURLToPath(import.meta.resolve('@iamthamanic/autoguide-core'));
-  return join(dirname(coreEntry), '..', 'schemas');
+/**
+ * Locate `@iamthamanic/autoguide-core` entry (dist/index.js).
+ * Prefer import.meta.resolve (Node CLI); fall back to walking node_modules
+ * (Vitest lacks a working import.meta.resolve; createRequire fails on ESM-only exports).
+ */
+function defaultResolveCoreEntry(): string {
+  const metaResolve = import.meta.resolve;
+  if (typeof metaResolve === 'function') {
+    try {
+      const resolved = metaResolve('@iamthamanic/autoguide-core');
+      if (typeof resolved === 'string' && resolved.length > 0) {
+        return fileURLToPath(resolved);
+      }
+    } catch {
+      // Vitest / incomplete resolver — walk node_modules instead
+    }
+  }
+
+  let dir = dirname(fileURLToPath(import.meta.url));
+  for (let i = 0; i < 12; i++) {
+    const entry = join(dir, 'node_modules', '@iamthamanic', 'autoguide-core', 'dist', 'index.js');
+    if (existsSync(entry)) return entry;
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+
+  throw new Error(
+    'AutoGuide-Core nicht gefunden (@iamthamanic/autoguide-core). Bitte Abhängigkeit installieren.',
+  );
+}
+
+/**
+ * Resolve schemas next to `@iamthamanic/autoguide-core` (npm + monorepo).
+ * Do not use relative `../../../core/schemas` from CLI dist — that resolves to
+ * `@iamthamanic/core/schemas` under node_modules and fails with ENOENT on npm.
+ */
+export function resolveSchemaDir(
+  resolveCoreEntry: () => string = defaultResolveCoreEntry,
+): string {
+  const coreEntry = resolveCoreEntry();
+  const schemaDir = join(dirname(coreEntry), '..', 'schemas');
+  if (!existsSync(join(schemaDir, 'facts.schema.json'))) {
+    throw new Error(
+      `AutoGuide-Schemas nicht gefunden unter ${schemaDir}. Ist @iamthamanic/autoguide-core korrekt installiert?`,
+    );
+  }
+  return schemaDir;
 }
 
 const SCHEMA_DIR = resolveSchemaDir();
