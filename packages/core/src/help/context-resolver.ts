@@ -4,6 +4,7 @@
 
 import type { Fact, VisibilityMode } from '../types/fact.js';
 import type { FlowRecord, PageRecord } from '../types/records.js';
+import { isGenericHandlerNoiseFact } from '../naming/generic-handlers.js';
 import { filterFactsForMode } from '../visibility/filter.js';
 import { filterByRole, filterFactsByRole, isVisibleForRole } from '../visibility/role-filter.js';
 
@@ -43,10 +44,13 @@ export function resolveHelpContext(
     return pageIds.includes(page.id) || pageIds.length === 0;
   });
 
-  const actions = roleFacts.filter((fact) => {
-    if (pageVisible && page && (page.factIds ?? []).includes(fact.id)) return true;
-    return fact.key === 'action' || fact.key === 'description';
-  });
+  const actions = roleFacts
+    .filter((fact) => !isGenericHandlerNoiseFact(fact))
+    .filter((fact) => {
+      if (pageVisible && page && (page.factIds ?? []).includes(fact.id)) return true;
+      return fact.key === 'action' || fact.key === 'description' || fact.key === 'label';
+    })
+    .sort((a, b) => helpFactRank(a) - helpFactRank(b));
 
   return {
     route: normalized,
@@ -54,4 +58,12 @@ export function resolveHelpContext(
     actions: actions.slice(0, 12),
     flows: pageFlows.slice(0, 6),
   };
+}
+
+/** Prefer human labels over raw action/handler keys in Help. */
+function helpFactRank(fact: Fact): number {
+  if (fact.key === 'label') return 0;
+  if (fact.key === 'description') return 1;
+  if (fact.key === 'action') return 2;
+  return 3;
 }
