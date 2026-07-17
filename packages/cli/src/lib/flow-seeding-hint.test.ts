@@ -16,8 +16,10 @@ describe('flowSeedingWarning', () => {
     expect(flowSeedingWarning(3)).toBeUndefined();
   });
 
-  it('returns the documented Playwright import path when empty', () => {
+  it('returns the documented autonomy crawl path when empty', () => {
     expect(flowSeedingWarning(0)).toBe(FLOW_SEEDING_HINT);
+    expect(FLOW_SEEDING_HINT).toContain('--auto');
+    expect(FLOW_SEEDING_HINT).toContain('--crawl');
     expect(FLOW_SEEDING_HINT).toContain('--playwright-import');
     expect(FLOW_SEEDING_HINT).toContain('integrations/hr-workflows');
     expect(FLOW_SEEDING_HINT).toContain('examples/react-vite');

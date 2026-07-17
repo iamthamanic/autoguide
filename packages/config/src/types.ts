@@ -18,6 +18,11 @@ export interface ScanConfig {
   /** When true, `autoguide scan` captures runtime DOM at baseUrl (overridable with --no-runtime). */
   runtime?: boolean;
   /**
+   * Autonomy orchestrator: after source (+ optional import), escalate with crawl when
+   * sufficiency is not met. Prefer explicit `--auto` / this flag to avoid surprising cost.
+   */
+  auto?: boolean;
+  /**
    * Playwright storageState JSON path (cookies/localStorage) for authenticated runtime scans.
    * Create via `npx playwright codegen --save-storage=.autoguide/auth.json` after login.
    */

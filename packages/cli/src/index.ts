@@ -52,6 +52,10 @@ program
     'Playwright storageState JSON (cookies/session) for authenticated runtime scan',
   )
   .option('--crawl', 'Crawl uncovered routes with Playwright')
+  .option(
+    '--auto',
+    'Autonomy path: sufficiency gate → escalate with own crawl (runtime only if enabled)',
+  )
   .option('--verify-flows', 'Verify generated flows in a browser via Playwright')
   .option('--no-ai', 'Skip AI enrichment')
   .option('--cloud-consent', 'Record consent for cloud AI enrichment')
@@ -63,6 +67,7 @@ program
     runtimeUrl?: string;
     storageState?: string;
     crawl?: boolean;
+    auto?: boolean;
     verifyFlows?: boolean;
     noAi?: boolean;
     cloudConsent?: boolean;
@@ -75,6 +80,7 @@ program
       runtimeUrl: options.runtimeUrl,
       storageState: options.storageState,
       crawl: options.crawl,
+      auto: options.auto,
       verifyFlows: options.verifyFlows,
       noAi: options.noAi,
       cloudConsent: options.cloudConsent,

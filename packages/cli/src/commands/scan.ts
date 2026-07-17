@@ -60,7 +60,7 @@ import { StorageWriter } from '@iamthamanic/autoguide-storage';
 import { attachFlowDefaults, buildFeatureRecords, toPageRecords } from '../scan/artifacts.js';
 import { loadScanRegistry } from '../plugins.js';
 import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js';
-import { flowSeedingWarning } from '../lib/flow-seeding-hint.js';
+import { AUTO_SCAN_NEXT_STEPS, flowSeedingWarning } from '../lib/flow-seeding-hint.js';
 
 export interface ScanOptions {
   sourceDir?: string;
@@ -71,9 +71,20 @@ export interface ScanOptions {
   /** Playwright storageState JSON for authenticated runtime capture. */
   storageState?: string;
   crawl?: boolean;
+  /**
+   * Autonomy orchestrator: sufficiency → escalate with crawl (runtime only if enabled).
+   * Prefer explicit flag / `scan.auto` to avoid surprising cost.
+   */
+  auto?: boolean;
   noAi?: boolean;
   cloudConsent?: boolean;
   verifyFlows?: boolean;
+}
+
+function resolveCrawlRoutes(uncoveredRoutes: string[], knownRoutes: string[]): string[] {
+  if (uncoveredRoutes.length > 0) return uncoveredRoutes;
+  if (knownRoutes.length > 0) return knownRoutes;
+  return ['/'];
 }
 
 export interface ScanResult {
@@ -184,6 +195,7 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
       : join(cwd, reportPathRaw)
     : undefined;
   const playwrightPathWarnings: string[] = [];
+  const autoNotes: string[] = [];
   if (reportPathRaw) {
     if (!reportPath || !existsSync(reportPath)) {
       playwrightPathWarnings.push(
@@ -199,11 +211,42 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     }
   }
 
-  if (options.crawl) {
+  const autoEnabled = options.auto === true || config.scan.auto === true;
+  let shouldCrawl = options.crawl === true;
+
+  if (autoEnabled) {
+    const provisionalFlows =
+      playwrightTests.length > 0
+        ? attachFlowDefaults(
+            mergePlaywrightEvidence(playwrightTests, knownRoutes, visitedRoutes).flows,
+          )
+        : [];
+    const midSufficiency = evaluateSufficiency({
+      flows: provisionalFlows,
+      facts: merged.facts,
+      pages: toPageRecords(merged.pages),
+    });
+    if (midSufficiency.status === 'escalate') {
+      shouldCrawl = true;
+      autoNotes.push(
+        'Auto: Evidenz unzureichend — starte eigenen Playwright-Crawl (kein Host-Report nötig).',
+      );
+    } else if (midSufficiency.status === 'blocked') {
+      autoNotes.push(
+        'Auto: keine verwertbare Evidenz — Source-Scan prüfen; Crawl wird trotzdem versucht.',
+      );
+      shouldCrawl = true;
+    } else {
+      autoNotes.push('Auto: Evidenz bereits ausreichend — Crawl übersprungen.');
+    }
+  }
+
+  if (shouldCrawl) {
     const importResult = mergePlaywrightEvidence(playwrightTests, knownRoutes, visitedRoutes);
+    const crawlRoutes = resolveCrawlRoutes(importResult.uncoveredRoutes, knownRoutes);
     const crawl = await crawlUncoveredRoutes({
       baseUrl,
-      routes: importResult.uncoveredRoutes,
+      routes: crawlRoutes,
       safeMode: config.scan.safeMode,
       screenshots: false,
     });
@@ -434,6 +477,8 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
 
   const orderedFlowCount = flowRecords.filter((flow) => flow.steps.length >= 1).length;
   const seedingHint = flowSeedingWarning(orderedFlowCount);
+  const autoFollowUp =
+    autoEnabled && sufficiency.status !== 'sufficient' ? [AUTO_SCAN_NEXT_STEPS] : [];
 
   return {
     ok: true,
@@ -442,8 +487,10 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
       ...formatPluginWarnings(pluginWarnings),
       ...runtimeWarnings,
       ...playwrightPathWarnings,
+      ...autoNotes,
       formatSufficiencySummary(sufficiency),
       ...(seedingHint ? [seedingHint] : []),
+      ...autoFollowUp,
     ],
     outputDir,
     sufficiency,
