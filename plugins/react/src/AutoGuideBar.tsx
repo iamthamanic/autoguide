@@ -211,8 +211,7 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
         style={dockShellStyle}
       >
         {scanMessage ? (
-          <button
-            type="button"
+          <p
             className="ag-dock-scan-toast"
             role="status"
             aria-live="polite"
@@ -220,7 +219,7 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
             onClick={dismissScanToast}
           >
             {scanMessage}
-          </button>
+          </p>
         ) : null}
         <div className="ag-dock-header">
           <span className="ag-dock-header__side" aria-hidden />

@@ -214,7 +214,6 @@ export const AG_DOCK_STYLES = `
   border: 1px solid var(--ag-border);
   background: var(--ag-surface);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
-  font: inherit;
   font-size: 12px;
   line-height: 1.4;
   color: var(--ag-text);
@@ -224,10 +223,6 @@ export const AG_DOCK_STYLES = `
   cursor: pointer;
   pointer-events: auto;
   z-index: 1;
-}
-.ag-dock-scan-toast:focus-visible {
-  outline: 2px solid var(--ag-primary);
-  outline-offset: 1px;
 }
 .ag-dock-dev {
   position: relative;
