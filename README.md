@@ -178,6 +178,22 @@ Danach erscheint der **Hilfe-Button** (FAB unten rechts). `appId` und `bundleBas
 | `inspector` | `false` | Dev-Inspector für Element-Facts |
 | `tours` | `false` | In-App Guided Tour Runner |
 
+#### Dock über Bottom-Navigation
+
+Wenn die Host-App eine feste Bottom-Nav hat, Dock mit `dockBottomOffset` (px) anheben:
+
+```tsx
+<AutoGuide
+  appId="meine-app"
+  mode="published"
+  dockBottomOffset={64}
+>
+  <App />
+</AutoGuide>
+```
+
+Gleiches Prop gibt es auf `AutoGuideProvider`. Default ist `0` (unverändertes Layout).
+
 #### Modi
 
 | Modus | Wer sieht was |

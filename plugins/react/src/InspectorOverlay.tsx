@@ -16,7 +16,7 @@ export interface InspectorOverlayProps {
 }
 
 export function InspectorOverlay({ active, onActiveChange }: InspectorOverlayProps) {
-  const { mode } = useAutoGuide();
+  const { mode, dockBottomOffset = 0 } = useAutoGuide();
   const [selected, setSelected] = useState<RuntimeElement | null>(null);
   const [announcement, setAnnouncement] = useState('');
   const overlayRef = useRef<HTMLDivElement | null>(null);
@@ -117,7 +117,7 @@ export function InspectorOverlay({ active, onActiveChange }: InspectorOverlayPro
         />
       ) : null}
       {selected ? (
-        <div style={{ ...agPanelAboveBarStyle(320), maxHeight: 'min(50vh, 360px)', overflow: 'auto' }}>
+        <div style={{ ...agPanelAboveBarStyle(320, dockBottomOffset), maxHeight: 'min(50vh, 360px)', overflow: 'auto' }}>
           <strong>Element</strong>
           <p style={{ margin: '8px 0 0', fontSize: 14 }}>{selected.label ?? selected.selector}</p>
           <p style={{ margin: '4px 0 0', color: 'var(--ag-text-muted)', fontSize: 12 }}>{selected.selector}</p>

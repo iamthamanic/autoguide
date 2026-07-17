@@ -34,6 +34,8 @@ export interface AutoGuideProviderProps {
   onRetry?: () => void;
   onReviewDecision?: (payload: ReviewDecisionPayload) => void | Promise<void>;
   devScanUrl?: string | false;
+  /** Extra px above the viewport bottom so the dock clears host bottom navigation. Default 0. */
+  dockBottomOffset?: number;
   children: ReactNode;
 }
 
@@ -53,6 +55,7 @@ export function AutoGuideProvider({
   onRetry,
   onReviewDecision,
   devScanUrl = '/__autoguide/scan',
+  dockBottomOffset = 0,
   children,
 }: AutoGuideProviderProps) {
   const liveRoute = useSpaRoute(route);
@@ -126,6 +129,7 @@ export function AutoGuideProvider({
         error,
         onRetry,
         devScanUrl,
+        dockBottomOffset,
         applyReview,
         onReviewDecision,
       }}

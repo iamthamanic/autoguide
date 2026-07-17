@@ -9,6 +9,12 @@ export const AG_BAR_BOTTOM = 14;
 export const AG_DOCK_HEIGHT = 52;
 export const AG_BAR_GAP = 10;
 
+/** Dock distance from viewport bottom (default gap + optional host bottom-nav offset). */
+export function resolveDockBottom(bottomOffset = 0): number {
+  const offset = Number.isFinite(bottomOffset) ? Math.max(0, bottomOffset) : 0;
+  return AG_BAR_BOTTOM + offset;
+}
+
 const AG_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
 export const AG_DOCK_STYLES = `
@@ -282,10 +288,10 @@ export const AG_DOCK_STYLES = `
 }
 `;
 
-export function agDockShellStyle(): CSSProperties {
+export function agDockShellStyle(bottomOffset = 0): CSSProperties {
   return {
     position: 'fixed',
-    bottom: AG_BAR_BOTTOM,
+    bottom: resolveDockBottom(bottomOffset),
     left: '50%',
     transform: 'translateX(-50%)',
     display: 'flex',
@@ -355,12 +361,12 @@ export function agDockActionsStyle(): CSSProperties {
   };
 }
 
-export function agPanelAboveBarStyle(width = 360): CSSProperties {
+export function agPanelAboveBarStyle(width = 360, bottomOffset = 0): CSSProperties {
   return {
     position: 'fixed',
     left: '50%',
     transform: 'translateX(-50%)',
-    bottom: AG_BAR_BOTTOM + AG_DOCK_HEIGHT + AG_BAR_GAP,
+    bottom: resolveDockBottom(bottomOffset) + AG_DOCK_HEIGHT + AG_BAR_GAP,
     width,
     maxWidth: 'min(94vw, 400px)',
     background: 'rgba(255, 255, 255, 0.88)',

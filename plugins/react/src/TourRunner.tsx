@@ -4,9 +4,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useAutoGuide } from './context.js';
-import { AG_BAR_BOTTOM, AG_BAR_GAP, AG_DOCK_HEIGHT } from './bar-styles.js';
-
-const TOUR_PANEL_BOTTOM = AG_BAR_BOTTOM + AG_DOCK_HEIGHT + AG_BAR_GAP;
+import { AG_BAR_GAP, AG_DOCK_HEIGHT, resolveDockBottom } from './bar-styles.js';
 
 export interface TourRunnerProps {
   tourId?: string;
@@ -24,8 +22,9 @@ function findTarget(selector?: string): HTMLElement | null {
 }
 
 export function TourRunner({ tourId, active, onActiveChange }: TourRunnerProps) {
-  const { tours = [] } = useAutoGuide();
+  const { tours = [], dockBottomOffset = 0 } = useAutoGuide();
   const [stepIndex, setStepIndex] = useState(0);
+  const tourPanelBottom = resolveDockBottom(dockBottomOffset) + AG_DOCK_HEIGHT + AG_BAR_GAP;
 
   const tour = useMemo(
     () => tours.find((item) => (tourId ? item.id === tourId : item.status === 'published')),
@@ -80,7 +79,7 @@ export function TourRunner({ tourId, active, onActiveChange }: TourRunnerProps) 
           position: 'fixed',
           left: '50%',
           transform: 'translateX(-50%)',
-          bottom: TOUR_PANEL_BOTTOM,
+          bottom: tourPanelBottom,
           zIndex: 10000,
           background: '#fff',
           border: '1px solid #e2e8f0',

@@ -38,6 +38,8 @@ export interface AutoGuideContextValue {
   error?: string | null;
   onRetry?: () => void;
   devScanUrl?: string | false;
+  /** Extra px above the viewport bottom (e.g. host bottom navigation). Default 0. */
+  dockBottomOffset?: number;
   applyReview: (factId: string, status: 'approved' | 'rejected', editedValue?: string) => void;
   onReviewDecision?: (payload: ReviewDecisionPayload) => void | Promise<void>;
 }
@@ -62,6 +64,7 @@ export function useAutoGuide(): AutoGuideContextValue {
       reviewHistory: [],
       docElements: [],
       registerDocElement: noopRegister,
+      dockBottomOffset: 0,
       applyReview: noopApplyReview,
     };
   }
