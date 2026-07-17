@@ -179,12 +179,20 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
       ? reportPathRaw
       : join(cwd, reportPathRaw)
     : undefined;
-  if (reportPath && existsSync(reportPath)) {
-    playwrightTests = await importPlaywrightReport(reportPath);
-    visitedRoutes = playwrightTests
-      .flatMap((test) => test.steps.map((step) => step.title))
-      .filter((title) => title.startsWith('goto '))
-      .map((title) => title.replace(/^goto\s+/, ''));
+  const playwrightPathWarnings: string[] = [];
+  if (reportPathRaw) {
+    if (!reportPath || !existsSync(reportPath)) {
+      playwrightPathWarnings.push(
+        `Playwright-Report nicht gefunden: ${reportPathRaw}. ` +
+          'Prüfe `--playwright-import` bzw. `scan.playwrightImportPath`.',
+      );
+    } else {
+      playwrightTests = await importPlaywrightReport(reportPath);
+      visitedRoutes = playwrightTests
+        .flatMap((test) => test.steps.map((step) => step.title))
+        .filter((title) => title.startsWith('goto '))
+        .map((title) => title.replace(/^goto\s+/, ''));
+    }
   }
 
   if (options.crawl) {
@@ -407,13 +415,17 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
     ...(await runPluginCleanup(pluginLoad.registry, pluginLoad.enabledIds)),
   );
 
+  const orderedFlowCount = flowRecords.filter((flow) => flow.steps.length >= 1).length;
+  const seedingHint = flowSeedingWarning(orderedFlowCount);
+
   return {
     ok: true,
     errors: [],
     warnings: [
       ...formatPluginWarnings(pluginWarnings),
       ...runtimeWarnings,
-      ...(flowSeedingWarning(flowRecords.length) ? [flowSeedingWarning(flowRecords.length)!] : []),
+      ...playwrightPathWarnings,
+      ...(seedingHint ? [seedingHint] : []),
     ],
     outputDir,
   };

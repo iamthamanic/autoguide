@@ -1,5 +1,8 @@
 {
   "appId": "example-react-vite",
   "mode": "published",
-  "outputDir": ".autoguide"
+  "outputDir": ".autoguide",
+  "scan": {
+    "playwrightImportPath": "fixtures/playwright-report.json"
+  }
 }
