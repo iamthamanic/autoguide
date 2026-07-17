@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import {
   crawlUncoveredRoutes,
   filterSafeClickCandidates,
+  isChromeNoise,
   isSafeAction,
 } from './crawl.js';
 
@@ -20,6 +21,7 @@ function fixtureHtml(): string {
       <button type="button">Open settings</button>
       <button type="button">Delete account</button>
       <button type="button">Speichern</button>
+      <button type="button" aria-label="Open Tanstack query devtools" class="tsqd-open-btn">Dev</button>
     </main>
   </body>
 </html>`;
@@ -61,6 +63,23 @@ describe('interactive crawl', () => {
     expect(isSafeAction('Delete account')).toBe(false);
   });
 
+  it('filters tanstack/devtools chrome by label and DOM hint', () => {
+    expect(isChromeNoise('Open Tanstack query devtools')).toBe(true);
+    expect(isChromeNoise('Dev', 'tsqd-open-btn')).toBe(true);
+    expect(isChromeNoise('Speichern', 'btn-primary')).toBe(false);
+
+    const safe = filterSafeClickCandidates(
+      [
+        { index: 0, label: 'Open Tanstack query devtools' },
+        { index: 1, label: 'Speichern' },
+        { index: 2, label: 'x', domHint: 'react-devtools-root' },
+      ],
+      true,
+      5,
+    );
+    expect(safe.map((c) => c.label)).toEqual(['Speichern']);
+  });
+
   it(
     'produces multi-step traces when page has safe clickables',
     async () => {
@@ -87,6 +106,7 @@ describe('interactive crawl', () => {
         expect(steps.length).toBeGreaterThanOrEqual(2);
         expect(steps.some((s) => s.title.startsWith('click '))).toBe(true);
         expect(steps.every((s) => !/delete|löschen/i.test(s.title))).toBe(true);
+        expect(steps.every((s) => !/tanstack|devtools/i.test(s.title))).toBe(true);
       });
     },
     30_000,
