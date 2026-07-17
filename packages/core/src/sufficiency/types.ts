@@ -19,11 +19,15 @@ export interface SufficiencyEvidence {
  * Pragmatic YAGNI thresholds (documented for autonomy escalate path).
  *
  * sufficient when:
- *   - ≥ minOrderedFlows ordered flows (steps.length ≥ 1), OR
- *   - ≥ minInteractiveFacts interactive facts AND ≥ minPages pages
+ *   - ≥ minOrderedFlows ordered flows (steps.length ≥ 1)
+ *
+ * Interactive fact/page coverage alone is never sufficient — large source
+ * trees would otherwise skip crawl under `--auto` (browo dogfood 0.1.6).
+ * Those thresholds still inform escalate reasons (low coverage hints).
  *
  * escalate when not sufficient but some pages or facts exist
- *   (crawl/runtime can improve coverage)
+ *   (crawl/runtime can improve coverage) — including high interactive
+ *   coverage with zero ordered flows
  *
  * blocked when no pages and no facts (nothing to escalate from)
  */

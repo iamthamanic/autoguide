@@ -12,7 +12,7 @@ Roadmap: Autonomy batch A — PRD Playwright import first, own crawl fallback.
 - No host Playwright JSON required for the gate itself
 
 ## Happy Path
-- [ ] Core module documents pragmatic criteria (≥1 ordered flow OR ≥N interactive facts + pages)
+- [ ] Core module documents pragmatic criteria (≥1 ordered flow required for sufficient; interactive-only → escalate — see #154)
 - [ ] Scan writes `sufficiency.json` with status, evidence, DE reasons
 - [ ] Scan warnings / doctor include German status reasons
 - [ ] Unit tests cover sufficient vs escalate vs blocked

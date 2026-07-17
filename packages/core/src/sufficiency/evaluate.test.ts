@@ -82,19 +82,37 @@ describe('evaluateSufficiency', () => {
     expect(report.reasons.some((r) => r.code === 'ordered_flows')).toBe(true);
   });
 
-  it('returns sufficient when interactive facts + pages meet threshold', () => {
+  it('escalates when interactive coverage is high but orderedFlowCount is 0 (browo false-positive)', () => {
+    const facts = Array.from({ length: 50 }, (_, i) =>
+      fact({ id: `f${i}`, key: `element-${i}` }),
+    );
+    const pages = Array.from({ length: 10 }, (_, i) => page(`p${i}`, `/r${i}`));
+    const report = evaluateSufficiency({
+      flows: [],
+      facts,
+      pages,
+    });
+    expect(report.status).toBe('escalate');
+    expect(report.evidence.orderedFlowCount).toBe(0);
+    expect(report.evidence.interactiveFactCount).toBe(50);
+    expect(report.reasons.some((r) => r.code === 'missing_ordered_flows')).toBe(true);
+    expect(report.reasons[0]?.messageDe).toMatch(/Eskalation/);
+  });
+
+  it('still notes interactive coverage when sufficient via ordered flows', () => {
     const facts = [
       fact({ id: 'a', key: 'element' }),
       fact({ id: 'b', key: 'onSave' }),
-      fact({ id: 'c', key: 'step', provenance: [{ source: 'playwright_trace', confidence: 0.9, observedAt: '2026-07-17T00:00:00.000Z' }] }),
+      fact({ id: 'c', key: 'step' }),
     ];
     const report = evaluateSufficiency({
-      flows: [],
+      flows: [flow('f1', 1)],
       facts,
       pages: [page('p1', '/')],
     });
     expect(report.status).toBe('sufficient');
-    expect(report.evidence.interactiveFactCount).toBe(3);
+    expect(report.reasons.some((r) => r.code === 'ordered_flows')).toBe(true);
+    expect(report.reasons.some((r) => r.code === 'interactive_coverage')).toBe(true);
   });
 
   it('returns escalate when pages exist but thresholds unmet', () => {

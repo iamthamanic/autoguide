@@ -57,15 +57,13 @@ function buildReasons(
   const reasons: SufficiencyReason[] = [];
 
   if (status === 'sufficient') {
-    if (evidence.orderedFlowCount >= criteria.minOrderedFlows) {
-      reasons.push({
-        code: 'ordered_flows',
-        messageDe:
-          evidence.orderedFlowCount === 1
-            ? 'Ausreichend: 1 geordneter Flow vorhanden.'
-            : `Ausreichend: ${evidence.orderedFlowCount} geordnete Flows vorhanden.`,
-      });
-    }
+    reasons.push({
+      code: 'ordered_flows',
+      messageDe:
+        evidence.orderedFlowCount === 1
+          ? 'Ausreichend: 1 geordneter Flow vorhanden.'
+          : `Ausreichend: ${evidence.orderedFlowCount} geordnete Flows vorhanden.`,
+    });
     if (
       evidence.interactiveFactCount >= criteria.minInteractiveFacts &&
       evidence.pageCount >= criteria.minPages
@@ -73,14 +71,8 @@ function buildReasons(
       reasons.push({
         code: 'interactive_coverage',
         messageDe:
-          `Ausreichend: ${evidence.interactiveFactCount} interaktive Facts ` +
+          `Zusätzlich: ${evidence.interactiveFactCount} interaktive Facts ` +
           `auf ${evidence.pageCount} Seite(n).`,
-      });
-    }
-    if (reasons.length === 0) {
-      reasons.push({
-        code: 'sufficient',
-        messageDe: 'Evidenz ausreichend für Hilfe und Touren.',
       });
     }
     return reasons;
@@ -142,16 +134,14 @@ export function evaluateSufficiency(
   const evidence = collectSufficiencyEvidence(input);
 
   const hasOrderedFlows = evidence.orderedFlowCount >= criteria.minOrderedFlows;
-  const hasInteractiveCoverage =
-    evidence.interactiveFactCount >= criteria.minInteractiveFacts &&
-    evidence.pageCount >= criteria.minPages;
 
   let status: SufficiencyStatus;
-  if (hasOrderedFlows || hasInteractiveCoverage) {
+  if (hasOrderedFlows) {
     status = 'sufficient';
   } else if (evidence.pageCount === 0 && evidence.factCount === 0) {
     status = 'blocked';
   } else {
+    // Includes high interactive coverage with 0 ordered flows — `--auto` must crawl.
     status = 'escalate';
   }
 

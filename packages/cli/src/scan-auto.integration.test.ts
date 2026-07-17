@@ -35,6 +35,71 @@ async function startFixtureServer(html: string): Promise<string> {
 
 describe('scan --auto orchestrator', () => {
   it(
+    'escalates and crawls when source has many interactive facts but zero ordered flows',
+    async () => {
+      const baseUrl = await startFixtureServer(`<!doctype html>
+<html lang="de"><body>
+  <a href="/about">About</a>
+  <button type="button">Open settings</button>
+</body></html>`);
+
+      const dir = await mkdtemp(join(tmpdir(), 'ag-auto-escalate-'));
+      try {
+        await mkdir(join(dir, 'src'), { recursive: true });
+        // Many source handlers → interactive_coverage would formerly mark sufficient
+        // and skip crawl (browo-style false-positive).
+        const handlers = Array.from({ length: 20 }, (_, i) => `function onAction${i}() {}`).join(
+          '\n',
+        );
+        const buttons = Array.from(
+          { length: 20 },
+          (_, i) => `      <button onClick={onAction${i}}>Action ${i}</button>`,
+        ).join('\n');
+        await writeFile(
+          join(dir, 'src/App.tsx'),
+          `export function App() {
+  return (
+    <main>
+      <Route path="/" />
+      <Route path="/about" />
+${buttons}
+    </main>
+  );
+}
+function Route(_props: { path: string }) { return null; }
+${handlers}
+`,
+        );
+        await writeFile(
+          join(dir, 'autoguide.config.json'),
+          JSON.stringify({
+            appId: 'auto-escalate-fixture',
+            framework: 'react',
+            baseUrl,
+            outputDir: '.autoguide',
+            mode: 'development',
+            ai: { provider: 'none' },
+            scan: { safeMode: true },
+          }),
+        );
+
+        const scan = await runScan(dir, { auto: true, baseUrl, noAi: true });
+        expect(scan.ok, scan.errors.join('; ')).toBe(true);
+        expect(scan.warnings.some((w) => w.includes('Crawl übersprungen'))).toBe(false);
+        expect(scan.warnings.some((w) => w.includes('Crawl'))).toBe(true);
+
+        const flows = JSON.parse(
+          await readFile(join(dir, '.autoguide/flows.json'), 'utf8'),
+        ) as FlowRecord[];
+        expect(flows.filter((f) => f.steps.length >= 1).length).toBeGreaterThanOrEqual(1);
+      } finally {
+        await rm(dir, { recursive: true, force: true });
+      }
+    },
+    45_000,
+  );
+
+  it(
     'without playwright-import produces ordered flow or clear sufficiency reasons',
     async () => {
       const baseUrl = await startFixtureServer(`<!doctype html>
