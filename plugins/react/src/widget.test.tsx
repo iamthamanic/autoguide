@@ -168,6 +168,60 @@ describe('@iamthamanic/autoguide-react', () => {
     expect(screen.queryByText(/Speichern/)).toBeNull();
   });
 
+  it('lists actionable German reasons when help is empty', () => {
+    render(
+      <AutoGuideProvider appId="demo" mode="published" facts={[]} pages={[]} flows={[]}>
+        <AutoGuideBar features={{ widget: true }} />
+      </AutoGuideProvider>,
+    );
+    fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
+    expect(screen.getByText('Keine Dokumentation für diese Seite.')).toBeTruthy();
+    expect(screen.getByText(/Doc-Bundle fehlt/)).toBeTruthy();
+    expect(screen.getByText(/playwright-import/)).toBeTruthy();
+    expect(screen.getAllByText(/autoguide sync/).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('shows published flows when approved content exists', () => {
+    render(
+      <AutoGuideProvider
+        appId="demo"
+        mode="published"
+        route="/vacation"
+        pages={[
+          {
+            id: 'p1',
+            route: '/vacation',
+            title: 'Urlaub',
+            roleIds: [],
+            elementIds: [],
+            featureIds: [],
+            flowIds: [],
+            factIds: ['f2'],
+            status: 'draft',
+          },
+        ]}
+        flows={[
+          {
+            id: 'fl1',
+            title: 'Urlaub beantragen',
+            steps: [{ order: 1, title: 'Antrag öffnen', factIds: [] }],
+            roleIds: [],
+            pageIds: ['p1'],
+            factIds: [],
+            status: 'published',
+          },
+        ]}
+        facts={[sampleFacts[1]!]}
+      >
+        <AutoGuideBar features={{ widget: true }} />
+      </AutoGuideProvider>,
+    );
+    fireEvent.click(screen.getByLabelText('Hilfe öffnen'));
+    expect(screen.getByText('Urlaub beantragen')).toBeTruthy();
+    expect(screen.getByText(/Exportieren/)).toBeTruthy();
+    expect(screen.queryByText(/Doc-Bundle fehlt/)).toBeNull();
+  });
+
   it('shows loading skeleton with aria-busy', () => {
     render(
       <AutoGuideProvider appId="demo" loading>

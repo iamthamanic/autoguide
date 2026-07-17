@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { resolveHelpContext, normalizeRoute } from './context-resolver.js';
+import { explainHelpGap } from './empty-state.js';
 import { searchKnowledge } from './search.js';
 import type { Fact } from '../types/fact.js';
 import type { FlowRecord, PageRecord } from '../types/records.js';
@@ -85,5 +86,67 @@ describe('help context', () => {
     const hits = searchKnowledge('Urlaub', pages, flows);
     expect(hits.some((hit) => hit.kind === 'page')).toBe(true);
     expect(hits.some((hit) => hit.kind === 'flow')).toBe(true);
+  });
+});
+
+describe('explainHelpGap', () => {
+  it('returns empty when help already has content', () => {
+    expect(
+      explainHelpGap({
+        mode: 'published',
+        route: '/vacation',
+        pages,
+        flows,
+        facts,
+      }),
+    ).toEqual([]);
+  });
+
+  it('lists scan/sync/bundle reasons when artifacts are empty', () => {
+    const reasons = explainHelpGap({
+      mode: 'development',
+      route: '/',
+      pages: [],
+      flows: [],
+      facts: [],
+    });
+    const ids = reasons.map((r) => r.id);
+    expect(ids).toContain('bundle');
+    expect(ids).toContain('scan_flows');
+    expect(ids).toContain('sync');
+    expect(reasons.every((r) => r.message.length > 10)).toBe(true);
+  });
+
+  it('explains published gate when facts exist but none are approved', () => {
+    const pending: Fact[] = [
+      {
+        ...facts[0]!,
+        id: 'f-pending',
+        reviewStatus: 'pending',
+        confidence: 0.5,
+        status: 'needs_review',
+      },
+    ];
+    const reasons = explainHelpGap({
+      mode: 'published',
+      route: '/other',
+      pages: [],
+      flows: [],
+      facts: pending,
+    });
+    expect(reasons.map((r) => r.id)).toEqual(
+      expect.arrayContaining(['publish', 'review', 'published_gate']),
+    );
+  });
+
+  it('mentions scan when flows are missing', () => {
+    const reasons = explainHelpGap({
+      mode: 'development',
+      route: '/vacation',
+      pages,
+      flows: [],
+      facts: [],
+    });
+    expect(reasons.some((r) => r.id === 'scan_flows')).toBe(true);
   });
 });
