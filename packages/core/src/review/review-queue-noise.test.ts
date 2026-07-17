@@ -28,15 +28,24 @@ describe('generic handler noise', () => {
     expect(isGenericHandlerName('submitVacationRequest')).toBe(false);
   });
 
+  it('treats broader on*/handle* identifiers as review/Help noise', () => {
+    expect(isGenericHandlerNoiseFact({ key: 'handler', value: 'onSave' })).toBe(true);
+    expect(isGenericHandlerNoiseFact({ key: 'action', value: 'handleLogin' })).toBe(true);
+    expect(isGenericHandlerNoiseFact({ key: 'label', value: 'Speichern' })).toBe(false);
+    expect(isGenericHandlerNoiseFact({ key: 'action', value: 'submitVacationRequest' })).toBe(false);
+  });
+
   it('excludes generic handlers from review seed but keeps real candidates', () => {
     const queue = new ReviewQueue();
     const items = queue.seedFromFacts([
       makeFact({ id: 'f-noise', key: 'handler', value: 'handleSubmit', entityId: 'handler:handleSubmit' }),
+      makeFact({ id: 'f-onsave', key: 'handler', value: 'onSave', entityId: 'btn-save' }),
       makeFact({ id: 'f-real', key: 'label', value: 'Urlaubsantrag speichern', entityId: 'btn-save' }),
       makeFact({ id: 'f-click', key: 'action', value: 'handleClick', entityId: 'btn-x' }),
     ]);
 
     expect(items.some((item) => item.factId === 'f-noise')).toBe(false);
+    expect(items.some((item) => item.factId === 'f-onsave')).toBe(false);
     expect(items.some((item) => item.factId === 'f-click')).toBe(false);
     expect(items.some((item) => item.factId === 'f-real')).toBe(true);
     expect(isGenericHandlerNoiseFact({ key: 'handler', value: 'handleSubmit' })).toBe(true);

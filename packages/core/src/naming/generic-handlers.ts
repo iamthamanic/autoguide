@@ -23,8 +23,19 @@ export function isGenericHandlerName(name: string): boolean {
 }
 
 /**
- * Facts whose primary documented value is a generic handler name are noise for
- * the review queue (rename guidance lives in recommendations instead).
+ * Broader identifier noise for review/Help: any `onFoo` / `handleFoo` camelCase
+ * handler id (not domain verbs like submitVacationRequest).
+ */
+export function isHandlerIdentifierNoise(name: string): boolean {
+  const trimmed = name.trim();
+  if (!trimmed) return false;
+  if (isGenericHandlerName(trimmed)) return true;
+  return /^(on|handle)[A-Z][A-Za-z0-9]*$/.test(trimmed);
+}
+
+/**
+ * Facts whose primary documented value is a handler identifier are noise for
+ * the review queue / Help actions (rename guidance lives in recommendations).
  */
 export function isGenericHandlerNoiseFact(fact: {
   key: string;
@@ -32,10 +43,14 @@ export function isGenericHandlerNoiseFact(fact: {
   entityId?: string;
 }): boolean {
   const value = String(fact.value ?? '').trim();
-  if (value && isGenericHandlerName(value)) return true;
-  if (fact.key === 'handler' && value && isGenericHandlerName(value)) return true;
+  if (value && isHandlerIdentifierNoise(value)) return true;
+  if (fact.key === 'handler' && value && isHandlerIdentifierNoise(value)) return true;
   const entityTail = (fact.entityId ?? '').split(':').pop() ?? '';
-  if (entityTail && isGenericHandlerName(entityTail) && (!value || isGenericHandlerName(value))) {
+  if (
+    entityTail &&
+    isHandlerIdentifierNoise(entityTail) &&
+    (!value || isHandlerIdentifierNoise(value))
+  ) {
     return true;
   }
   return false;
