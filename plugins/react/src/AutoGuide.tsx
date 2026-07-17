@@ -31,6 +31,8 @@ export interface AutoGuideProps {
   features?: AutoGuideFeatures;
   /** Dev-only POST target for scan button; default `/__autoguide/scan`, `false` to hide. */
   devScanUrl?: string | false;
+  /** Extra px above the viewport bottom so the dock clears host bottom navigation. Default 0. */
+  dockBottomOffset?: number;
   children?: ReactNode;
 }
 
@@ -63,6 +65,7 @@ export function AutoGuide({
   userRole,
   features = { widget: true },
   devScanUrl = '/__autoguide/scan',
+  dockBottomOffset = 0,
   children,
 }: AutoGuideProps) {
   const [state, setState] = useState<LoadedState>(emptyState);
@@ -118,6 +121,7 @@ export function AutoGuide({
       error={state.error}
       onRetry={() => void load()}
       devScanUrl={devScanUrl}
+      dockBottomOffset={dockBottomOffset}
     >
       {children}
       {showBar ? <AutoGuideBar features={features} tourId={primaryTour?.id} /> : null}

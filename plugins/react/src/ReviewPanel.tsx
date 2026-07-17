@@ -14,7 +14,7 @@ export interface ReviewPanelProps {
 }
 
 export function ReviewPanel({ open, onOpenChange }: ReviewPanelProps) {
-  const { mode, facts, reviews, reviewHistory, applyReview } = useAutoGuide();
+  const { mode, facts, reviews, reviewHistory, applyReview, dockBottomOffset = 0 } = useAutoGuide();
   const [draftValues, setDraftValues] = useState<Record<string, string>>({});
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +54,7 @@ export function ReviewPanel({ open, onOpenChange }: ReviewPanelProps) {
         role="dialog"
         aria-label="Review-Warteschlange"
         style={{
-          ...agPanelAboveBarStyle(),
+          ...agPanelAboveBarStyle(360, dockBottomOffset),
           maxHeight: 'min(70vh, 520px)',
           overflow: 'auto',
         }}

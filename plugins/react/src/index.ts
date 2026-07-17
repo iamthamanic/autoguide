@@ -23,3 +23,4 @@ export type { TourRunnerProps } from './TourRunner.js';
 export { useAutoGuide } from './context.js';
 export type { ReviewDecisionPayload } from './review-types.js';
 export type { AutoGuideContextValue } from './context.js';
+export { AG_BAR_BOTTOM, AG_DOCK_HEIGHT, resolveDockBottom } from './bar-styles.js';

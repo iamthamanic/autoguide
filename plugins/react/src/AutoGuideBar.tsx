@@ -38,7 +38,7 @@ export interface AutoGuideBarProps {
 }
 
 export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideBarProps) {
-  const { mode, devScanUrl, onRetry } = useAutoGuide();
+  const { mode, devScanUrl, onRetry, dockBottomOffset = 0 } = useAutoGuide();
   const [helpOpen, setHelpOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [inspectorActive, setInspectorActive] = useState(false);
@@ -175,7 +175,7 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
         <TourRunner tourId={tourId} active={tourActive} onActiveChange={setTourActive} />
       ) : null}
 
-      <aside className="ag-dock" aria-label="AutoGuide" style={agDockShellStyle()}>
+      <aside className="ag-dock" aria-label="AutoGuide" style={agDockShellStyle(dockBottomOffset)}>
         {scanMessage ? (
           <p className="ag-dock-scan-toast" role="status" aria-live="polite">
             {scanMessage}

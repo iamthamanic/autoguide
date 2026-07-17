@@ -18,7 +18,8 @@ export interface AutoGuideWidgetProps {
 }
 
 export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
-  const { mode, facts, pages, flows, route, userRole, loading, error, onRetry } = useAutoGuide();
+  const { mode, facts, pages, flows, route, userRole, loading, error, onRetry, dockBottomOffset = 0 } =
+    useAutoGuide();
   const panelRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
 
@@ -45,7 +46,7 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
         role="dialog"
         aria-label="AutoGuide Hilfe"
         aria-busy={loading || undefined}
-        style={agPanelAboveBarStyle()}
+        style={agPanelAboveBarStyle(360, dockBottomOffset)}
       >
         <div
           style={{
