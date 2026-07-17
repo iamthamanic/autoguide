@@ -406,6 +406,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-07-17** — Release v0.1.3: CLI schema path fix for npm installs (`@iamthamanic/autoguide-*`)
 - **2026-07-16** — Release v0.1.2: Dev-Scan im Dock-Menü, SPA-Route-Hook, Vite-Scan-Middleware (`@iamthamanic/autoguide-*`)
 - **2026-07-15** — Dock unten mittig (Hilfe, Tour); Dev-Tools Inspect + Review im ⚙-Menü (`chore/npm-scope-iamthamanic`)
 - **2026-07-15** — README + docs/AGENT_INTEGRATION.md: KI-Agent Playbook für Host-App-Integration

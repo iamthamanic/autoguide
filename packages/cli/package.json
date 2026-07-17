@@ -1,6 +1,6 @@
 {
   "name": "@iamthamanic/autoguide-cli",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "type": "module",
   "description": "AutoGuide CLI — init, scan, review, export, sync, publish",
