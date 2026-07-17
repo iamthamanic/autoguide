@@ -19,6 +19,7 @@ import { ReviewPanel, useReviewPendingCount } from './ReviewPanel.js';
 import { TourRunner, usePrimaryTour } from './TourRunner.js';
 import { triggerDevScan } from './triggerDevScan.js';
 import { useAutoGuide } from './context.js';
+import { applyCustomDockPosition, useDockPosition } from './useDockPosition.js';
 
 const ICON_SIZE = 16;
 
@@ -38,7 +39,8 @@ export interface AutoGuideBarProps {
 }
 
 export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideBarProps) {
-  const { mode, devScanUrl, onRetry, dockBottomOffset = 0 } = useAutoGuide();
+  const { appId, mode, devScanUrl, onRetry, dockBottomOffset = 0 } = useAutoGuide();
+  const { dockRef, handleProps, position, dragging } = useDockPosition(appId);
   const [helpOpen, setHelpOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [inspectorActive, setInspectorActive] = useState(false);
@@ -163,6 +165,9 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
   const hasBar = showWidget || showTours || showDevMenu;
   if (!hasBar) return null;
 
+  const dockShellStyle = applyCustomDockPosition(agDockShellStyle(dockBottomOffset), position);
+  const dockClassName = dragging ? 'ag-dock ag-dock--dragging' : 'ag-dock';
+
   return (
     <div style={agTokenCssVars()}>
       <style>{AG_DOCK_STYLES}</style>
@@ -175,7 +180,14 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
         <TourRunner tourId={tourId} active={tourActive} onActiveChange={setTourActive} />
       ) : null}
 
-      <aside className="ag-dock" aria-label="AutoGuide" style={agDockShellStyle(dockBottomOffset)}>
+      <aside
+        ref={(el) => {
+          dockRef.current = el;
+        }}
+        className={dockClassName}
+        aria-label="AutoGuide"
+        style={dockShellStyle}
+      >
         {scanMessage ? (
           <p className="ag-dock-scan-toast" role="status" aria-live="polite">
             {scanMessage}
@@ -183,7 +195,14 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
         ) : null}
         <div className="ag-dock-header">
           <span className="ag-dock-header__side" aria-hidden />
-          <p className="ag-dock-header__brand">AutoGuide</p>
+          <button
+            type="button"
+            className="ag-dock-drag-handle"
+            data-dragging={dragging ? 'true' : undefined}
+            {...handleProps}
+          >
+            AutoGuide
+          </button>
           <span className="ag-dock-header__side">
             {showDevMenu ? (
               <DockDevMenu open={devMenuOpen} onOpenChange={setDevMenuOpen} items={devMenuItems} />
