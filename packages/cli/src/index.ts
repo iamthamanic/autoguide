@@ -14,13 +14,14 @@ import { runValidateCommand } from './commands/validate.js';
 import { runGenerate } from './commands/generate.js';
 import { runSearch } from './commands/search.js';
 import { runSyncCommand } from './commands/sync.js';
+import { getCliVersion } from './lib/cli-version.js';
 
 const program = new Command();
 
 program
   .name('autoguide')
   .description('AutoGuide documentation intelligence CLI')
-  .version('0.1.0');
+  .version(getCliVersion());
 
 program
   .command('init')
