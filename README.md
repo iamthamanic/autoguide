@@ -465,6 +465,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-07-17** — Release v0.1.6: Autonomy (`scan --auto`, sufficiency gate, interactive crawl), draggable dock with persisted position (`@iamthamanic/autoguide-*`)
 - **2026-07-17** — Release v0.1.5: Playwright→flows first-class, Help empty-state `explainHelpGap` (DE), sync/doc-bundle includes `reviews.json` (`@iamthamanic/autoguide-*`)
 - **2026-07-17** — Release v0.1.4: Inspect overlay hit-testing, `dockBottomOffset`, `--storage-state` / `scan.storageStatePath`, review-queue handler filter, flow-seeding docs (`@iamthamanic/autoguide-*`)
 - **2026-07-17** — Release v0.1.3: CLI schema path fix for npm installs (`@iamthamanic/autoguide-*`)
