@@ -32,11 +32,28 @@ plugins: [react(), autoguide()]
 ## Artefakte
 
 Die `.autoguide/`-Dateien sind committed (kein Scan nötig für das Beispiel).
-In einer echten App: `autoguide scan` → `autoguide publish` → `autoguide sync --target public/autoguide`.
+In einer echten App: `autoguide scan` → Review → `autoguide publish` → `autoguide sync --target public/autoguide`.
+**Published-Hilfe wird nicht gefaked** — nur freigegebene Facts erscheinen im `published` Mode.
 
-### Flows aus Playwright regenerieren
+### Autonomie-Scan (ohne Host-Playwright-Report)
 
-Die Referenz-App enthält `fixtures/playwright-report.json` und `scan.playwrightImportPath` in `autoguide.config.json`:
+Drop-in: eigener Crawl erzeugt geordnete Flows — **kein** externes JSON-Reporter-Artefakt nötig:
+
+```bash
+cd examples/react-vite
+# Dev-Server parallel: pnpm dev (http://localhost:5173)
+pnpm exec autoguide scan --auto --no-ai --base-url http://localhost:5173
+# oder explizit nur Crawl:
+pnpm exec autoguide scan --crawl --no-ai --base-url http://localhost:5173
+pnpm exec autoguide doctor          # Sufficiency + DE-Hinweise
+pnpm exec autoguide generate tours  # optional, wenn flows.json Schritte hat
+```
+
+Config-Option: `"scan": { "auto": true }` (sonst explizit `--auto`, um Crawl-Kosten zu vermeiden).
+
+### Optional: Flows aus vorhandenem Playwright-Report
+
+Wenn die Host-App bereits einen Report hat (`fixtures/playwright-report.json` / `scan.playwrightImportPath`):
 
 ```bash
 cd examples/react-vite
