@@ -128,6 +128,7 @@ export async function crawlUncoveredRoutes(options: CrawlOptions): Promise<Crawl
   const visitedRoutes: string[] = [];
   const skippedRoutes: string[] = [];
   const traces: PlaywrightTestEvidence[] = [];
+  const warnings: string[] = [];
 
   let chromium: typeof import('playwright').chromium | undefined;
   try {
@@ -138,11 +139,28 @@ export async function crawlUncoveredRoutes(options: CrawlOptions): Promise<Crawl
       visitedRoutes: [],
       skippedRoutes: options.routes,
       traces: [],
+      warnings,
     };
   }
 
+  let storageState: string | undefined;
+  if (options.storageStatePath?.trim()) {
+    const { access } = await import('node:fs/promises');
+    const { resolve } = await import('node:path');
+    const resolved = resolve(options.storageStatePath.trim());
+    try {
+      await access(resolved);
+      storageState = resolved;
+    } catch {
+      warnings.push(
+        `storageState nicht gefunden (${resolved}) — Crawl ohne Session fortgesetzt.`,
+      );
+    }
+  }
+
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const context = await browser.newContext(storageState ? { storageState } : undefined);
+  const page = await context.newPage();
 
   for (const route of options.routes) {
     const label = route;
@@ -168,5 +186,5 @@ export async function crawlUncoveredRoutes(options: CrawlOptions): Promise<Crawl
   }
 
   await browser.close();
-  return { visitedRoutes, skippedRoutes, traces };
+  return { visitedRoutes, skippedRoutes, traces, warnings };
 }

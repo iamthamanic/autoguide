@@ -28,10 +28,16 @@ export interface CrawlOptions {
   routes: string[];
   safeMode?: boolean;
   screenshots?: boolean;
+  /**
+   * Absolute or relative path to a Playwright storageState JSON file
+   * so crawl can visit post-login / protected routes.
+   */
+  storageStatePath?: string;
 }
 
 export interface CrawlResult {
   visitedRoutes: string[];
   skippedRoutes: string[];
   traces: PlaywrightTestEvidence[];
+  warnings?: string[];
 }
