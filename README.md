@@ -465,6 +465,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-07-17** — Dock UX dogfood: visible grip drag handle, scan toast auto-dismiss + wrap, Help empty-state prefers `scan --auto` (#168)
 - **2026-07-17** — Release v0.1.7: Dogfood crawl/sufficiency fixes, flow preserve, noise filters, Inspect pick, auth storageState, CLI `--version` (`@iamthamanic/autoguide-*`)
 - **2026-07-17** — Release v0.1.6: Autonomy (`scan --auto`, sufficiency gate, interactive crawl), draggable dock with persisted position (`@iamthamanic/autoguide-*`)
 - **2026-07-17** — Release v0.1.5: Playwright→flows first-class, Help empty-state `explainHelpGap` (DE), sync/doc-bundle includes `reviews.json` (`@iamthamanic/autoguide-*`)

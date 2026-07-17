@@ -41,7 +41,7 @@ const REASON_BUNDLE: HelpGapReason = {
 const REASON_SCAN: HelpGapReason = {
   id: 'scan_flows',
   message:
-    'Keine Flows vorhanden — `autoguide scan --playwright-import <report.json>` (siehe integrations/hr-workflows).',
+    'Keine Flows vorhanden — `autoguide scan --auto` ausführen (Autonomy/Crawl). Optional, wenn Playwright-Tests existieren: `autoguide scan --playwright-import <report.json>`.',
 };
 
 const REASON_REVIEW: HelpGapReason = {

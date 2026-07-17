@@ -145,27 +145,55 @@ export const AG_DOCK_STYLES = `
 .ag-dock-drag-handle {
   flex: 1;
   min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   margin: 0;
-  padding: 2px 0;
-  border: none;
-  background: transparent;
+  padding: 3px 8px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  background: rgba(255, 255, 255, 0.78);
   font: inherit;
   font-size: 8px;
   font-weight: 650;
-  letter-spacing: 0.13em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ag-text-muted);
+  color: var(--ag-text);
   line-height: 1;
   white-space: nowrap;
   user-select: none;
   text-align: center;
   cursor: grab;
   touch-action: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition:
+    background 0.18s ${AG_EASE},
+    border-color 0.18s ${AG_EASE},
+    box-shadow 0.18s ${AG_EASE};
+}
+.ag-dock-drag-handle__grip {
+  flex-shrink: 0;
+  opacity: 0.72;
+  color: var(--ag-text-muted);
+}
+.ag-dock-drag-handle__label {
+  min-width: 0;
+}
+.ag-dock-drag-handle:hover {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(29, 78, 216, 0.28);
+}
+.ag-dock-drag-handle:hover .ag-dock-drag-handle__grip {
+  opacity: 1;
+  color: var(--ag-primary);
 }
 .ag-dock-drag-handle:active,
 .ag-dock-drag-handle[data-dragging="true"] {
   cursor: grabbing;
+  background: rgba(255, 255, 255, 0.98);
+  border-color: rgba(29, 78, 216, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(29, 78, 216, 0.12);
 }
 .ag-dock-drag-handle:focus-visible {
   outline: 2px solid var(--ag-primary);
@@ -186,14 +214,20 @@ export const AG_DOCK_STYLES = `
   border: 1px solid var(--ag-border);
   background: var(--ag-surface);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  font: inherit;
   font-size: 12px;
   line-height: 1.4;
   color: var(--ag-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  pointer-events: none;
+  white-space: normal;
+  overflow: visible;
+  text-align: center;
+  cursor: pointer;
+  pointer-events: auto;
   z-index: 1;
+}
+.ag-dock-scan-toast:focus-visible {
+  outline: 2px solid var(--ag-primary);
+  outline-offset: 1px;
 }
 .ag-dock-dev {
   position: relative;
