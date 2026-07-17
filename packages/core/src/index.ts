@@ -24,6 +24,7 @@ export * from './graph/entity-graph.js';
 export * from './review/review-queue.js';
 export * from './review/types.js';
 export * from './review/verify-fact.js';
+export * from './naming/generic-handlers.js';
 export * from './visibility/filter.js';
 export * from './visibility/role-filter.js';
 export * from './plugins/registry.js';
