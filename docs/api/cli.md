@@ -29,7 +29,7 @@ Binary: `autoguide` (see `packages/cli/src/index.ts`).
 
 `--crawl` runs AutoGuide’s **own** Playwright crawl for uncovered routes. It is the autonomy fallback when a host app does **not** provide a Playwright JSON reporter import — import is optional bonus, not required.
 
-The crawl performs safe interactions (links/buttons) beyond a single `goto`, respecting `scan.safeMode` (destructive labels like delete/löschen are skipped). Results land in flows via the same Playwright evidence merge path.
+The crawl performs safe interactions (links/buttons) beyond a single `goto`, respecting `scan.safeMode` (destructive labels like delete/löschen are skipped). Results land in flows via the same Playwright evidence merge path. Candidates matching common tooling chrome (TanStack Query Devtools, React/Redux/Vite DevTools labels/classes) are skipped so flows prefer host controls.
 
 Subsequent scans **merge** ordered flows into existing `.autoguide/flows.json` (by title) instead of wiping them when the current pass produces no crawl/import flows. To intentionally clear flows, delete `.autoguide/flows.json` (or the whole output dir) before scanning.
 

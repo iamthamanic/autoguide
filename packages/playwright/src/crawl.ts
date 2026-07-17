@@ -9,12 +9,29 @@ import type { CrawlOptions, CrawlResult, PlaywrightTestEvidence } from './types.
 
 const DESTRUCTIVE_PATTERN = /(delete|remove|löschen|entfernen|destroy)/i;
 
+/**
+ * Generic third-party / tooling chrome — not host-app UI.
+ * Labels and DOM hints that should never become crawl flow steps.
+ */
+const CHROME_NOISE_LABEL =
+  /(tanstack|react\s*dev\s*tools|redux\s*dev\s*tools|vue\s*dev\s*tools|vite\s*dev\s*tools|open\s+.*dev\s*tools|query\s*devtools|tsqd-)/i;
+
+const CHROME_NOISE_DOM =
+  /(tsqd-|tanstack|__devtools|react-devtools|redux-devtools|vite-plugin-devtools)/i;
+
 /** Max safe clicks per route — keeps crawl bounded (YAGNI). */
 export const CRAWL_MAX_SAFE_CLICKS = 5;
 
 export function isSafeAction(label: string, safeMode = true): boolean {
   if (!safeMode) return true;
   return !DESTRUCTIVE_PATTERN.test(label);
+}
+
+/** True when the control looks like tooling chrome rather than host UI. */
+export function isChromeNoise(label: string, domHint = ''): boolean {
+  if (CHROME_NOISE_LABEL.test(label)) return true;
+  if (domHint && CHROME_NOISE_DOM.test(domHint)) return true;
+  return false;
 }
 
 interface ClickCandidate {
@@ -27,23 +44,29 @@ interface ClickCandidate {
  * Pure filter helper also exported for unit tests without a browser.
  */
 export function filterSafeClickCandidates(
-  candidates: Array<{ index: number; label: string }>,
+  candidates: Array<{ index: number; label: string; domHint?: string }>,
   safeMode: boolean,
   maxClicks = CRAWL_MAX_SAFE_CLICKS,
 ): ClickCandidate[] {
-  const safe: ClickCandidate[] = [];
-  for (const candidate of candidates) {
-    const label = candidate.label.trim() || `element-${candidate.index}`;
-    if (!isSafeAction(label, safeMode)) continue;
-    safe.push({ index: candidate.index, label });
-    if (safe.length >= maxClicks) break;
-  }
-  return safe;
+  const scored = candidates
+    .map((candidate) => {
+      const label = candidate.label.trim() || `element-${candidate.index}`;
+      return { ...candidate, label, domHint: candidate.domHint ?? '' };
+    })
+    .filter((c) => isSafeAction(c.label, safeMode) && !isChromeNoise(c.label, c.domHint))
+    // Prefer real labels over empty/fallback element-N placeholders.
+    .sort((a, b) => {
+      const aNamed = a.label.startsWith('element-') ? 1 : 0;
+      const bNamed = b.label.startsWith('element-') ? 1 : 0;
+      return aNamed - bNamed;
+    });
+
+  return scored.slice(0, maxClicks).map(({ index, label }) => ({ index, label }));
 }
 
 async function collectClickCandidates(
   page: import('playwright').Page,
-): Promise<Array<{ index: number; label: string }>> {
+): Promise<Array<{ index: number; label: string; domHint: string }>> {
   return page.evaluate(() => {
     const nodes = Array.from(
       document.querySelectorAll('a[href], button, [role="button"], input[type="submit"]'),
@@ -60,7 +83,8 @@ async function collectClickCandidates(
         .replace(/\s+/g, ' ')
         .trim()
         .slice(0, 80);
-      return { index, label };
+      const domHint = `${el.id} ${el.className} ${el.getAttribute('data-testid') ?? ''}`;
+      return { index, label, domHint };
     });
   });
 }
