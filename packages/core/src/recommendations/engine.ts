@@ -11,15 +11,7 @@ import type {
   RecommendationScanHint,
   RecommendationSeverity,
 } from './types.js';
-
-const GENERIC_HANDLERS = new Set([
-  'handleclick',
-  'handlechange',
-  'handlesubmit',
-  'onclick',
-  'onsubmit',
-  'onchange',
-]);
+import { isGenericHandlerName } from '../naming/generic-handlers.js';
 
 let counter = 0;
 
@@ -39,11 +31,6 @@ function push(
 ): void {
   const { idPrefix, ...rest } = input;
   list.push({ id: nextId(idPrefix), ...rest });
-}
-
-function isGenericHandler(name: string): boolean {
-  const lower = name.toLowerCase();
-  return GENERIC_HANDLERS.has(lower) || /^handle(click|submit|change)$/i.test(name);
 }
 
 function suggestHandlerName(handler: string): string {
@@ -84,7 +71,7 @@ export function generateRecommendations(
       });
     }
 
-    if (hint.handlerName && isGenericHandler(hint.handlerName)) {
+    if (hint.handlerName && isGenericHandlerName(hint.handlerName)) {
       const suggested = suggestHandlerName(hint.handlerName);
       remember(`name:${hint.filePath}:${hint.handlerName}:${hint.line ?? 0}`, {
         idPrefix: 'rec-name',

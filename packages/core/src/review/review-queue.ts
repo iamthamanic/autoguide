@@ -8,6 +8,7 @@ import { factPrecedence } from '../validators/fact.js';
 import type { Recommendation } from '../recommendations/types.js';
 import type { ReviewAction, ReviewActionRecord } from './types.js';
 import { recommendationForUnsupportedEdit, verifyEditedFact } from './verify-fact.js';
+import { isGenericHandlerNoiseFact } from '../naming/generic-handlers.js';
 
 export interface ReviewItem {
   factId: string;
@@ -16,6 +17,8 @@ export interface ReviewItem {
   value: unknown;
   confidence: number;
   reason: string;
+  /** Lower = higher priority in the queue (generic handlers are down-ranked). */
+  priority?: number;
 }
 
 export interface ReviewDecisionResult {
@@ -32,6 +35,8 @@ export class ReviewQueue {
   seedFromFacts(facts: Fact[]): ReviewItem[] {
     for (const fact of facts) {
       const threshold = minimumConfidenceForKey(fact.key);
+      const genericNoise = isGenericHandlerNoiseFact(fact);
+
       if (fact.status === 'stale') {
         const item: ReviewItem = {
           factId: fact.id,
@@ -40,10 +45,17 @@ export class ReviewQueue {
           value: fact.value,
           confidence: fact.confidence,
           reason: 'Dokumentation veraltet — Quellcode geändert',
+          priority: genericNoise ? 100 : 0,
         };
         this.items.set(fact.id, item);
         continue;
       }
+
+      if (genericNoise) {
+        // Keep rename guidance in recommendations; do not flood the review queue.
+        continue;
+      }
+
       if (fact.confidence < threshold || needsReview(fact.confidence)) {
         const item: ReviewItem = {
           factId: fact.id,
@@ -52,6 +64,7 @@ export class ReviewQueue {
           value: fact.value,
           confidence: fact.confidence,
           reason: `Confidence ${fact.confidence} unter Schwellwert ${threshold}`,
+          priority: 0,
         };
         this.items.set(fact.id, item);
       }
@@ -76,7 +89,11 @@ export class ReviewQueue {
   }
 
   list(): ReviewItem[] {
-    return [...this.items.values()];
+    return [...this.items.values()].sort((a, b) => {
+      const priorityDelta = (a.priority ?? 0) - (b.priority ?? 0);
+      if (priorityDelta !== 0) return priorityDelta;
+      return b.confidence - a.confidence;
+    });
   }
 
   loadFromItems(items: ReviewItem[]): void {
