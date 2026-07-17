@@ -92,8 +92,65 @@ describe('@iamthamanic/autoguide-react', () => {
       expect.objectContaining({ method: 'POST' }),
     );
     expect(onRetry).toHaveBeenCalled();
+    expect(screen.getByRole('status').textContent).toContain('Scan abgeschlossen');
 
     vi.unstubAllGlobals();
+  });
+
+  it('auto-dismisses scan toast after 5s and on click', async () => {
+    vi.useFakeTimers();
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      json: async () => ({
+        ok: true,
+        message: 'Scan abgeschlossen. Dokumentation wurde aktualisiert.',
+      }),
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(
+      <AutoGuideProvider appId="demo" mode="development">
+        <AutoGuideBar features={{ widget: true }} />
+      </AutoGuideProvider>,
+    );
+
+    fireEvent.click(screen.getByLabelText('Entwickler-Menü'));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('menuitem', { name: 'Dokumentation neu scannen' }));
+      await Promise.resolve();
+    });
+
+    expect(
+      screen.getByText('Scan abgeschlossen. Dokumentation wurde aktualisiert.'),
+    ).toBeTruthy();
+
+    await act(async () => {
+      vi.advanceTimersByTime(5000);
+    });
+    expect(screen.queryByRole('status')).toBeNull();
+
+    fireEvent.click(screen.getByLabelText('Entwickler-Menü'));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('menuitem', { name: 'Dokumentation neu scannen' }));
+      await Promise.resolve();
+    });
+    fireEvent.click(screen.getByRole('status'));
+    expect(screen.queryByRole('status')).toBeNull();
+
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  it('renders a visible grip drag handle', () => {
+    render(
+      <AutoGuideProvider appId="demo" mode="development">
+        <AutoGuideBar features={{ widget: true }} />
+      </AutoGuideProvider>,
+    );
+    const handle = screen.getByRole('button', { name: /Dock verschieben/ });
+    expect(handle.className).toContain('ag-dock-drag-handle');
+    expect(handle.querySelector('.ag-dock-drag-handle__grip')).toBeTruthy();
+    expect(handle.textContent).toContain('AutoGuide');
   });
 
   it('shows tour button when tours feature is enabled', () => {

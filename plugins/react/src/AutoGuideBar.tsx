@@ -2,7 +2,15 @@
  * @iamthamanic/autoguide-react — bottom-center dock: Hilfe + Tour; dev tools in settings menu.
  */
 
-import { CircleHelp, ClipboardList, Crosshair, Route, ScanSearch, type LucideIcon } from 'lucide-react';
+import {
+  CircleHelp,
+  ClipboardList,
+  Crosshair,
+  GripVertical,
+  Route,
+  ScanSearch,
+  type LucideIcon,
+} from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import {
@@ -22,6 +30,7 @@ import { useAutoGuide } from './context.js';
 import { applyCustomDockPosition, useDockPosition } from './useDockPosition.js';
 
 const ICON_SIZE = 16;
+const SCAN_TOAST_DISMISS_MS = 5000;
 
 function dockIcon(IconComponent: LucideIcon, active: boolean) {
   return (
@@ -57,6 +66,10 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
   const showReviewInMenu = mode === 'development';
   const showScanInMenu = mode === 'development' && devScanUrl !== false && Boolean(devScanUrl);
 
+  const dismissScanToast = useCallback(() => {
+    setScanMessage(null);
+  }, []);
+
   const runDevScan = useCallback(async () => {
     if (!devScanUrl || scanBusy) return;
     setScanBusy(true);
@@ -66,6 +79,15 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
     setScanMessage(result.message);
     if (result.ok && onRetry) onRetry();
   }, [devScanUrl, onRetry, scanBusy]);
+
+  // Auto-dismiss completed scan toast; clear on unmount / new message while busy.
+  useEffect(() => {
+    if (!scanMessage || scanBusy) return;
+    const timer = window.setTimeout(() => {
+      setScanMessage(null);
+    }, SCAN_TOAST_DISMISS_MS);
+    return () => window.clearTimeout(timer);
+  }, [scanMessage, scanBusy]);
 
   const devMenuItems = useMemo(() => {
     const items: Parameters<typeof DockDevMenu>[0]['items'] = [];
@@ -189,9 +211,16 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
         style={dockShellStyle}
       >
         {scanMessage ? (
-          <p className="ag-dock-scan-toast" role="status" aria-live="polite">
+          <button
+            type="button"
+            className="ag-dock-scan-toast"
+            role="status"
+            aria-live="polite"
+            title="Klicken zum Schließen"
+            onClick={dismissScanToast}
+          >
             {scanMessage}
-          </p>
+          </button>
         ) : null}
         <div className="ag-dock-header">
           <span className="ag-dock-header__side" aria-hidden />
@@ -201,7 +230,8 @@ export function AutoGuideBar({ features = { widget: true }, tourId }: AutoGuideB
             data-dragging={dragging ? 'true' : undefined}
             {...handleProps}
           >
-            AutoGuide
+            <GripVertical className="ag-dock-drag-handle__grip" size={12} strokeWidth={2.25} aria-hidden />
+            <span className="ag-dock-drag-handle__label">AutoGuide</span>
           </button>
           <span className="ag-dock-header__side">
             {showDevMenu ? (

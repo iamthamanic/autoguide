@@ -117,6 +117,19 @@ describe('explainHelpGap', () => {
     expect(reasons.every((r) => r.message.length > 10)).toBe(true);
   });
 
+  it('recommends scan --auto as primary path when flows are missing', () => {
+    const reasons = explainHelpGap({
+      mode: 'development',
+      route: '/vacation',
+      pages,
+      flows: [],
+      facts: [],
+    });
+    const scan = reasons.find((r) => r.id === 'scan_flows');
+    expect(scan?.message).toContain('autoguide scan --auto');
+    expect(scan?.message).toMatch(/playwright-import/i);
+  });
+
   it('explains published gate when facts exist but none are approved', () => {
     const pending: Fact[] = [
       {
