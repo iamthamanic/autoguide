@@ -57,6 +57,7 @@ import { StorageWriter } from '@iamthamanic/autoguide-storage';
 import { attachFlowDefaults, buildFeatureRecords, toPageRecords } from '../scan/artifacts.js';
 import { loadScanRegistry } from '../plugins.js';
 import { validateArtifactsWithJsonSchema } from '../lib/json-schema-validator.js';
+import { flowSeedingWarning } from '../lib/flow-seeding-hint.js';
 
 export interface ScanOptions {
   sourceDir?: string;
@@ -409,7 +410,11 @@ export async function runScan(cwd: string, options: ScanOptions = {}): Promise<S
   return {
     ok: true,
     errors: [],
-    warnings: [...formatPluginWarnings(pluginWarnings), ...runtimeWarnings],
+    warnings: [
+      ...formatPluginWarnings(pluginWarnings),
+      ...runtimeWarnings,
+      ...(flowSeedingWarning(flowRecords.length) ? [flowSeedingWarning(flowRecords.length)!] : []),
+    ],
     outputDir,
   };
 }

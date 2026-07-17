@@ -117,6 +117,25 @@ Nach dem Scan liegt unter `.autoguide/` u. a.:
 | `recommendations.json` | Priorisierte Verbesserungsvorschläge |
 | `doc-bundle.json` | Manifest für Runtime-Loader |
 
+#### Flows aus Playwright seeden
+
+Ohne Playwright-Import bleibt `flows.json` oft leer. Kanonischer In-Repo-Pfad:
+
+```bash
+cd integrations/hr-workflows
+pnpm exec autoguide scan --no-ai --playwright-import fixtures/playwright-report.json
+# → .autoguide/flows.json mit ≥1 geordnetem Flow (Fixture liefert drei)
+```
+
+Oder in jeder Host-App:
+
+```bash
+npx autoguide scan --playwright-import path/to/playwright-report.json
+# bzw. autoguide.config.json → scan.playwrightImportPath
+```
+
+Details: [integrations/hr-workflows/README.md](integrations/hr-workflows/README.md). Externe browo-hr-E2E sind optional (Dogfood), kein CI-Dependency.
+
 ### Schritt 4 — Vite-Plugin einbinden
 
 ```ts
