@@ -245,7 +245,7 @@ Ohne Vite-Dev-Server oder für CI-Deploy:
 npx autoguide sync --target public/autoguide --clean
 ```
 
-Kopiert publish-ready JSONs ins Static-Verzeichnis. `bundleBase="/autoguide"` in `<AutoGuide />` muss dem URL-Pfad entsprechen.
+Kopiert publish-ready JSONs ins Static-Verzeichnis (`facts`/`pages`/`flows`/`tours`/`recommendations`/`reviews`/`review-history`/`doc-bundle`). `bundleBase="/autoguide"` in `<AutoGuide />` muss dem URL-Pfad entsprechen.
 
 **Typischer CI-Ablauf:**
 

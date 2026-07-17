@@ -2,9 +2,9 @@
  * @iamthamanic/autoguide-cli — sync command: copy publish-ready artifacts to a static target.
  */
 
-import { cp, mkdir, rm, readdir } from 'node:fs/promises';
+import { cp, mkdir, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { join, basename } from 'node:path';
+import { join } from 'node:path';
 import { resolveOutputDir } from '../lib/artifacts.js';
 
 export interface SyncOptions {
@@ -18,14 +18,21 @@ export interface SyncResult {
   errors: string[];
 }
 
-const RUNTIME_ARTIFACTS = [
+/**
+ * Full list of runtime artifacts copied by `autoguide sync`.
+ * Keep in sync with `@iamthamanic/autoguide-client` RUNTIME_ARTIFACT_FILES
+ * and `doc-bundle.json` → `runtimeArtifacts`.
+ */
+export const RUNTIME_ARTIFACTS = [
   'facts.json',
   'pages.json',
   'flows.json',
   'tours.json',
   'recommendations.json',
+  'reviews.json',
+  'review-history.json',
   'doc-bundle.json',
-];
+] as const;
 
 export async function runSync(cwd: string, options: SyncOptions): Promise<SyncResult> {
   const outputDir = await resolveOutputDir(cwd);

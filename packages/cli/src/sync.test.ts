@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { runSync } from './commands/sync.js';
+import { runSync, RUNTIME_ARTIFACTS } from './commands/sync.js';
 import { runGenerateBundle } from './commands/generate.js';
 import { runScan } from './commands/scan.js';
 
@@ -33,6 +33,50 @@ describe('sync command', () => {
       expect(result.copied).toContain('tours.json');
       expect(result.copied).toContain('doc-bundle.json');
       expect(existsSync(join(target, 'facts.json'))).toBe(true);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('copies reviews.json so the runtime Review panel stays in sync', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'ag-sync-reviews-'));
+    try {
+      await cp(integrationDir, dir, { recursive: true });
+      expect((await runScan(dir, { noAi: true })).ok).toBe(true);
+
+      const reviews = [
+        { factId: 'fact-pending', reason: 'Unsicherer Scan-Eintrag', createdAt: '2026-07-17T00:00:00.000Z' },
+      ];
+      const history = [
+        {
+          factId: 'fact-pending',
+          entityId: 'el-1',
+          key: 'label',
+          action: 'pending',
+          at: '2026-07-17T00:00:00.000Z',
+        },
+      ];
+      await writeFile(join(dir, '.autoguide/reviews.json'), JSON.stringify(reviews), 'utf8');
+      await writeFile(join(dir, '.autoguide/review-history.json'), JSON.stringify(history), 'utf8');
+
+      const target = join(dir, 'public/autoguide');
+      const result = await runSync(dir, { target });
+
+      expect(result.ok).toBe(true);
+      expect(result.copied).toContain('reviews.json');
+      expect(result.copied).toContain('review-history.json');
+      expect(RUNTIME_ARTIFACTS).toContain('reviews.json');
+
+      const syncedReviews = JSON.parse(
+        await readFile(join(target, 'reviews.json'), 'utf8'),
+      ) as typeof reviews;
+      expect(syncedReviews).toHaveLength(1);
+      expect(syncedReviews[0]?.factId).toBe('fact-pending');
+
+      const syncedHistory = JSON.parse(
+        await readFile(join(target, 'review-history.json'), 'utf8'),
+      ) as typeof history;
+      expect(syncedHistory[0]?.action).toBe('pending');
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
