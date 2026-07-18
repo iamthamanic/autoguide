@@ -4,10 +4,10 @@
 
 import type { Fact, VisibilityMode } from '../types/fact.js';
 import type { FlowRecord, PageRecord } from '../types/records.js';
-import { isGenericHandlerNoiseFact } from '../naming/generic-handlers.js';
 import { filterFactsForMode } from '../visibility/filter.js';
 import { filterByRole, filterFactsByRole, isVisibleForRole } from '../visibility/role-filter.js';
 import { filePathMatchesRoute, normalizeRoute } from './route.js';
+import { isUserFacingHelpFact } from './useful-fact.js';
 
 export { normalizeRoute } from './route.js';
 
@@ -16,6 +16,8 @@ export interface HelpDraftDigest {
   pageCount: number;
   flowCount: number;
   samples: Fact[];
+  /** Pending facts exist but none are user-facing Help content. */
+  technicalOnly?: boolean;
 }
 
 export interface HelpContext {
@@ -42,11 +44,6 @@ function factTouchesRoute(fact: Fact, route: string, page?: PageRecord): boolean
   return false;
 }
 
-function isHelpKey(fact: Fact): boolean {
-  return fact.key === 'action' || fact.key === 'description' || fact.key === 'label';
-}
-
-/** Prefer human labels over raw action/handler keys in Help. */
 function helpFactRank(fact: Fact): number {
   if (fact.key === 'label') return 0;
   if (fact.key === 'description') return 1;
@@ -59,23 +56,15 @@ function pickRouteActions(
   route: string,
   page: PageRecord | undefined,
   pageVisible: boolean,
-  mode: VisibilityMode,
 ): Fact[] {
+  if (!pageVisible || !page) return [];
+
   const linked = roleFacts.filter((fact) => {
-    if (isGenericHandlerNoiseFact(fact)) return false;
-    if (!pageVisible || !page) return false;
+    if (!isUserFacingHelpFact(fact)) return false;
     return factTouchesRoute(fact, route, page);
   });
 
-  const preferred = linked.filter(isHelpKey);
-  const pool =
-    preferred.length > 0
-      ? preferred
-      : mode === 'development'
-        ? linked
-        : linked.filter(isHelpKey);
-
-  return [...pool].sort((a, b) => helpFactRank(a) - helpFactRank(b)).slice(0, 12);
+  return [...linked].sort((a, b) => helpFactRank(a) - helpFactRank(b)).slice(0, 12);
 }
 
 function pickRouteFlows(
@@ -109,17 +98,23 @@ function buildDraftDigest(
   if (pages.length === 0 && flows.length === 0 && facts.length === 0) return undefined;
 
   const pending = facts.filter((fact) => fact.reviewStatus === 'pending');
-  const samples = pending
-    .filter((fact) => !isGenericHandlerNoiseFact(fact))
+  const pendingUseful = pending.filter((fact) => isUserFacingHelpFact(fact));
+  const samples = pendingUseful
     .filter((fact) => factTouchesRoute(fact, route, page))
     .sort((a, b) => helpFactRank(a) - helpFactRank(b))
     .slice(0, 8);
+
+  // Only signal “technical candidates” when every pending fact is Help noise
+  const technicalOnly = pending.length > 0 && pendingUseful.length === 0;
+
+  if (samples.length === 0 && !technicalOnly) return undefined;
 
   return {
     pendingFactCount: pending.length,
     pageCount: pages.length,
     flowCount: flows.length,
     samples,
+    technicalOnly: technicalOnly || undefined,
   };
 }
 
@@ -140,7 +135,7 @@ export function resolveHelpContext(
   const pageVisible = page ? isVisibleForRole(page.roleIds, userRole) : false;
   const pageTitle = pageVisible ? page?.title : undefined;
 
-  const actions = pickRouteActions(roleFacts, normalized, page, pageVisible, mode);
+  const actions = pickRouteActions(roleFacts, normalized, page, pageVisible);
   const pageFlows = pickRouteFlows(roleFlows, page, pageVisible, mode);
 
   const draftDigest =

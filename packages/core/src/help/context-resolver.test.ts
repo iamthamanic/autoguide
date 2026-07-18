@@ -31,7 +31,7 @@ describe('resolveHelpContext handler noise', () => {
       elementIds: [],
       featureIds: [],
       flowIds: [],
-      factIds: ['f-noise', 'f-label', 'f-action'],
+      factIds: ['f-noise', 'f-label', 'f-action', 'f-element'],
       status: 'draft',
     };
     const ctx = resolveHelpContext(
@@ -40,6 +40,7 @@ describe('resolveHelpContext handler noise', () => {
       [],
       [
         fact({ id: 'f-noise', key: 'handler', value: 'onSave' }),
+        fact({ id: 'f-element', key: 'element', value: 'HomePanel' }),
         fact({ id: 'f-label', key: 'label', value: 'Speichern' }),
         fact({ id: 'f-action', key: 'action', value: 'submitVacationRequest' }),
       ],

@@ -11,8 +11,9 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { resolveHelpContext, searchKnowledge, explainHelpGap } from '@iamthamanic/autoguide-core';
+import { resolveHelpContext, searchKnowledge, explainHelpGap, formatHelpActionText } from '@iamthamanic/autoguide-core';
 import { agTokenCssVars, bindFocusTrap } from '@iamthamanic/autoguide-ui';
+import type { Fact } from '@iamthamanic/autoguide-core';
 import { AutoGuideContextService } from './context.js';
 import { FlowStepListComponent } from './flow-step-list.component.js';
 import { PanelSkeletonComponent } from './panel-skeleton.component.js';
@@ -111,7 +112,7 @@ import { ReviewBadgeComponent } from './review-badge.component.js';
                   <li>Keine Treffer.</li>
                 } @else {
                   @for (hit of searchHits; track hit.kind + hit.id) {
-                    <li><strong>{{ hit.title }}</strong> ({{ hit.kind }})</li>
+                    <li><strong>{{ hit.title }}</strong> ({{ hit.kindLabel }})</li>
                   }
                 }
               </ul>
@@ -121,8 +122,7 @@ import { ReviewBadgeComponent } from './review-badge.component.js';
               !(
                 ctx.mode === 'development' &&
                 helpContext.draftDigest &&
-                (helpContext.draftDigest.samples.length > 0 ||
-                  helpContext.draftDigest.pendingFactCount > 0)
+                helpContext.draftDigest.samples.length > 0
               )
             ) {
               <div style="font-size: 14px">
@@ -140,7 +140,8 @@ import { ReviewBadgeComponent } from './review-badge.component.js';
             } @else if (
               helpContext.actions.length === 0 &&
               helpContext.flows.length === 0 &&
-              helpContext.draftDigest
+              helpContext.draftDigest &&
+              helpContext.draftDigest.samples.length > 0
             ) {
               <div style="font-size: 14px">
                 <p style="margin: 0; color: var(--ag-text-muted)">
@@ -151,6 +152,15 @@ import { ReviewBadgeComponent } from './review-badge.component.js';
                   {{ helpContext.draftDigest.pageCount }} Seiten ·
                   {{ helpContext.draftDigest.flowCount }} Abläufe
                 </p>
+                <h3 style="margin: 12px 0 6px; font-size: 14px; font-weight: 600">Entwurf (Auswahl)</h3>
+                <ul style="margin: 0; padding-left: 18px; font-size: 14px">
+                  @for (fact of helpContext.draftDigest.samples; track fact.id) {
+                    <li>
+                      {{ formatHelpAction(fact) }}
+                      <ag-review-badge [fact]="fact" [mode]="ctx.mode" surface="help" />
+                    </li>
+                  }
+                </ul>
               </div>
             } @else {
               @if (helpContext.flows.length > 0) {
@@ -167,9 +177,8 @@ import { ReviewBadgeComponent } from './review-badge.component.js';
                 <ul style="margin: 0; padding-left: 18px; font-size: 14px">
                   @for (fact of helpContext.actions; track fact.id) {
                     <li>
-                      <strong>{{ fact.key }}</strong
-                      >: {{ fact.value }}
-                      <ag-review-badge [fact]="fact" [mode]="ctx.mode" />
+                      {{ formatHelpAction(fact) }}
+                      <ag-review-badge [fact]="fact" [mode]="ctx.mode" surface="help" />
                     </li>
                   }
                 </ul>
@@ -245,6 +254,10 @@ export class AutoGuideWidgetComponent implements OnDestroy {
 
   get searchHits() {
     return searchKnowledge(this.query, this.ctx.pages, this.ctx.flows, this.ctx.userRole);
+  }
+
+  formatHelpAction(fact: Fact): string {
+    return formatHelpActionText(fact);
   }
 
   toggleOpen(): void {

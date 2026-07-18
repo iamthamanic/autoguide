@@ -3,7 +3,12 @@
  */
 
 import { computed, defineComponent, h, ref } from 'vue';
-import { explainHelpGap, resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+import {
+  explainHelpGap,
+  formatHelpActionText,
+  resolveHelpContext,
+  searchKnowledge,
+} from '@iamthamanic/autoguide-core';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { FlowStepList } from './FlowStepList.js';
 import { PanelSkeleton } from './PanelSkeleton.js';
@@ -183,7 +188,7 @@ export const AutoGuideWidget = defineComponent({
                                 : searchHits.value.map((hit) =>
                                     h('li', { key: `${hit.kind}-${hit.id}` }, [
                                       h('strong', hit.title),
-                                      ` (${hit.kind})`,
+                                      ` (${hit.kindLabel})`,
                                     ]),
                                   ),
                             )
@@ -192,8 +197,7 @@ export const AutoGuideWidget = defineComponent({
                               !(
                                 mode === 'development' &&
                                 helpContext.value.draftDigest &&
-                                (helpContext.value.draftDigest.samples.length > 0 ||
-                                  helpContext.value.draftDigest.pendingFactCount > 0)
+                                helpContext.value.draftDigest.samples.length > 0
                               )
                             ? h('div', { style: { fontSize: '14px' } }, [
                                 h(
@@ -221,7 +225,8 @@ export const AutoGuideWidget = defineComponent({
                               ])
                             : helpContext.value.actions.length === 0 &&
                                 helpContext.value.flows.length === 0 &&
-                                helpContext.value.draftDigest
+                                helpContext.value.draftDigest &&
+                                helpContext.value.draftDigest.samples.length > 0
                               ? h('div', { style: { fontSize: '14px' } }, [
                                   h(
                                     'p',
@@ -238,6 +243,21 @@ export const AutoGuideWidget = defineComponent({
                                       },
                                     },
                                     `${helpContext.value.draftDigest.pendingFactCount} offene Fakten · ${helpContext.value.draftDigest.pageCount} Seiten · ${helpContext.value.draftDigest.flowCount} Abläufe`,
+                                  ),
+                                  h(
+                                    'h3',
+                                    { style: { margin: '12px 0 6px', fontSize: '14px', fontWeight: 600 } },
+                                    'Entwurf (Auswahl)',
+                                  ),
+                                  h(
+                                    'ul',
+                                    { style: { margin: 0, paddingLeft: '18px', fontSize: '14px' } },
+                                    helpContext.value.draftDigest.samples.map((fact) =>
+                                      h('li', { key: fact.id }, [
+                                        formatHelpActionText(fact),
+                                        h(ReviewBadge, { fact, mode, surface: 'help' }),
+                                      ]),
+                                    ),
                                   ),
                                 ])
                             : [
@@ -278,9 +298,8 @@ export const AutoGuideWidget = defineComponent({
                                         { style: { margin: 0, paddingLeft: '18px', fontSize: '14px' } },
                                         helpContext.value.actions.map((fact) =>
                                           h('li', { key: fact.id }, [
-                                            h('strong', String(fact.key)),
-                                            `: ${String(fact.value ?? '')}`,
-                                            h(ReviewBadge, { fact, mode }),
+                                            formatHelpActionText(fact),
+                                            h(ReviewBadge, { fact, mode, surface: 'help' }),
                                           ]),
                                         ),
                                       ),

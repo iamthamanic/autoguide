@@ -17,7 +17,8 @@ export type HelpGapReasonId =
   | 'sync'
   | 'route'
   | 'published_gate'
-  | 'drafts';
+  | 'drafts'
+  | 'technical_drafts';
 
 export interface HelpGapReason {
   id: HelpGapReasonId;
@@ -62,6 +63,12 @@ const REASON_DRAFTS: HelpGapReason = {
     'Dokumentation liegt als Entwurf vor — im Review-Panel prüfen; Help zeigt Entwürfe im development-Modus.',
 };
 
+const REASON_TECHNICAL_DRAFTS: HelpGapReason = {
+  id: 'technical_drafts',
+  message:
+    'Noch keine verständliche Hilfe — Scan liefert technische Kandidaten. Bitte Review oder `scan --auto` für Flows.',
+};
+
 const REASON_PUBLISH: HelpGapReason = {
   id: 'publish',
   message:
@@ -94,11 +101,8 @@ function hasHelpContent(input: ExplainHelpGapInput): boolean {
     input.userRole,
   );
   if (ctx.actions.length > 0 || ctx.flows.length > 0) return true;
-  if (
-    input.mode === 'development' &&
-    ctx.draftDigest &&
-    (ctx.draftDigest.samples.length > 0 || ctx.draftDigest.pendingFactCount > 0)
-  ) {
+  // User-facing draft samples only — technical-only digests are a gap, not content
+  if (input.mode === 'development' && ctx.draftDigest && ctx.draftDigest.samples.length > 0) {
     return true;
   }
   return false;
@@ -138,12 +142,21 @@ export function explainHelpGap(input: ExplainHelpGapInput): HelpGapReason[] {
   const hasUnapproved =
     facts.some((f) => f.reviewStatus === 'pending') || pendingReviews > 0;
 
+  const ctx = resolveHelpContext(route, pages, flows, facts, mode, input.userRole);
+  const technicalOnly =
+    mode === 'development' &&
+    ctx.draftDigest?.technicalOnly === true &&
+    ctx.actions.length === 0 &&
+    ctx.flows.length === 0;
+
   if (mode === 'published') {
     if (facts.length > 0 && visibleFacts.length === 0) {
       push(REASON_PUBLISH);
       push(REASON_REVIEW_PUBLISHED);
     }
     push(REASON_PUBLISHED_GATE);
+  } else if (technicalOnly) {
+    push(REASON_TECHNICAL_DRAFTS);
   } else if (hasUnapproved) {
     // Soft tip — never claim reviews blank Help in development
     push(REASON_DRAFTS);

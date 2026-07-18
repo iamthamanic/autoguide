@@ -3,11 +3,15 @@
    * @iamthamanic/autoguide-svelte — dev-only confidence and provenance badge for facts.
    */
   import type { Fact, VisibilityMode } from '@iamthamanic/autoguide-core';
-  import { getReviewBadgeState } from '@iamthamanic/autoguide-ui';
+  import { getReviewBadgeState, type ReviewBadgeSurface } from '@iamthamanic/autoguide-ui';
 
-  const { fact, mode } = $props<{ fact: Fact; mode: VisibilityMode }>();
+  const {
+    fact,
+    mode,
+    surface = 'review',
+  }: { fact: Fact; mode: VisibilityMode; surface?: ReviewBadgeSurface } = $props();
 
-  const state = $derived(getReviewBadgeState(fact, mode));
+  const state = $derived(getReviewBadgeState(fact, mode, surface));
 </script>
 
 {#if state.visible}

@@ -35,6 +35,7 @@ export * from './help/context-resolver.js';
 export * from './help/link-page-facts.js';
 export * from './help/search.js';
 export * from './help/empty-state.js';
+export * from './help/useful-fact.js';
 export * from './recommendations/types.js';
 export * from './recommendations/engine.js';
 export * from './recommendations/link.js';

@@ -3,7 +3,12 @@
  */
 
 import { useMemo, useRef, useState } from 'react';
-import { explainHelpGap, resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+import {
+  explainHelpGap,
+  formatHelpActionText,
+  resolveHelpContext,
+  searchKnowledge,
+} from '@iamthamanic/autoguide-core';
 import { agTokenCssVars } from '@iamthamanic/autoguide-ui';
 import { agPanelAboveBarStyle } from './bar-styles.js';
 import { FlowStepList } from './FlowStepList.js';
@@ -70,7 +75,7 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
     mode === 'development' &&
     !hasRouteHelp &&
     draftDigest !== undefined &&
-    (draftDigest.samples.length > 0 || draftDigest.pendingFactCount > 0);
+    draftDigest.samples.length > 0;
 
   return (
     <div style={agTokenCssVars()}>
@@ -157,7 +162,7 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
                 ) : (
                   searchHits.map((hit) => (
                     <li key={`${hit.kind}-${hit.id}`}>
-                      <strong>{hit.title}</strong> ({hit.kind})
+                      <strong>{hit.title}</strong> ({hit.kindLabel})
                     </li>
                   ))
                 )}
@@ -181,8 +186,8 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
                     <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14 }}>
                       {helpContext.actions.map((fact) => (
                         <li key={fact.id}>
-                          <strong>{String(fact.key)}</strong>: {String(fact.value ?? '')}
-                          <ReviewBadge fact={fact} mode={mode} />
+                          {formatHelpActionText(fact)}
+                          <ReviewBadge fact={fact} mode={mode} surface="help" />
                         </li>
                       ))}
                     </ul>
@@ -206,8 +211,8 @@ export function AutoGuideWidget({ open, onOpenChange }: AutoGuideWidgetProps) {
                     <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14 }}>
                       {draftDigest.samples.map((fact) => (
                         <li key={fact.id}>
-                          <strong>{String(fact.key)}</strong>: {String(fact.value ?? '')}
-                          <ReviewBadge fact={fact} mode={mode} />
+                          {formatHelpActionText(fact)}
+                          <ReviewBadge fact={fact} mode={mode} surface="help" />
                         </li>
                       ))}
                     </ul>

@@ -465,7 +465,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
-- **2026-07-17** — Release v0.1.9: Help after scan — route slash normalize, page↔fact linking, development draft digest (reviews no longer blank Help), Dev-Scan `--auto` + cache-bust reload (`@iamthamanic/autoguide-*`)
+- **2026-07-18** — Release v0.1.9: Help after scan + **user-useful Help** (filter handler/`element`/route noise; DE technical-draft gap; „Vorschlag“ in Help; route slash normalize, page↔fact linking, draft digest) (`@iamthamanic/autoguide-*`)
 - **2026-07-17** — Release v0.1.8: Dock UX dogfood — visible grip handle, scan toast auto-dismiss/wrap, Help empty-state prefers `scan --auto` (`@iamthamanic/autoguide-*`)
 - **2026-07-17** — Release v0.1.7: Dogfood crawl/sufficiency fixes, flow preserve, noise filters, Inspect pick, auth storageState, CLI `--version` (`@iamthamanic/autoguide-*`)
 - **2026-07-17** — Release v0.1.6: Autonomy (`scan --auto`, sufficiency gate, interactive crawl), draggable dock with persisted position (`@iamthamanic/autoguide-*`)

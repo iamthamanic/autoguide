@@ -24,6 +24,42 @@ String normalizeRoute(String route) {
   return path;
 }
 
+final _handlerNoise = RegExp(r'^(on|handle|set)[A-Z][A-Za-z0-9]*$');
+final _componentId = RegExp(r'^[A-Z][A-Za-z0-9]*$');
+final _interiorCamel = RegExp(r'[a-z][A-Z]');
+
+const _helpKeys = {'action', 'description', 'label'};
+const _techKeys = {
+  'element',
+  'handler',
+  'component',
+  'prop',
+  'props',
+  'selector',
+  'file',
+  'filepath',
+  'filePath',
+  'type',
+  'entity',
+};
+
+bool _isHelpNoise(Fact fact) {
+  if (_techKeys.contains(fact.key)) return true;
+  if (_handlerNoise.hasMatch(fact.key)) return true;
+  final value = (fact.value ?? '').toString().trim();
+  if (value.isEmpty) return true;
+  if (_handlerNoise.hasMatch(value)) return true;
+  if (value.startsWith('/') && !value.contains(RegExp(r'\s'))) return true;
+  if (_componentId.hasMatch(value) && _interiorCamel.hasMatch(value)) return true;
+  return false;
+}
+
+bool _isUserFacingHelpFact(Fact fact) {
+  if (!_helpKeys.contains(fact.key)) return false;
+  if (_isHelpNoise(fact)) return false;
+  return (fact.value ?? '').toString().trim().isNotEmpty;
+}
+
 HelpContext resolveHelpContext({
   required String route,
   required List<PageRecord> pages,
@@ -53,12 +89,16 @@ HelpContext resolveHelpContext({
     return flow.pageIds.contains(page.id) || flow.pageIds.isEmpty;
   }).take(6).toList();
 
-  final actions = roleFacts.where((fact) {
-    if (pageVisible && page != null && page.factIds.contains(fact.id)) {
-      return true;
+  final actions = <Fact>[];
+  if (pageVisible && page != null) {
+    final linkedPage = page;
+    for (final fact in roleFacts) {
+      if (!_isUserFacingHelpFact(fact)) continue;
+      if (!linkedPage.factIds.contains(fact.id)) continue;
+      actions.add(fact);
+      if (actions.length >= 12) break;
     }
-    return fact.key == 'action' || fact.key == 'description';
-  }).take(12).toList();
+  }
 
   return HelpContext(
     route: normalized,
