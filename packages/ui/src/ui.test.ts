@@ -35,6 +35,12 @@ describe('@iamthamanic/autoguide-ui review badge', () => {
     expect(state.visible).toBe(true);
     expect(state.label).toBe('Prüfen');
   });
+
+  it('uses Vorschlag label on Help surface', () => {
+    const state = getReviewBadgeState(fact, 'development', 'help');
+    expect(state.visible).toBe(true);
+    expect(state.label).toBe('Vorschlag');
+  });
 });
 
 describe('@iamthamanic/autoguide-ui flow steps', () => {

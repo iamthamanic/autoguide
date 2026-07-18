@@ -5,6 +5,8 @@
 import type { Fact, VisibilityMode } from '@iamthamanic/autoguide-core';
 import type { AgCssVar } from './tokens.js';
 
+export type ReviewBadgeSurface = 'review' | 'help';
+
 export interface ReviewBadgeState {
   visible: boolean;
   label: string;
@@ -17,7 +19,11 @@ function provenanceLabel(fact: Fact): string {
   return fact.provenance.map((item) => item.source.replace(/_/g, ' ')).join(', ');
 }
 
-export function getReviewBadgeState(fact: Fact, mode: VisibilityMode): ReviewBadgeState {
+export function getReviewBadgeState(
+  fact: Fact,
+  mode: VisibilityMode,
+  surface: ReviewBadgeSurface = 'review',
+): ReviewBadgeState {
   const title = `Confidence: ${Math.round(fact.confidence * 100)}% — ${provenanceLabel(fact)}`;
 
   if (mode !== 'development') {
@@ -30,12 +36,14 @@ export function getReviewBadgeState(fact: Fact, mode: VisibilityMode): ReviewBad
   const colorVar: AgCssVar =
     fact.confidence >= 0.85 ? '--ag-success' : '--ag-warning';
 
+  const pendingLabel = surface === 'help' ? 'Vorschlag' : 'Prüfen';
+
   const label =
     fact.reviewStatus === 'approved'
       ? 'Verifiziert'
       : fact.confidence < 0.5
         ? 'Unsicher'
-        : 'Prüfen';
+        : pendingLabel;
 
   return { visible: true, label, colorVar, title };
 }

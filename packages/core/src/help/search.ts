@@ -4,6 +4,7 @@
 
 import type { FlowRecord, PageRecord } from '../types/records.js';
 import { filterByRole } from '../visibility/role-filter.js';
+import { isFriendlyHelpPageTitle } from './useful-fact.js';
 
 export interface SearchHit {
   id: string;
@@ -11,6 +12,8 @@ export interface SearchHit {
   title: string;
   snippet: string;
   score: number;
+  /** German kind label for Help UI */
+  kindLabel: string;
 }
 
 function scoreMatch(query: string, text: string): number {
@@ -23,6 +26,28 @@ function scoreMatch(query: string, text: string): number {
   return 0;
 }
 
+function pageHit(page: PageRecord, score: number): SearchHit {
+  return {
+    id: page.id,
+    kind: 'page',
+    title: page.title,
+    snippet: page.route,
+    score,
+    kindLabel: 'Seite',
+  };
+}
+
+function flowHit(flow: FlowRecord, score: number, snippet: string): SearchHit {
+  return {
+    id: flow.id,
+    kind: 'flow',
+    title: flow.title,
+    snippet,
+    score,
+    kindLabel: 'Ablauf',
+  };
+}
+
 export function searchKnowledge(
   query: string,
   pages: PageRecord[],
@@ -31,36 +56,26 @@ export function searchKnowledge(
 ): SearchHit[] {
   const visiblePages = filterByRole(pages, userRole);
   const visibleFlows = filterByRole(flows, userRole);
+  const friendlyPages = visiblePages.filter((page) =>
+    isFriendlyHelpPageTitle(page.title, page.route),
+  );
 
   const q = query.trim();
   if (!q) {
     return [
-      ...visiblePages.slice(0, 5).map((page) => ({
-        id: page.id,
-        kind: 'page' as const,
-        title: page.title,
-        snippet: page.route,
-        score: 10,
-      })),
-      ...visibleFlows.slice(0, 5).map((flow) => ({
-        id: flow.id,
-        kind: 'flow' as const,
-        title: flow.title,
-        snippet: flow.description ?? '',
-        score: 5,
-      })),
+      ...friendlyPages.slice(0, 5).map((page) => pageHit(page, 10)),
+      ...visibleFlows.slice(0, 5).map((flow) => flowHit(flow, 5, flow.description ?? '')),
     ];
   }
 
   const hits: SearchHit[] = [];
-  for (const page of visiblePages) {
+  for (const page of friendlyPages) {
     const score = Math.max(
       scoreMatch(q, page.title),
-      scoreMatch(q, page.route),
       scoreMatch(q, page.description ?? ''),
     );
     if (score > 0) {
-      hits.push({ id: page.id, kind: 'page', title: page.title, snippet: page.route, score });
+      hits.push(pageHit(page, score));
     }
   }
   for (const flow of visibleFlows) {
@@ -71,13 +86,7 @@ export function searchKnowledge(
       scoreMatch(q, stepText),
     );
     if (score > 0) {
-      hits.push({
-        id: flow.id,
-        kind: 'flow',
-        title: flow.title,
-        snippet: flow.steps[0]?.title ?? '',
-        score,
-      });
+      hits.push(flowHit(flow, score, flow.steps[0]?.title ?? ''));
     }
   }
 

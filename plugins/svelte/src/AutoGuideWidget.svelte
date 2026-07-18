@@ -2,7 +2,12 @@
   /**
    * @iamthamanic/autoguide-svelte — Help Widget with context resolution and search.
    */
-  import { resolveHelpContext, searchKnowledge } from '@iamthamanic/autoguide-core';
+  import {
+    explainHelpGap,
+    formatHelpActionText,
+    resolveHelpContext,
+    searchKnowledge,
+  } from '@iamthamanic/autoguide-core';
   import { agTokenCssVars, bindFocusTrap } from '@iamthamanic/autoguide-ui';
   import FlowStepList from './FlowStepList.svelte';
   import PanelSkeleton from './PanelSkeleton.svelte';
@@ -20,6 +25,16 @@
     .join('; ');
   const helpContext = $derived(
     resolveHelpContext(ctx.route, ctx.pages, ctx.flows, ctx.facts, ctx.mode, ctx.userRole),
+  );
+  const gapReasons = $derived(
+    explainHelpGap({
+      mode: ctx.mode,
+      route: ctx.route,
+      pages: ctx.pages,
+      flows: ctx.flows,
+      facts: ctx.facts,
+      userRole: ctx.userRole,
+    }),
   );
   const searchHits = $derived(searchKnowledge(query, ctx.pages, ctx.flows, ctx.userRole));
 
@@ -98,7 +113,7 @@
               <li>Keine Treffer.</li>
             {:else}
               {#each searchHits as hit (hit.kind + hit.id)}
-                <li><strong>{hit.title}</strong> ({hit.kind})</li>
+                <li><strong>{hit.title}</strong> ({hit.kindLabel})</li>
               {/each}
             {/if}
           </ul>
@@ -108,22 +123,26 @@
           !(
             ctx.mode === 'development' &&
             helpContext.draftDigest &&
-            (helpContext.draftDigest.samples.length > 0 ||
-              helpContext.draftDigest.pendingFactCount > 0)
+            helpContext.draftDigest.samples.length > 0
           )
         )}
           <div style="font-size:14px">
             <p style="margin:0;color:var(--ag-text-muted)">Keine Dokumentation für diese Seite.</p>
-            {#if ctx.mode === 'development'}
-              <p style="margin:8px 0 0;color:var(--ag-text-muted);font-size:12px">
-                Mit Review-Panel unsichere Einträge prüfen oder `autoguide scan --auto`.
-              </p>
+            {#if gapReasons.length > 0}
+              <ul
+                style="margin:10px 0 0;padding-left:18px;color:var(--ag-text-muted);font-size:13px;line-height:1.45"
+              >
+                {#each gapReasons as reason (reason.id)}
+                  <li>{reason.message}</li>
+                {/each}
+              </ul>
             {/if}
           </div>
         {:else if (
           helpContext.actions.length === 0 &&
           helpContext.flows.length === 0 &&
-          helpContext.draftDigest
+          helpContext.draftDigest &&
+          helpContext.draftDigest.samples.length > 0
         )}
           <div style="font-size:14px">
             <p style="margin:0;color:var(--ag-text-muted)">Entwürfe vorhanden — noch nicht freigegeben.</p>
@@ -132,6 +151,15 @@
               {helpContext.draftDigest.pageCount} Seiten ·
               {helpContext.draftDigest.flowCount} Abläufe
             </p>
+            <h3 style="margin:12px 0 6px;font-size:14px;font-weight:600">Entwurf (Auswahl)</h3>
+            <ul style="margin:0;padding-left:18px;font-size:14px">
+              {#each helpContext.draftDigest.samples as fact (fact.id)}
+                <li>
+                  {formatHelpActionText(fact)}
+                  <ReviewBadge {fact} mode={ctx.mode} surface="help" />
+                </li>
+              {/each}
+            </ul>
           </div>
         {:else}
           {#if helpContext.flows.length > 0}
@@ -148,8 +176,8 @@
             <ul style="margin:0;padding-left:18px;font-size:14px">
               {#each helpContext.actions as fact (fact.id)}
                 <li>
-                  <strong>{fact.key}</strong>: {String(fact.value ?? '')}
-                  <ReviewBadge {fact} mode={ctx.mode} />
+                  {formatHelpActionText(fact)}
+                  <ReviewBadge {fact} mode={ctx.mode} surface="help" />
                 </li>
               {/each}
             </ul>

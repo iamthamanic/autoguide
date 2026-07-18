@@ -217,6 +217,7 @@ export class SqliteIndex {
         title: row.title,
         snippet: row.body.slice(0, 80) || row.title,
         score: Math.max(1, Math.round(100 + row.rank * -10)),
+        kindLabel: row.kind === 'flow' ? 'Ablauf' : 'Seite',
       }))
       .slice(0, limit);
 
@@ -253,6 +254,7 @@ export class SqliteIndex {
         title: row.title,
         snippet: row.body.slice(0, 80) || row.title,
         score: Math.max(1, 50 - index),
+        kindLabel: row.kind === 'flow' ? 'Ablauf' : 'Seite',
       }))
       .slice(0, limit);
   }
@@ -303,6 +305,7 @@ export class SqliteIndex {
         title: row.title,
         snippet: row.body.split(' ')[0] ?? row.title,
         score: 10,
+        kindLabel: 'Seite',
       }));
 
     const flowHits = flows
@@ -317,6 +320,7 @@ export class SqliteIndex {
         title: row.title,
         snippet: row.body.slice(0, 80),
         score: 5,
+        kindLabel: 'Ablauf',
       }));
 
     return [...pageHits, ...flowHits];

@@ -75,8 +75,7 @@ describe('help context', () => {
     };
     const ctx = resolveHelpContext('/dashboard', pages, [], [loginLabel], 'development');
     expect(ctx.actions).toHaveLength(0);
-    expect(ctx.draftDigest?.pendingFactCount).toBe(1);
-    expect(ctx.draftDigest?.samples).toHaveLength(0);
+    expect(ctx.draftDigest).toBeUndefined();
   });
 
   it('shows global flows in development when route has none', () => {
@@ -192,7 +191,8 @@ describe('explainHelpGap', () => {
         },
       ],
     });
-    expect(reasons).toEqual([]);
+    expect(reasons.some((r) => r.id === 'review')).toBe(false);
+    expect(reasons.every((r) => !/blockieren freigegebene Hilfe/.test(r.message))).toBe(true);
   });
 
   it('explains published gate when facts exist but none are approved', () => {

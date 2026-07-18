@@ -102,7 +102,7 @@ class _AutoGuideWidgetState extends State<AutoGuideWidget> {
                           (fact) => ListTile(
                             dense: true,
                             contentPadding: EdgeInsets.zero,
-                            title: Text('${fact.key}: ${fact.value ?? ''}'),
+                            title: Text((fact.value ?? '').toString()),
                           ),
                         ),
                       ],

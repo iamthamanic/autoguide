@@ -5,7 +5,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import type { Fact, VisibilityMode } from '@iamthamanic/autoguide-core';
-import { getReviewBadgeState } from '@iamthamanic/autoguide-ui';
+import { getReviewBadgeState, type ReviewBadgeSurface } from '@iamthamanic/autoguide-ui';
 
 @Component({
   selector: 'ag-review-badge',
@@ -29,8 +29,9 @@ import { getReviewBadgeState } from '@iamthamanic/autoguide-ui';
 export class ReviewBadgeComponent {
   @Input({ required: true }) fact!: Fact;
   @Input({ required: true }) mode!: VisibilityMode;
+  @Input() surface: ReviewBadgeSurface = 'review';
 
   get state() {
-    return getReviewBadgeState(this.fact, this.mode);
+    return getReviewBadgeState(this.fact, this.mode, this.surface);
   }
 }

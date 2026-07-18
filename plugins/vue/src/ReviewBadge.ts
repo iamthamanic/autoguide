@@ -4,17 +4,18 @@
 
 import { defineComponent, h, type PropType } from 'vue';
 import type { Fact, VisibilityMode } from '@iamthamanic/autoguide-core';
-import { getReviewBadgeState } from '@iamthamanic/autoguide-ui';
+import { getReviewBadgeState, type ReviewBadgeSurface } from '@iamthamanic/autoguide-ui';
 
 export const ReviewBadge = defineComponent({
   name: 'ReviewBadge',
   props: {
     fact: { type: Object as PropType<Fact>, required: true },
     mode: { type: String as PropType<VisibilityMode>, required: true },
+    surface: { type: String as PropType<ReviewBadgeSurface>, default: 'review' },
   },
   setup(props) {
     return () => {
-      const state = getReviewBadgeState(props.fact, props.mode);
+      const state = getReviewBadgeState(props.fact, props.mode, props.surface);
       if (!state.visible) return null;
       return h(
         'span',
