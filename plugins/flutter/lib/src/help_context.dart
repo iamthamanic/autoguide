@@ -81,20 +81,27 @@ HelpContext resolveHelpContext({
     }
   }
 
-  final pageVisible = page != null && isVisibleForRole(page.roleIds, userRole);
-  final pageTitle = page != null && pageVisible ? page.title : null;
+  final matchedPage = page;
+  if (matchedPage == null) {
+    return HelpContext(
+      route: normalized,
+      flows: roleFlows.where((flow) => flow.pageIds.isEmpty).take(6).toList(),
+    );
+  }
+
+  final pageVisible = isVisibleForRole(matchedPage.roleIds, userRole);
+  final pageTitle = pageVisible ? matchedPage.title : null;
 
   final pageFlows = roleFlows.where((flow) {
-    if (!pageVisible || page == null) return flow.pageIds.isEmpty;
-    return flow.pageIds.contains(page.id) || flow.pageIds.isEmpty;
+    if (!pageVisible) return flow.pageIds.isEmpty;
+    return flow.pageIds.contains(matchedPage.id) || flow.pageIds.isEmpty;
   }).take(6).toList();
 
   final actions = <Fact>[];
-  if (pageVisible && page != null) {
-    final linkedPage = page;
+  if (pageVisible) {
     for (final fact in roleFacts) {
       if (!_isUserFacingHelpFact(fact)) continue;
-      if (!linkedPage.factIds.contains(fact.id)) continue;
+      if (!matchedPage.factIds.contains(fact.id)) continue;
       actions.add(fact);
       if (actions.length >= 12) break;
     }
